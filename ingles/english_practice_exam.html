@@ -109,33 +109,43 @@
             margin: 0 5px;
         }
         
-        .matching-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 15px;
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
         
-        .matching-column {
-            background: #f8f9ff;
+        .matching-table td {
             padding: 15px;
-            border-radius: 10px;
             border: 2px solid #e1e8ff;
-        }
-        
-        .matching-item {
-            background: white;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+            background: #f8f9ff;
+            text-align: center;
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
-        .matching-item:hover {
+        .matching-table td:hover {
             background: #e1e8ff;
-            transform: scale(1.02);
+        }
+        
+        .matching-table .selected {
+            background: #ffeb3b !important;
+            border-color: #ff9800 !important;
+            font-weight: bold;
+        }
+        
+        .matching-table .correct {
+            background: #4caf50 !important;
+            color: white !important;
+            border-color: #2e7d32 !important;
+            font-weight: bold;
+        }
+        
+        .matching-table .wrong {
+            background: #f44336 !important;
+            color: white !important;
+            border-color: #d32f2f !important;
         }
         
         .reading-passage {
@@ -180,27 +190,8 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
         }
-        
-        .progress-bar {
-            background: #e0e0e0;
-            height: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            background: linear-gradient(45deg, #4caf50, #45a049);
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
 
         @media (max-width: 600px) {
-            .matching-container {
-                grid-template-columns: 1fr;
-            }
-            
             .header h1 {
                 font-size: 2em;
             }
@@ -218,9 +209,6 @@
             <h1>🌟 English Practice Test 🌟</h1>
             <div class="subtitle">Second Grade • Third Trimester Review</div>
             <div class="subtitle">📅 September 23, 2025</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressBar"></div>
-            </div>
         </div>
 
         <!-- Reading Comprehension Section -->
@@ -329,21 +317,6 @@
                     </label>
                 </div>
             </div>
-
-            <div class="question">
-                <h4>7. What does Maria like to do while cooking?</h4>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="q7" value="a"> a) Watch TV
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q7" value="b"> b) Play games
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q7" value="c"> c) Speak with her mom
-                    </label>
-                </div>
-            </div>
         </div>
 
         <!-- Listening Section -->
@@ -359,61 +332,61 @@
             </div>
 
             <div class="question">
-                <h4>8. How old is Carlos?</h4>
+                <h4>7. How old is Carlos?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q8" value="a"> a) Seven years old
+                        <input type="radio" name="q7" value="a"> a) Seven years old
                     </label>
                     <label class="option">
-                        <input type="radio" name="q8" value="b"> b) Eight years old
+                        <input type="radio" name="q7" value="b"> b) Eight years old
                     </label>
                     <label class="option">
-                        <input type="radio" name="q8" value="c"> c) Nine years old
+                        <input type="radio" name="q7" value="c"> c) Nine years old
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>9. What did Carlos and his friend do first?</h4>
+                <h4>8. What did Carlos and his friend do first?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q9" value="a"> a) Watched a movie
+                        <input type="radio" name="q8" value="a"> a) Watched a movie
                     </label>
                     <label class="option">
-                        <input type="radio" name="q9" value="b"> b) Played video games
+                        <input type="radio" name="q8" value="b"> b) Played video games
                     </label>
                     <label class="option">
-                        <input type="radio" name="q9" value="c"> c) Went to the park
+                        <input type="radio" name="q8" value="c"> c) Went to the park
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>10. What was the movie about?</h4>
+                <h4>9. What was the movie about?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q10" value="a"> a) Dogs
+                        <input type="radio" name="q9" value="a"> a) Dogs
                     </label>
                     <label class="option">
-                        <input type="radio" name="q10" value="b"> b) Robots
+                        <input type="radio" name="q9" value="b"> b) Robots
                     </label>
                     <label class="option">
-                        <input type="radio" name="q10" value="c"> c) Cars
+                        <input type="radio" name="q9" value="c"> c) Cars
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>11. Who cooked lunch?</h4>
+                <h4>10. Who cooked lunch?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q11" value="a"> a) Carlos
+                        <input type="radio" name="q10" value="a"> a) Carlos
                     </label>
                     <label class="option">
-                        <input type="radio" name="q11" value="b"> b) His friend
+                        <input type="radio" name="q10" value="b"> b) His friend
                     </label>
                     <label class="option">
-                        <input type="radio" name="q11" value="c"> c) His friend's mom
+                        <input type="radio" name="q10" value="c"> c) His friend's mom
                     </label>
                 </div>
             </div>
@@ -427,22 +400,22 @@
             </h2>
 
             <div class="question">
-                <h4>12. Complete with the correct past tense: Yesterday, I _____ to the park.</h4>
+                <h4>11. Complete with the correct past tense: Yesterday, I _____ to the park.</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q12" value="a"> a) go
+                        <input type="radio" name="q11" value="a"> a) go
                     </label>
                     <label class="option">
-                        <input type="radio" name="q12" value="b"> b) went
+                        <input type="radio" name="q11" value="b"> b) went
                     </label>
                     <label class="option">
-                        <input type="radio" name="q12" value="c"> c) goes
+                        <input type="radio" name="q11" value="c"> c) goes
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>13. Fill in the blank: We _____ pizza for dinner last night.</h4>
+                <h4>12. Fill in the blank: We _____ pizza for dinner last night.</h4>
                 <p>We <input type="text" class="fill-blank"> pizza for dinner last night.</p>
                 <div class="options">
                     <em>Choose from: had, have, has</em>
@@ -450,22 +423,22 @@
             </div>
 
             <div class="question">
-                <h4>14. What is the past form of "see"?</h4>
+                <h4>13. What is the past form of "see"?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q14" value="a"> a) seed
+                        <input type="radio" name="q13" value="a"> a) seed
                     </label>
                     <label class="option">
-                        <input type="radio" name="q14" value="b"> b) saw
+                        <input type="radio" name="q13" value="b"> b) saw
                     </label>
                     <label class="option">
-                        <input type="radio" name="q14" value="c"> c) seen
+                        <input type="radio" name="q13" value="c"> c) seen
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>15. Complete: Last week, my sister _____ a new book.</h4>
+                <h4>14. Complete: Last week, my sister _____ a new book.</h4>
                 <p>Last week, my sister <input type="text" class="fill-blank"> a new book.</p>
                 <div class="options">
                     <em>Choose from: read, reads, reading</em>
@@ -473,37 +446,37 @@
             </div>
 
             <div class="question">
-                <h4>16. Circle the correct answer: My mom _____ cookies yesterday.</h4>
+                <h4>15. Circle the correct answer: My mom _____ cookies yesterday.</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q16" value="a"> a) make
+                        <input type="radio" name="q15" value="a"> a) make
                     </label>
                     <label class="option">
-                        <input type="radio" name="q16" value="b"> b) made
+                        <input type="radio" name="q15" value="b"> b) made
                     </label>
                     <label class="option">
-                        <input type="radio" name="q16" value="c"> c) making
+                        <input type="radio" name="q15" value="c"> c) making
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>17. What is the past of "buy"?</h4>
+                <h4>16. What is the past of "buy"?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q17" value="a"> a) buyed
+                        <input type="radio" name="q16" value="a"> a) buyed
                     </label>
                     <label class="option">
-                        <input type="radio" name="q17" value="b"> b) bought
+                        <input type="radio" name="q16" value="b"> b) bought
                     </label>
                     <label class="option">
-                        <input type="radio" name="q17" value="c"> c) buying
+                        <input type="radio" name="q16" value="c"> c) buying
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>18. Complete: Last month, we _____ to the beach.</h4>
+                <h4>17. Complete: Last month, we _____ to the beach.</h4>
                 <p>Last month, we <input type="text" class="fill-blank"> to the beach.</p>
                 <div class="options">
                     <em>Choose from: went, go, going</em>
@@ -511,16 +484,16 @@
             </div>
 
             <div class="question">
-                <h4>19. Choose the correct past form: She _____ a beautiful song.</h4>
+                <h4>18. Choose the correct past form: She _____ a beautiful song.</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q19" value="a"> a) sing
+                        <input type="radio" name="q18" value="a"> a) sing
                     </label>
                     <label class="option">
-                        <input type="radio" name="q19" value="b"> b) sang
+                        <input type="radio" name="q18" value="b"> b) sang
                     </label>
                     <label class="option">
-                        <input type="radio" name="q19" value="c"> c) singing
+                        <input type="radio" name="q18" value="c"> c) singing
                     </label>
                 </div>
             </div>
@@ -534,131 +507,107 @@
             </h2>
 
             <div class="question">
-                <h4>20. Match the words with their meanings (click on pairs):</h4>
-                <div class="matching-container">
-                    <div class="matching-column">
-                        <h5>Words:</h5>
-                        <div class="matching-item" data-pair="1">cook</div>
-                        <div class="matching-item" data-pair="2">exercise</div>
-                        <div class="matching-item" data-pair="3">watch</div>
-                        <div class="matching-item" data-pair="4">robot</div>
-                    </div>
-                    <div class="matching-column">
-                        <h5>Meanings:</h5>
-                        <div class="matching-item" data-pair="3">look at something</div>
-                        <div class="matching-item" data-pair="1">make food</div>
-                        <div class="matching-item" data-pair="2">move your body</div>
-                        <div class="matching-item" data-pair="4">machine helper</div>
-                    </div>
-                </div>
+                <h4>19. Match the words with their meanings (click on a word, then click on its meaning):</h4>
+                <table class="matching-table">
+                    <tr>
+                        <td onclick="selectMatch(this, 'cook')" id="cook">cook</td>
+                        <td onclick="selectMatch(this, 'machine')" id="machine">machine helper</td>
+                    </tr>
+                    <tr>
+                        <td onclick="selectMatch(this, 'exercise')" id="exercise">exercise</td>
+                        <td onclick="selectMatch(this, 'look-at')" id="look-at">look at something</td>
+                    </tr>
+                    <tr>
+                        <td onclick="selectMatch(this, 'watch')" id="watch">watch</td>
+                       <td onclick="selectMatch(this, 'move-body')" id="move-body">move your body</td> 
+                    </tr>
+                    <tr>
+                        <td onclick="selectMatch(this, 'robot')" id="robot">robot</td>
+                        <td onclick="selectMatch(this, 'make-food')" id="make-food">make food</td>
+                    </tr>
+                </table>
             </div>
 
             <div class="question">
-                <h4>21. Choose the correct word: I like to _____ movies on TV.</h4>
+                <h4>20. Choose the correct word: I like to _____ movies on TV.</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q21" value="a"> a) cook
+                        <input type="radio" name="q20" value="a"> a) cook
                     </label>
                     <label class="option">
-                        <input type="radio" name="q21" value="b"> b) watch
+                        <input type="radio" name="q20" value="b"> b) watch
                     </label>
                     <label class="option">
-                        <input type="radio" name="q21" value="c"> c) exercise
+                        <input type="radio" name="q20" value="c"> c) exercise
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>22. Fill in the blank: My mom likes to _____ dinner for the family.</h4>
+                <h4>21. Fill in the blank: My mom likes to _____ dinner for the family.</h4>
                 <p>My mom likes to <input type="text" class="fill-blank"> dinner for the family.</p>
             </div>
 
             <div class="question">
-                <h4>23. What can you do with video games?</h4>
+                <h4>22. What can you do with video games?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q23" value="a"> a) cook them
+                        <input type="radio" name="q22" value="a"> a) cook them
                     </label>
                     <label class="option">
-                        <input type="radio" name="q23" value="b"> b) play them
+                        <input type="radio" name="q22" value="b"> b) play them
                     </label>
                     <label class="option">
-                        <input type="radio" name="q23" value="c"> c) fix them
+                        <input type="radio" name="q22" value="c"> c) fix them
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>24. Match the pairs (click on pairs):</h4>
-                <div class="matching-container">
-                    <div class="matching-column">
-                        <h5>Items:</h5>
-                        <div class="matching-item" data-pair="5">speak</div>
-                        <div class="matching-item" data-pair="6">cable</div>
-                        <div class="matching-item" data-pair="7">broken</div>
-                    </div>
-                    <div class="matching-column">
-                        <h5>Descriptions:</h5>
-                        <div class="matching-item" data-pair="7">not working</div>
-                        <div class="matching-item" data-pair="5">talk</div>
-                        <div class="matching-item" data-pair="6">wire for TV</div>
-                    </div>
-                </div>
+                <h4>23. Match the pairs (click on a word, then click on its pair):</h4>
+                <table class="matching-table">
+                    <tr>
+                        <td onclick="selectMatch(this, 'speak')" id="speak">speak</td>
+                        <td onclick="selectMatch(this, 'not-working')" id="not-working">not working</td>
+                    </tr>
+                    <tr>
+                        <td onclick="selectMatch(this, 'cable')" id="cable">cable</td>
+                        <td onclick="selectMatch(this, 'talk')" id="talk">talk</td>
+                    </tr>
+                    <tr>
+                        <td onclick="selectMatch(this, 'broken')" id="broken">broken</td>
+                        <td onclick="selectMatch(this, 'wire')" id="wire">wire for TV</td>
+                    </tr>
+                </table>
             </div>
 
             <div class="question">
-                <h4>25. Complete the sentence: When something doesn't work, it is _____.</h4>
+                <h4>24. Complete the sentence: When something doesn't work, it is _____.</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q25" value="a"> a) new
+                        <input type="radio" name="q24" value="a"> a) new
                     </label>
                     <label class="option">
-                        <input type="radio" name="q25" value="b"> b) broken
+                        <input type="radio" name="q24" value="b"> b) broken
                     </label>
                     <label class="option">
-                        <input type="radio" name="q25" value="c"> c) big
+                        <input type="radio" name="q24" value="c"> c) big
                     </label>
                 </div>
             </div>
 
             <div class="question">
-                <h4>26. What do you need to connect your TV?</h4>
+                <h4>25. What do you need to connect your TV?</h4>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="q26" value="a"> a) Cable
+                        <input type="radio" name="q25" value="a"> a) Cable
                     </label>
                     <label class="option">
-                        <input type="radio" name="q26" value="b"> b) Food
+                        <input type="radio" name="q25" value="b"> b) Food
                     </label>
                     <label class="option">
-                        <input type="radio" name="q26" value="c"> c) Water
+                        <input type="radio" name="q25" value="c"> c) Water
                     </label>
-                </div>
-            </div>
-
-            <div class="question">
-                <h4>27. Fill in the blank: I like to _____ with my friends on the phone.</h4>
-                <p>I like to <input type="text" class="fill-blank"> with my friends on the phone.</p>
-                <div class="options">
-                    <em>Choose from: speak, cook, watch</em>
-                </div>
-            </div>
-
-            <div class="question">
-                <h4>28. Match activities with places:</h4>
-                <div class="matching-container">
-                    <div class="matching-column">
-                        <h5>Activities:</h5>
-                        <div class="matching-item" data-pair="8">exercise</div>
-                        <div class="matching-item" data-pair="9">cook</div>
-                        <div class="matching-item" data-pair="10">watch movies</div>
-                    </div>
-                    <div class="matching-column">
-                        <h5>Places:</h5>
-                        <div class="matching-item" data-pair="10">living room</div>
-                        <div class="matching-item" data-pair="8">park</div>
-                        <div class="matching-item" data-pair="9">kitchen</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -669,125 +618,104 @@
     </div>
 
     <script>
-        let selectedItem = null;
-        let matches = [];
+        let selectedCell = null;
+        let matchedPairs = [];
 
-        // Función para manejar el matching
-        document.querySelectorAll('.matching-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const pair = this.getAttribute('data-pair');
-                
-                // Si no hay item seleccionado, seleccionar este
-                if (!selectedItem) {
-                    selectedItem = this;
-                    this.style.backgroundColor = '#ffeb3b';
-                    this.style.border = '3px solid #ff9800';
-                    this.style.transform = 'scale(1.05)';
-                } else {
-                    // Si hay un item seleccionado, verificar si hace match
-                    const selectedPair = selectedItem.getAttribute('data-pair');
-                    
-                    if (pair === selectedPair && this !== selectedItem) {
-                        // ¡Match correcto!
-                        this.style.backgroundColor = '#4caf50';
-                        selectedItem.style.backgroundColor = '#4caf50';
-                        this.style.color = 'white';
-                        selectedItem.style.color = 'white';
-                        this.style.border = '3px solid #2e7d32';
-                        selectedItem.style.border = '3px solid #2e7d32';
-                        
-                        // Agregar checkmark
-                        if (!this.innerHTML.includes('✓')) {
-                            this.innerHTML += ' ✓';
-                            selectedItem.innerHTML += ' ✓';
-                        }
-                        
-                        matches.push(pair);
-                        selectedItem = null;
-                        updateProgress();
-                        
-                        // Animación de éxito
-                        this.style.animation = 'bounce 0.6s';
-                        
-                    } else if (this === selectedItem) {
-                        // Deseleccionar el mismo item
-                        this.style.backgroundColor = '';
-                        this.style.border = '1px solid #ddd';
-                        this.style.transform = 'scale(1)';
-                        selectedItem = null;
-                    } else {
-                        // Match incorrecto
-                        this.style.backgroundColor = '#f44336';
-                        selectedItem.style.backgroundColor = '#f44336';
-                        this.style.color = 'white';
-                        selectedItem.style.color = 'white';
-                        
-                        // Resetear después de un momento
-                        setTimeout(() => {
-                            this.style.backgroundColor = '';
-                            selectedItem.style.backgroundColor = '';
-                            this.style.color = '';
-                            selectedItem.style.color = '';
-                            this.style.border = '1px solid #ddd';
-                            selectedItem.style.border = '1px solid #ddd';
-                            selectedItem.style.transform = 'scale(1)';
-                            selectedItem = null;
-                        }, 1000);
-                    }
-                }
-            });
-        });
-
-        // CSS para la animación bounce
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes bounce {
-                0%, 20%, 60%, 100% { transform: translateY(0); }
-                40% { transform: translateY(-10px); }
-                80% { transform: translateY(-5px); }
+        function selectMatch(cell, pair) {
+            // Si la celda ya está matched, no hacer nada
+            if (cell.classList.contains('correct')) {
+                return;
             }
-        `;
-        document.head.appendChild(style);
 
-        // Función para actualizar el progreso
-        function updateProgress() {
-            const totalQuestions = 28;
+            // Si no hay celda seleccionada
+            if (selectedCell === null) {
+                selectedCell = { element: cell, pair: pair };
+                cell.classList.add('selected');
+                return;
+            }
+
+            // Si clickea la misma celda, deseleccionar
+            if (selectedCell.element === cell) {
+                cell.classList.remove('selected');
+                selectedCell = null;
+                return;
+            }
+
+            // Verificar si las celdas hacen match
+            const matches = {
+                'cook': 'make-food',
+                'make-food': 'cook',
+                'exercise': 'move-body',
+                'move-body': 'exercise',
+                'watch': 'look-at',
+                'look-at': 'watch',
+                'robot': 'machine',
+                'machine': 'robot',
+                'speak': 'talk',
+                'talk': 'speak',
+                'cable': 'wire',
+                'wire': 'cable',
+                'broken': 'not-working',
+                'not-working': 'broken'
+            };
+
+            if (matches[selectedCell.pair] === pair) {
+                // ¡Match correcto!
+                cell.classList.add('correct');
+                selectedCell.element.classList.add('correct');
+                cell.classList.remove('selected');
+                selectedCell.element.classList.remove('selected');
+                
+                // Agregar checkmarks
+                if (!cell.innerHTML.includes('✓')) {
+                    cell.innerHTML += ' ✓';
+                }
+                if (!selectedCell.element.innerHTML.includes('✓')) {
+                    selectedCell.element.innerHTML += ' ✓';
+                }
+                
+                matchedPairs.push(selectedCell.pair);
+                selectedCell = null;
+            } else {
+                // Match incorrecto
+                cell.classList.add('wrong');
+                selectedCell.element.classList.add('wrong');
+                
+                setTimeout(function() {
+                    cell.classList.remove('wrong', 'selected');
+                    selectedCell.element.classList.remove('wrong', 'selected');
+                    selectedCell = null;
+                }, 1000);
+            }
+        }
+
+        function checkAnswers() {
             let answered = 0;
+            const totalQuestions = 25;
             
-            // Contar respuestas de multiple choice
-            document.querySelectorAll('input[type="radio"]:checked').forEach(() => answered++);
+            // Contar multiple choice
+            answered += document.querySelectorAll('input[type="radio"]:checked').length;
             
-            // Contar respuestas de fill-in-the-blank
+            // Contar fill-in-the-blank
             document.querySelectorAll('input[type="text"]').forEach(input => {
                 if (input.value.trim() !== '') answered++;
             });
             
-            // Contar matches correctos
-            answered += matches.length;
+            // Contar matches (cada match correcto cuenta)
+            answered += matchedPairs.length;
             
-            const percentage = (answered / totalQuestions) * 100;
-            document.getElementById('progressBar').style.width = percentage + '%';
+            const percentage = Math.round((answered / totalQuestions) * 100);
+            
+            if (percentage >= 90) {
+                alert(`🌟 ¡EXCELENTE! ${percentage}% completado 🌟\n\n👩‍🏫 ¡Estás súper lista para el examen!\n\n🎉 ¡Felicitaciones!`);
+            } else if (percentage >= 70) {
+                alert(`👍 ¡MUY BIEN! ${percentage}% completado\n\n📚 Revisa las que faltan y estarás perfecta.\n\n💪 ¡Sigue así!`);
+            } else if (percentage >= 50) {
+                alert(`😊 ¡BUEN TRABAJO! ${percentage}% completado\n\n📝 Intenta completar más preguntas.\n\n🤗 ¡Tú puedes!`);
+            } else {
+                alert(`🌱 ¡BUEN INICIO! ${percentage}% completado\n\n📖 Sigue practicando, cada respuesta cuenta.\n\n💖 ¡No te rindas!`);
+            }
         }
-
-        // Agregar event listeners para actualizar progreso
-        document.querySelectorAll('input[type="radio"]').forEach(input => {
-            input.addEventListener('change', updateProgress);
-        });
-
-        document.querySelectorAll('input[type="text"]').forEach(input => {
-            input.addEventListener('input', updateProgress);
-        });
-
-        // Agregar efectos hover para las preguntas
-        document.querySelectorAll('.question').forEach(question => {
-            question.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.02)';
-                this.style.transition = 'transform 0.3s ease';
-            });
-            
-            question.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-
-        //
+    </script>
+</body>
+</html>
