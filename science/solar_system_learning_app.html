@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planets Learning Adventure</title>
+    <title>Solar System Learning Adventure</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
         
         body {
             font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background: linear-gradient(135deg, #2C1810 0%, #8B4513 30%, #000000 100%);
             min-height: 100vh;
             color: white;
         }
@@ -56,7 +56,7 @@
 
         .nav-btn {
             padding: 15px 25px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            background: linear-gradient(45deg, #8B4513, #D2691E);
             color: white;
             border: none;
             border-radius: 25px;
@@ -125,15 +125,12 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* Planet Colors */
-        .mercury { background: linear-gradient(45deg, #8C7853, #BEB19B); }
-        .venus { background: linear-gradient(45deg, #FFA500, #FFD700); }
-        .earth { background: linear-gradient(45deg, #4682B4, #87CEEB); }
-        .mars { background: linear-gradient(45deg, #CD853F, #A0522D); }
-        .jupiter { background: linear-gradient(45deg, #DAA520, #B8860B); }
-        .saturn { background: linear-gradient(45deg, #F4A460, #DEB887); }
-        .uranus { background: linear-gradient(45deg, #4FD0E3, #87CEEB); }
-        .neptune { background: linear-gradient(45deg, #4169E1, #6495ED); }
+        /* Solar System Object Colors */
+        .star { background: linear-gradient(45deg, #FFD700, #FFA500); }
+        .moon { background: linear-gradient(45deg, #C0C0C0, #DCDCDC); }
+        .asteroid { background: linear-gradient(45deg, #696969, #808080); }
+        .constellation { background: linear-gradient(45deg, #4B0082, #8A2BE2); }
+        .blackhole { background: linear-gradient(45deg, #000000, #2F2F2F); }
         .planet-rules { background: linear-gradient(45deg, #9B59B6, #8E44AD); }
 
         .card-facts {
@@ -270,7 +267,7 @@
         }
 
         .btn {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            background: linear-gradient(45deg, #8B4513, #D2691E);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -310,10 +307,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🪐 Planets Learning Adventure 🚀</h1>
+        <h1>⭐ Solar System Learning Adventure 🌌</h1>
         
         <div class="nav-buttons">
-            <button class="nav-btn active" onclick="showSection('learn')">📚 Learn About Planets</button>
+            <button class="nav-btn active" onclick="showSection('learn')">📚 Learn About Solar System</button>
             <button class="nav-btn" onclick="showSection('match')">🔗 Match Game</button>
             <button class="nav-btn" onclick="showSection('quiz')">🧠 Quiz</button>
         </div>
@@ -322,82 +319,52 @@
         <div id="learn" class="section active">
             <div class="cards-grid">
                 <div class="planet-card">
-                    <div class="card-title mercury">☿️ MERCURY</div>
+                    <div class="card-title star">⭐ STARS</div>
                     <ul class="card-facts">
-                        <li>Closest planet to the Sun</li>
-                        <li>Smallest planet in our solar system</li>
-                        <li>Very hot during the day, very cold at night</li>
-                        <li>Has no moons or rings</li>
+                        <li>Giant balls of hot, glowing gas</li>
+                        <li>The Sun is our closest star</li>
+                        <li>They produce their own light and heat</li>
+                        <li>Come in different colors and sizes</li>
                     </ul>
                 </div>
                 
                 <div class="planet-card">
-                    <div class="card-title venus">♀️ VENUS</div>
+                    <div class="card-title constellation">🌟 CONSTELLATIONS</div>
                     <ul class="card-facts">
-                        <li>Hottest planet in the solar system</li>
-                        <li>Called Earth's "twin" because of similar size</li>
-                        <li>Covered in thick, poisonous clouds</li>
-                        <li>Spins backwards compared to Earth</li>
+                        <li>Patterns of stars in the night sky</li>
+                        <li>Look like pictures or shapes</li>
+                        <li>Examples: Big Dipper, Orion</li>
+                        <li>Help people navigate and tell stories</li>
                     </ul>
                 </div>
                 
                 <div class="planet-card">
-                    <div class="card-title earth">🌍 EARTH</div>
+                    <div class="card-title moon">🌙 MOONS</div>
                     <ul class="card-facts">
-                        <li>The only planet known to have life</li>
-                        <li>71% of the surface is covered by water</li>
-                        <li>Has one moon</li>
-                        <li>Perfect distance from the Sun for life</li>
+                        <li>Natural satellites that orbit planets</li>
+                        <li>Earth has one moon</li>
+                        <li>Some planets have many moons</li>
+                        <li>Made of rock, ice, or both</li>
                     </ul>
                 </div>
                 
                 <div class="planet-card">
-                    <div class="card-title mars">♂️ MARS</div>
+                    <div class="card-title asteroid">🪨 ASTEROIDS</div>
                     <ul class="card-facts">
-                        <li>Known as the "Red Planet"</li>
-                        <li>Has the largest volcano in the solar system</li>
-                        <li>Has two small moons: Phobos and Deimos</li>
-                        <li>Scientists look for signs of past life here</li>
+                        <li>Rocky objects that orbit the Sun</li>
+                        <li>Most are found between Mars and Jupiter</li>
+                        <li>Come in many different sizes</li>
+                        <li>Sometimes called "space rocks"</li>
                     </ul>
                 </div>
                 
                 <div class="planet-card">
-                    <div class="card-title jupiter">♃ JUPITER</div>
+                    <div class="card-title blackhole">⚫ BLACK HOLES</div>
                     <ul class="card-facts">
-                        <li>Largest planet in our solar system</li>
-                        <li>Has a famous Great Red Spot (giant storm)</li>
-                        <li>Has over 80 moons</li>
-                        <li>Made mostly of gas, not rock</li>
-                    </ul>
-                </div>
-                
-                <div class="planet-card">
-                    <div class="card-title saturn">♄ SATURN</div>
-                    <ul class="card-facts">
-                        <li>Famous for its beautiful rings</li>
-                        <li>Less dense than water (would float!)</li>
-                        <li>Has over 80 moons</li>
-                        <li>Second largest planet</li>
-                    </ul>
-                </div>
-                
-                <div class="planet-card">
-                    <div class="card-title uranus">⛢ URANUS</div>
-                    <ul class="card-facts">
-                        <li>Spins on its side like a rolling ball</li>
-                        <li>Made of ice and gas</li>
-                        <li>Has faint rings</li>
-                        <li>Very cold and windy</li>
-                    </ul>
-                </div>
-                
-                <div class="planet-card">
-                    <div class="card-title neptune">♆ NEPTUNE</div>
-                    <ul class="card-facts">
-                        <li>Farthest planet from the Sun</li>
-                        <li>Windiest planet with speeds up to 1,200 mph</li>
-                        <li>Deep blue color</li>
-                        <li>Takes 165 Earth years to orbit the Sun</li>
+                        <li>Places in space with super strong gravity</li>
+                        <li>Nothing can escape, not even light</li>
+                        <li>Form when massive stars collapse</li>
+                        <li>Help scientists understand space better</li>
                     </ul>
                 </div>
 
@@ -407,7 +374,7 @@
                         <li><strong>1. Orbit a Star</strong> - Must go around the Sun</li>
                         <li><strong>2. Round</strong> - Must be big enough to be round</li>
                         <li><strong>3. Clear Neighborhood</strong> - Must be the biggest object in its path</li>
-                        <li style="color: #FFD700;"><strong>All 8 planets have these 3 things!</strong></li>
+                        <li style="color: #FFD700;"><strong>Dwarf planets have only 2 out of 3!</strong></li>
                     </ul>
                 </div>
             </div>
@@ -416,30 +383,25 @@
         <!-- Match Section -->
         <div id="match" class="section">
             <div class="quiz-container">
-                <div class="score-display">Score: <span id="matchScore">0</span>/8</div>
+                <div class="score-display">Score: <span id="matchScore">0</span>/6</div>
                 <div class="match-container">
                     <div class="match-column">
-                        <h3>🪐 Planets</h3>
-                        <div class="match-item" data-planet="mercury">☿️ Mercury</div>
-                        <div class="match-item" data-planet="venus">♀️ Venus</div>
-                        <div class="match-item" data-planet="earth">🌍 Earth</div>
-                        <div class="match-item" data-planet="mars">♂️ Mars</div>
-                        <div class="match-item" data-planet="jupiter">♃ Jupiter</div>
-                        <div class="match-item" data-planet="saturn">♄ Saturn</div>
-                        <div class="match-item" data-planet="uranus">⛢ Uranus</div>
-                        <div class="match-item" data-planet="neptune">♆ Neptune</div>
+                        <h3>🌌 Solar System Objects</h3>
+                        <div class="match-item" data-planet="stars">⭐ Stars</div>
+                        <div class="match-item" data-planet="constellations">🌟 Constellations</div>
+                        <div class="match-item" data-planet="moons">🌙 Moons</div>
+                        <div class="match-item" data-planet="asteroids">🪨 Asteroids</div>
+                        <div class="match-item" data-planet="blackholes">⚫ Black Holes</div>
+                        <div class="match-item" data-planet="planets">🪐 Planets</div>
                     </div>
                     <div class="match-column">
-                        <h3>🔍 Characteristics</h3>
-                        <div class="match-item" data-characteristic="venus">Hottest planet</div>
-                        <div class="match-item" data-characteristic="earth">Only planet with life</div>
-                        <div class="match-item" data-characteristic="mercury">Closest to the Sun</div>
-                        <div class="match-item" data-characteristic="jupiter">Largest planet</div>
-                        <div class="match-item" data-characteristic="mercury">Closest to the Sun</div>
-                        <div class="match-item" data-characteristic="saturn">Famous for rings</div>
-                        <div class="match-item" data-characteristic="uranus">Spins on its side</div>
-                        <div class="match-item" data-characteristic="neptune">Farthest from Sun</div>
-                        <div class="match-item" data-characteristic="mars">The Red Planet</div>
+                        <h3>🔍 Definitions</h3>
+                        <div class="match-item" data-characteristic="stars">Giant balls of hot gas</div>
+                        <div class="match-item" data-characteristic="constellations">Patterns of stars in the sky</div>
+                        <div class="match-item" data-characteristic="moons">Natural satellites of planets</div>
+                        <div class="match-item" data-characteristic="asteroids">Rocky objects that orbit the Sun</div>
+                        <div class="match-item" data-characteristic="blackholes">Super strong gravity in space</div>
+                        <div class="match-item" data-characteristic="planets">Must have 3 special rules</div>
                     </div>
                 </div>
                 <button class="btn" onclick="resetMatch()">🔄 Reset Game</button>
@@ -469,28 +431,28 @@
 
         const quizQuestions = [
             {
-                question: "What are the 3 things that make a planet?",
-                options: ["Orbit star, round, clear neighborhood", "Big, bright, far away", "Hot, cold, windy", "Rocky, gassy, icy"],
+                question: "What are stars made of?",
+                options: ["Hot, glowing gas", "Rock and ice", "Metal and dust", "Water and air"],
                 correct: 0
             },
             {
-                question: "Which planet is closest to the Sun?",
-                options: ["Mercury", "Venus", "Earth", "Mars"],
+                question: "What are constellations?",
+                options: ["Patterns of stars in the sky", "Groups of planets", "Types of moons", "Kinds of asteroids"],
                 correct: 0
             },
             {
-                question: "Which planet is known as the Red Planet?",
-                options: ["Mars", "Venus", "Jupiter", "Saturn"],
+                question: "What are moons?",
+                options: ["Natural satellites of planets", "Small stars", "Large asteroids", "Pieces of comets"],
                 correct: 0
             },
             {
-                question: "Which planet is famous for its rings?",
-                options: ["Saturn", "Jupiter", "Uranus", "Neptune"],
+                question: "Where are most asteroids found?",
+                options: ["Between Mars and Jupiter", "Between Earth and Mars", "Beyond Neptune", "Near the Sun"],
                 correct: 0
             },
             {
-                question: "Which planet is the largest in our solar system?",
-                options: ["Jupiter", "Saturn", "Neptune", "Uranus"],
+                question: "What makes black holes special?",
+                options: ["Super strong gravity", "Very bright light", "Lots of water", "Many colors"],
                 correct: 0
             }
         ];
@@ -564,9 +526,9 @@
                 matchScore++;
                 document.getElementById('matchScore').textContent = matchScore;
                 
-                if (matchScore === 8) {
+                if (matchScore === 6) {
                     setTimeout(() => {
-                        alert('🎉 Congratulations! You matched all the planets! 🎉');
+                        alert('🎉 Congratulations! You matched all the solar system objects! 🎉');
                     }, 500);
                 }
             }
@@ -665,7 +627,7 @@
             let message = '';
             
             if (percentage >= 80) {
-                message = '🌟 Excellent! You know your planets! 🌟';
+                message = '🌟 Excellent! You know your solar system! 🌟';
             } else if (percentage >= 60) {
                 message = '👍 Good job! Keep learning! 👍';
             } else {
