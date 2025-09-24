@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dwarf Planets Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #000428 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            transform: scale(1.05);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .planets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .planet-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .planet-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .planet-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .ceres { background: linear-gradient(45deg, #8B7355, #A0522D); }
+        .pluto { background: linear-gradient(45deg, #4682B4, #6495ED); }
+        .eris { background: linear-gradient(45deg, #DC143C, #FF69B4); }
+        .haumea { background: linear-gradient(45deg, #DAA520, #FFD700); }
+        .makemake { background: linear-gradient(45deg, #CD853F, #D2691E); }
+
+        .planet-facts {
+            list-style: none;
+        }
+
+        .planet-facts li {
+            padding: 8px 0;
+            font-size: 1.1em;
+            border-left: 3px solid #FFD700;
+            padding-left: 15px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .quiz-question {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .quiz-option.correct {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4CAF50;
+        }
+
+        .quiz-option.wrong {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #F44336;
+        }
+
+        .match-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .match-column {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .match-column h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .match-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .match-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .match-item.selected {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .match-item.matched {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4CAF50;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .celebration {
+            text-align: center;
+            font-size: 3em;
+            margin: 20px 0;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌌 Dwarf Planets Learning Adventure 🪐</h1>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('characteristics')">📚 Learn</button>
+            <button class="nav-btn" onclick="showSection('match')">🔗 Match Game</button>
+            <button class="nav-btn" onclick="showSection('quiz')">🧠 Quiz</button>
+        </div>
+
+        <!-- Characteristics Section -->
+        <div id="characteristics" class="section active">
+            <div class="planets-grid">
+                <div class="planet-card">
+                    <div class="planet-title ceres">🪨 CERES</div>
+                    <ul class="planet-facts">
+                        <li>The little one between Mars and Jupiter</li>
+                        <li>Made of rock and ice</li>
+                        <li>First dwarf planet discovered</li>
+                    </ul>
+                </div>
+
+                <div class="planet-card">
+                    <div class="planet-title pluto">❄️ PLUTÓN</div>
+                    <ul class="planet-facts">
+                        <li>Used to have nine planets total</li>
+                        <li>Now we have eight planets plus five dwarfs</li>
+                        <li>Very cold and very far</li>
+                    </ul>
+                </div>
+
+                <div class="planet-card">
+                    <div class="planet-title eris">🔴 ERIS</div>
+                    <ul class="planet-facts">
+                        <li>Bigger than Pluto, caused the debate</li>
+                        <li>Very far away in space</li>
+                        <li>Named after goddess of trouble</li>
+                    </ul>
+                </div>
+
+                <div class="planet-card">
+                    <div class="planet-title haumea">🥚 HAUMEA</div>
+                    <ul class="planet-facts">
+                        <li>Spins like a top, shaped like an egg</li>
+                        <li>Only four hours in a day</li>
+                        <li>Has rings like Saturn</li>
+                    </ul>
+                </div>
+
+                <div class="planet-card">
+                    <div class="planet-title makemake">🌅 MAKEMAKE</div>
+                    <ul class="planet-facts">
+                        <li>Red and bright in the dark</li>
+                        <li>No air to breathe</li>
+                        <li>Named from Easter Island</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Match Game Section -->
+        <div id="match" class="section">
+            <div class="score">Score: <span id="matchScore">0</span>/8</div>
+            <div class="match-container">
+                <div class="match-column">
+                    <h3>Dwarf Planets</h3>
+                    <div class="match-item" data-planet="ceres">🪨 Ceres</div>
+                    <div class="match-item" data-planet="pluto">❄️ Pluto</div>
+                    <div class="match-item" data-planet="eris">🔴 Eris</div>
+                    <div class="match-item" data-planet="haumea">🥚 Haumea</div>
+                    <div class="match-item" data-planet="makemake">🌅 Makemake</div>
+                </div>
+                
+                <div class="match-column">
+                    <h3>Characteristics</h3>
+                    <div class="match-item" data-characteristic="ceres">Between Mars and Jupiter</div>
+                    <div class="match-item" data-characteristic="pluto">Used to be planet nine</div>
+                    <div class="match-item" data-characteristic="eris">Caused the great debate</div>
+                    <div class="match-item" data-characteristic="haumea">Shaped like an egg</div>
+                    <div class="match-item" data-characteristic="makemake">Named from Easter Island</div>
+                    <div class="match-item" data-characteristic="ceres2">Made of rock and ice</div>
+                    <div class="match-item" data-characteristic="haumea2">Only four hours in a day</div>
+                    <div class="match-item" data-characteristic="makemake2">No air to breathe</div>
+                </div>
+            </div>
+            <button class="btn" onclick="resetMatch()">🔄 Reset Game</button>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz" class="section">
+            <div class="quiz-container">
+                <div class="score">Question: <span id="currentQuestion">1</span>/5 | Score: <span id="quizScore">0</span></div>
+                <div class="quiz-question" id="questionText">Loading question...</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+                <div id="celebration" class="celebration" style="display: none;">🎉</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'characteristics';
+        let selectedPlanet = null;
+        let selectedCharacteristic = null;
+        let matchScore = 0;
+        let quizScore = 0;
+        let currentQuestionIndex = 0;
+        let questionAnswered = false;
+
+        const quizQuestions = [
+            {
+                question: "Which dwarf planet is between Mars and Jupiter?",
+                options: ["Ceres", "Pluto", "Eris", "Haumea"],
+                correct: 0
+            },
+            {
+                question: "Which dwarf planet used to be the 9th planet?",
+                options: ["Makemake", "Eris", "Pluto", "Ceres"],
+                correct: 2
+            },
+            {
+                question: "Which dwarf planet spins like a top and is shaped like an egg?",
+                options: ["Eris", "Haumea", "Makemake", "Pluto"],
+                correct: 1
+            },
+            {
+                question: "Which dwarf planet is named after Easter Island?",
+                options: ["Haumea", "Ceres", "Makemake", "Eris"],
+                correct: 2
+            },
+            {
+                question: "Which dwarf planet caused the great debate about planet classification?",
+                options: ["Eris", "Pluto", "Ceres", "Makemake"],
+                correct: 0
+            }
+        ];
+
+        const matchPairs = {
+            'ceres': ['ceres', 'ceres2'],
+            'pluto': ['pluto'],
+            'eris': ['eris'],
+            'haumea': ['haumea', 'haumea2'],
+            'makemake': ['makemake', 'makemake2']
+        };
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(section).classList.add('active');
+            event.target.classList.add('active');
+            
+            currentSection = section;
+            
+            // Initialize section-specific content
+            if (section === 'quiz') {
+                initQuiz();
+            } else if (section === 'match') {
+                resetMatch();
+            }
+        }
+
+        // Match Game Logic
+        function initMatchGame() {
+            const matchItems = document.querySelectorAll('.match-item');
+            matchItems.forEach(item => {
+                item.addEventListener('click', handleMatchClick);
+            });
+        }
+
+        function handleMatchClick(event) {
+            const item = event.target;
+            
+            if (item.classList.contains('matched')) return;
+            
+            if (item.dataset.planet) {
+                // Clicking on a planet
+                if (selectedPlanet) {
+                    selectedPlanet.classList.remove('selected');
+                }
+                selectedPlanet = item;
+                item.classList.add('selected');
+            } else if (item.dataset.characteristic) {
+                // Clicking on a characteristic
+                if (selectedCharacteristic) {
+                    selectedCharacteristic.classList.remove('selected');
+                }
+                selectedCharacteristic = item;
+                item.classList.add('selected');
+            }
+            
+            // Check if we have both selections
+            if (selectedPlanet && selectedCharacteristic) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const planet = selectedPlanet.dataset.planet;
+            const characteristic = selectedCharacteristic.dataset.characteristic;
+            
+            if (matchPairs[planet] && matchPairs[planet].includes(characteristic)) {
+                // Correct match
+                selectedPlanet.classList.add('matched');
+                selectedCharacteristic.classList.add('matched');
+                matchScore++;
+                document.getElementById('matchScore').textContent = matchScore;
+                
+                if (matchScore === 8) {
+                    setTimeout(() => {
+                        alert('🎉 Congratulations! You matched all the dwarf planets! 🎉');
+                    }, 500);
+                }
+            }
+            
+            // Reset selections
+            selectedPlanet.classList.remove('selected');
+            selectedCharacteristic.classList.remove('selected');
+            selectedPlanet = null;
+            selectedCharacteristic = null;
+        }
+
+        function resetMatch() {
+            const matchItems = document.querySelectorAll('.match-item');
+            matchItems.forEach(item => {
+                item.classList.remove('selected', 'matched');
+            });
+            selectedPlanet = null;
+            selectedCharacteristic = null;
+            matchScore = 0;
+            document.getElementById('matchScore').textContent = '0';
+        }
+
+        // Quiz Logic
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            questionAnswered = false;
+            document.getElementById('quizScore').textContent = '0';
+            document.getElementById('currentQuestion').textContent = '1';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('celebration').style.display = 'none';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            questionAnswered = false;
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function selectOption(selectedIndex) {
+            if (questionAnswered) return;
+            
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            questionAnswered = true;
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    option.classList.add('wrong');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                quizScore++;
+                document.getElementById('quizScore').textContent = quizScore;
+                document.getElementById('celebration').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('celebration').style.display = 'none';
+                }, 1500);
+            }
+            
+            setTimeout(() => {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function showQuizResults() {
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '🌟 Excellent! You know your dwarf planets! 🌟';
+            } else if (percentage >= 60) {
+                message = '👍 Good job! Keep learning! 👍';
+            } else {
+                message = '📚 Keep studying! You can do better! 📚';
+            }
+            
+            document.getElementById('questionText').innerHTML = `
+                <h2>Quiz Complete!</h2>
+                <p>Final Score: ${quizScore}/${quizQuestions.length} (${percentage}%)</p>
+                <p>${message}</p>
+            `;
+            
+            document.getElementById('quizOptions').innerHTML = `
+                <button class="btn" onclick="initQuiz()">🔄 Try Again</button>
+            `;
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            initMatchGame();
+        });
+    </script>
+</body>
+</html>
