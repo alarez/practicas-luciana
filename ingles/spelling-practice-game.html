@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Week #2 - Fun Practice!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #764ba2;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .game-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 3px solid #667eea;
+        }
+        
+        .game-title {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .word-item {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .word-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .scramble-game {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .scramble-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .scrambled {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #764ba2;
+            min-width: 180px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .check-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .check-btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        
+        .result {
+            margin-left: 10px;
+            font-size: 1.5em;
+            min-width: 30px;
+        }
+        
+        .typing-practice {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .typing-word {
+            text-align: center;
+            font-size: 2.5em;
+            color: #764ba2;
+            font-weight: bold;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .typing-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+        }
+        
+        .progress {
+            text-align: center;
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .nav-btn {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .match-game {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .match-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .match-item:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+        }
+        
+        .match-item.selected {
+            border-color: #764ba2;
+            background: #f0f0f0;
+        }
+        
+        .match-item.matched {
+            background: #90EE90;
+            border-color: #228B22;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Spelling Adventure - Week #2 🌟</h1>
+        <div class="subtitle">Let's practice our spelling words!</div>
+        
+        <!-- Word List -->
+        <div class="game-section">
+            <div class="game-title">📚 Our Spelling Words</div>
+            <div class="word-list" id="wordList"></div>
+        </div>
+        
+        <!-- Game 1: Unscramble -->
+        <div class="game-section">
+            <div class="game-title">🎯 Game 1: Unscramble the Words!</div>
+            <div class="scramble-game" id="scrambleGame"></div>
+            <div class="score" id="scrambleScore">Score: 0 / 11</div>
+        </div>
+        
+        <!-- Game 2: Listen and Type -->
+        <div class="game-section">
+            <div class="game-title">🔊 Game 2: Listen and Write!</div>
+            <div class="typing-practice">
+                <button class="nav-btn" onclick="speakWord()" style="font-size: 3em; padding: 30px; background: #764ba2;">🔊 Listen</button>
+                <input type="text" class="typing-input" id="typingInput" placeholder="Type what you hear...">
+                <div class="progress" id="typingProgress">Word 1 of 11</div>
+                <div class="btn-container">
+                    <button class="nav-btn" onclick="checkTyping()">Check ✓</button>
+                    <button class="nav-btn" onclick="nextWord()">Next →</button>
+                </div>
+            </div>
+            <div class="score" id="typingScore">Score: 0 / 11</div>
+        </div>
+        
+        <!-- Game 3: Memory Game -->
+        <div class="game-section">
+            <div class="game-title">💭 Game 3: Memory Challenge!</div>
+            <div class="typing-practice">
+                <div class="typing-word" id="memoryWord" style="font-size: 3em;">Click Start!</div>
+                <input type="text" class="typing-input" id="memoryInput" placeholder="Write what you remember..." disabled>
+                <div class="progress" id="memoryProgress">Word 1 of 11</div>
+                <div class="btn-container">
+                    <button class="nav-btn" id="memoryStartBtn" onclick="startMemory()">Start 👀</button>
+                    <button class="nav-btn" onclick="checkMemory()" id="memoryCheckBtn" style="display:none;">Check ✓</button>
+                    <button class="nav-btn" onclick="nextMemory()" id="memoryNextBtn" style="display:none;">Next →</button>
+                </div>
+            </div>
+            <div class="score" id="memoryScore">Score: 0 / 11</div>
+        </div>
+
+        <!-- Game 4: Riddle and Write -->
+        <div class="game-section">
+            <div class="game-title">❓ Game 4: Guess and Write!</div>
+            <div class="typing-practice">
+                <div class="typing-word" id="riddleText" style="font-size: 1.5em; color: #764ba2;">Click to see the riddle!</div>
+                <input type="text" class="typing-input" id="riddleInput" placeholder="Write your answer...">
+                <div class="progress" id="riddleProgress">Riddle 1 of 11</div>
+                <div class="btn-container">
+                    <button class="nav-btn" onclick="showRiddle()">Show Riddle 🤔</button>
+                    <button class="nav-btn" onclick="checkRiddle()">Check ✓</button>
+                    <button class="nav-btn" onclick="nextRiddle()">Next →</button>
+                </div>
+            </div>
+            <div class="score" id="riddleScore">Score: 0 / 11</div>
+        </div>
+
+        <!-- Game 5: Match Missing Letters -->
+        <div class="game-section">
+            <div class="game-title">🔤 Game 5: Match the Missing Letters!</div>
+            <div class="match-game">
+                <div class="match-column" id="incomplete"></div>
+                <div class="match-column" id="complete"></div>
+            </div>
+            <div class="score" id="matchScore">Matches: 0 / 11</div>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            'ship', 'chewing gum', 'bicycle', 'wheel', 'telescope',
+            'computer', 'cotton candy', 'toothbrush', 'inventor', 'shampoo', 'toaster'
+        ];
+
+        // Display word list
+        const wordList = document.getElementById('wordList');
+        words.forEach(word => {
+            const div = document.createElement('div');
+            div.className = 'word-item';
+            div.textContent = word;
+            wordList.appendChild(div);
+        });
+
+        // Game 1: Scramble
+        let scrambleScore = 0;
+        
+        function scrambleWord(word) {
+            const arr = word.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join('');
+        }
+
+        const scrambleGame = document.getElementById('scrambleGame');
+        words.forEach((word, index) => {
+            const div = document.createElement('div');
+            div.className = 'scramble-item';
+            
+            let scrambled = scrambleWord(word);
+            while (scrambled === word) {
+                scrambled = scrambleWord(word);
+            }
+            
+            div.innerHTML = `
+                <span class="scrambled">${scrambled}</span>
+                <input type="text" id="answer${index}" placeholder="Type answer...">
+                <button class="check-btn" onclick="checkAnswer(${index}, '${word}')">Check</button>
+                <span class="result" id="result${index}"></span>
+            `;
+            scrambleGame.appendChild(div);
+        });
+
+        function checkAnswer(index, correct) {
+            const input = document.getElementById(`answer${index}`);
+            const result = document.getElementById(`result${index}`);
+            
+            if (input.value.toLowerCase().trim() === correct.toLowerCase()) {
+                result.textContent = '✓';
+                result.style.color = 'green';
+                input.disabled = true;
+                input.style.background = '#90EE90';
+                if (result.textContent === '✓' && !input.dataset.scored) {
+                    scrambleScore++;
+                    input.dataset.scored = 'true';
+                    document.getElementById('scrambleScore').textContent = `Score: ${scrambleScore} / 11`;
+                }
+            } else {
+                result.textContent = '✗';
+                result.style.color = 'red';
+            }
+        }
+
+        // Game 2: Listen and Type
+        let typingIndex = 0;
+        let typingScore = 0;
+        
+        function speakWord() {
+            const currentWord = words[typingIndex];
+            const utterance = new SpeechSynthesisUtterance(currentWord);
+            utterance.rate = 0.8; // Slower speed for kids
+            utterance.pitch = 1.1;
+            utterance.lang = 'en-US';
+            speechSynthesis.speak(utterance);
+        }
+        
+        function checkTyping() {
+            const input = document.getElementById('typingInput');
+            const currentWord = words[typingIndex];
+            
+            if (input.value.toLowerCase().trim() === currentWord.toLowerCase()) {
+                input.style.background = '#90EE90';
+                typingScore++;
+                document.getElementById('typingScore').textContent = `Score: ${typingScore} / 11`;
+                setTimeout(() => {
+                    nextWord();
+                }, 1000);
+            } else {
+                input.style.background = '#ffcccb';
+                setTimeout(() => {
+                    input.style.background = 'white';
+                }, 500);
+            }
+        }
+
+        function nextWord() {
+            typingIndex = (typingIndex + 1) % words.length;
+            document.getElementById('typingInput').value = '';
+            document.getElementById('typingInput').style.background = 'white';
+            document.getElementById('typingProgress').textContent = `Word ${typingIndex + 1} of 11`;
+        }
+
+        document.getElementById('typingInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkTyping();
+            }
+        });
+
+        // Game 3: Memory Game
+        let memoryIndex = 0;
+        let memoryScore = 0;
+        let memoryTimer;
+        
+        function startMemory() {
+            const wordDisplay = document.getElementById('memoryWord');
+            const input = document.getElementById('memoryInput');
+            const startBtn = document.getElementById('memoryStartBtn');
+            const checkBtn = document.getElementById('memoryCheckBtn');
+            
+            const currentWord = words[memoryIndex];
+            wordDisplay.textContent = currentWord;
+            wordDisplay.style.fontSize = '3em';
+            wordDisplay.style.color = '#667eea';
+            
+            input.disabled = true;
+            input.value = '';
+            input.style.background = 'white';
+            startBtn.style.display = 'none';
+            
+            let countdown = 3;
+            wordDisplay.textContent = currentWord + ' (' + countdown + ')';
+            
+            memoryTimer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    wordDisplay.textContent = currentWord + ' (' + countdown + ')';
+                } else {
+                    clearInterval(memoryTimer);
+                    wordDisplay.textContent = '❓❓❓';
+                    wordDisplay.style.fontSize = '4em';
+                    input.disabled = false;
+                    input.focus();
+                    checkBtn.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+        
+        function checkMemory() {
+            const input = document.getElementById('memoryInput');
+            const currentWord = words[memoryIndex];
+            const checkBtn = document.getElementById('memoryCheckBtn');
+            const nextBtn = document.getElementById('memoryNextBtn');
+            const wordDisplay = document.getElementById('memoryWord');
+            
+            if (input.value.toLowerCase().trim() === currentWord.toLowerCase()) {
+                input.style.background = '#90EE90';
+                wordDisplay.textContent = '✓ Correct!';
+                wordDisplay.style.color = 'green';
+                memoryScore++;
+                document.getElementById('memoryScore').textContent = `Score: ${memoryScore} / 11`;
+            } else {
+                input.style.background = '#ffcccb';
+                wordDisplay.textContent = '✗ It was: ' + currentWord;
+                wordDisplay.style.color = 'red';
+                wordDisplay.style.fontSize = '2em';
+            }
+            
+            checkBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
+            input.disabled = true;
+        }
+        
+        function nextMemory() {
+            memoryIndex = (memoryIndex + 1) % words.length;
+            document.getElementById('memoryProgress').textContent = `Word ${memoryIndex + 1} of 11`;
+            document.getElementById('memoryWord').textContent = 'Click Start!';
+            document.getElementById('memoryWord').style.fontSize = '3em';
+            document.getElementById('memoryWord').style.color = '#764ba2';
+            document.getElementById('memoryInput').value = '';
+            document.getElementById('memoryInput').style.background = 'white';
+            document.getElementById('memoryStartBtn').style.display = 'inline-block';
+            document.getElementById('memoryNextBtn').style.display = 'none';
+        }
+        
+        document.getElementById('memoryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !this.disabled) {
+                checkMemory();
+            }
+        });
+
+        // Game 4: Riddle and Write
+        let riddleIndex = 0;
+        let riddleScore = 0;
+        
+        const riddles = [
+            { word: 'ship', riddle: 'I sail on water and carry people across the ocean 🚢' },
+            { word: 'chewing gum', riddle: 'You chew me but never swallow me. I come in flavors! 🍬' },
+            { word: 'bicycle', riddle: 'I have two wheels and you pedal me to go places 🚴' },
+            { word: 'wheel', riddle: 'I am round and help cars and bikes move ⭕' },
+            { word: 'telescope', riddle: 'I help you see stars and planets far away in the sky 🔭' },
+            { word: 'computer', riddle: 'I have a screen and keyboard. You use me for games and homework 💻' },
+            { word: 'cotton candy', riddle: 'I am pink and fluffy, sweet like a cloud at the fair 🎡' },
+            { word: 'toothbrush', riddle: 'You use me every morning and night to clean your teeth 🦷' },
+            { word: 'inventor', riddle: 'I am a person who creates new things that never existed before 💡' },
+            { word: 'shampoo', riddle: 'I make bubbles and clean your hair in the shower 🧴' },
+            { word: 'toaster', riddle: 'I make your bread warm and crispy for breakfast 🍞' }
+        ];
+        
+        function showRiddle() {
+            const riddleText = document.getElementById('riddleText');
+            riddleText.textContent = riddles[riddleIndex].riddle;
+            riddleText.style.fontSize = '1.5em';
+        }
+        
+        function checkRiddle() {
+            const input = document.getElementById('riddleInput');
+            const currentRiddle = riddles[riddleIndex];
+            
+            if (input.value.toLowerCase().trim() === currentRiddle.word.toLowerCase()) {
+                input.style.background = '#90EE90';
+                riddleScore++;
+                document.getElementById('riddleScore').textContent = `Score: ${riddleScore} / 11`;
+                setTimeout(() => {
+                    nextRiddle();
+                }, 1500);
+            } else {
+                input.style.background = '#ffcccb';
+                setTimeout(() => {
+                    input.style.background = 'white';
+                }, 500);
+            }
+        }
+        
+        function nextRiddle() {
+            riddleIndex = (riddleIndex + 1) % riddles.length;
+            document.getElementById('riddleProgress').textContent = `Riddle ${riddleIndex + 1} of 11`;
+            document.getElementById('riddleText').textContent = 'Click to see the riddle!';
+            document.getElementById('riddleInput').value = '';
+            document.getElementById('riddleInput').style.background = 'white';
+        }
+        
+        document.getElementById('riddleInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkRiddle();
+            }
+        });
+
+        // Game 5: Match Game
+        let selectedIncomplete = null;
+        let selectedComplete = null;
+        let matchScore = 0;
+        
+        function createIncomplete(word) {
+            const vowels = 'aeiou';
+            return word.split('').map(char => 
+                vowels.includes(char.toLowerCase()) && Math.random() > 0.5 ? '_' : char
+            ).join('');
+        }
+
+        const incompleteWords = words.map(w => ({
+            incomplete: createIncomplete(w),
+            complete: w
+        }));
+
+        const shuffledComplete = [...words].sort(() => Math.random() - 0.5);
+
+        const incompleteDiv = document.getElementById('incomplete');
+        const completeDiv = document.getElementById('complete');
+
+        incompleteWords.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'match-item';
+            div.textContent = item.incomplete;
+            div.dataset.word = item.complete;
+            div.dataset.index = index;
+            div.onclick = () => selectIncomplete(div);
+            incompleteDiv.appendChild(div);
+        });
+
+        shuffledComplete.forEach((word, index) => {
+            const div = document.createElement('div');
+            div.className = 'match-item';
+            div.textContent = word;
+            div.dataset.word = word;
+            div.dataset.index = index;
+            div.onclick = () => selectComplete(div);
+            completeDiv.appendChild(div);
+        });
+
+        function selectIncomplete(element) {
+            if (element.classList.contains('matched')) return;
+            
+            if (selectedIncomplete) {
+                selectedIncomplete.classList.remove('selected');
+            }
+            selectedIncomplete = element;
+            element.classList.add('selected');
+            checkMatch();
+        }
+
+        function selectComplete(element) {
+            if (element.classList.contains('matched')) return;
+            
+            if (selectedComplete) {
+                selectedComplete.classList.remove('selected');
+            }
+            selectedComplete = element;
+            element.classList.add('selected');
+            checkMatch();
+        }
+
+        function checkMatch() {
+            if (selectedIncomplete && selectedComplete) {
+                if (selectedIncomplete.dataset.word === selectedComplete.dataset.word) {
+                    selectedIncomplete.classList.add('matched');
+                    selectedComplete.classList.add('matched');
+                    selectedIncomplete.classList.remove('selected');
+                    selectedComplete.classList.remove('selected');
+                    matchScore++;
+                    document.getElementById('matchScore').textContent = `Matches: ${matchScore} / 11`;
+                    selectedIncomplete = null;
+                    selectedComplete = null;
+                } else {
+                    setTimeout(() => {
+                        selectedIncomplete.classList.remove('selected');
+                        selectedComplete.classList.remove('selected');
+                        selectedIncomplete = null;
+                        selectedComplete = null;
+                    }, 500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
