@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spelling Week #2 - Fun Practice!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-    <style>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,7 @@
             font-family: "Comic Neue", cursive;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
         
         .container {
@@ -26,59 +26,109 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            body {
+                padding: 20px;
+            }
         }
         
         h1 {
             text-align: center;
             color: #667eea;
-            font-size: 2.5em;
+            font-size: 1.8em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
         }
         
         .subtitle {
             text-align: center;
             color: #764ba2;
-            font-size: 1.2em;
-            margin-bottom: 30px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .subtitle {
+                font-size: 1.2em;
+                margin-bottom: 30px;
+            }
         }
         
         .game-section {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 15px;
+            margin-bottom: 20px;
             border: 3px solid #667eea;
+        }
+        
+        @media (min-width: 768px) {
+            .game-section {
+                padding: 25px;
+                margin-bottom: 25px;
+            }
         }
         
         .game-title {
             color: #764ba2;
-            font-size: 1.8em;
+            font-size: 1.3em;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 700;
+        }
+        
+        @media (min-width: 768px) {
+            .game-title {
+                font-size: 1.8em;
+            }
         }
         
         .word-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
             margin-bottom: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .word-list {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
         }
         
         .word-item {
             background: white;
-            padding: 12px;
+            padding: 10px;
             border-radius: 10px;
             text-align: center;
-            font-size: 1.1em;
+            font-size: 0.95em;
             font-weight: bold;
             color: #667eea;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.2s;
+        }
+        
+        @media (min-width: 768px) {
+            .word-item {
+                padding: 12px;
+                font-size: 1.1em;
+            }
         }
         
         .word-item:hover {
@@ -87,23 +137,46 @@
         
         .scramble-game {
             display: grid;
-            gap: 15px;
+            gap: 10px;
+        }
+        
+        @media (min-width: 768px) {
+            .scramble-game {
+                gap: 15px;
+            }
         }
         
         .scramble-item {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
             background: white;
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
         }
         
+        @media (min-width: 768px) {
+            .scramble-item {
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+                padding: 15px;
+            }
+        }
+        
         .scrambled {
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: bold;
             color: #764ba2;
-            min-width: 180px;
+            text-align: center;
+        }
+        
+        @media (min-width: 768px) {
+            .scrambled {
+                font-size: 1.3em;
+                min-width: 180px;
+                text-align: left;
+            }
         }
         
         input[type="text"] {
@@ -111,8 +184,15 @@
             padding: 10px;
             border: 2px solid #667eea;
             border-radius: 8px;
-            font-size: 1.1em;
-            font-family: 'Comic Sans MS', cursive;
+            font-size: 1em;
+            font-family: "Comic Neue", cursive;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            input[type="text"] {
+                font-size: 1.1em;
+            }
         }
         
         input[type="text"]:focus {
@@ -125,12 +205,22 @@
             background: #667eea;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.95em;
             font-weight: bold;
             transition: all 0.3s;
+            font-family: "Comic Neue", cursive;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .check-btn {
+                width: auto;
+                padding: 10px 20px;
+                font-size: 1em;
+            }
         }
         
         .check-btn:hover {
@@ -139,61 +229,112 @@
         }
         
         .result {
-            margin-left: 10px;
+            text-align: center;
             font-size: 1.5em;
             min-width: 30px;
+            margin-top: 5px;
+        }
+        
+        @media (min-width: 768px) {
+            .result {
+                margin-top: 0;
+                margin-left: 10px;
+            }
         }
         
         .typing-practice {
             display: grid;
-            gap: 20px;
+            gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .typing-practice {
+                gap: 20px;
+            }
         }
         
         .typing-word {
             text-align: center;
-            font-size: 2.5em;
+            font-size: 2em;
             color: #764ba2;
             font-weight: bold;
-            padding: 20px;
+            padding: 15px;
             background: white;
             border-radius: 10px;
             margin-bottom: 10px;
         }
         
+        @media (min-width: 768px) {
+            .typing-word {
+                font-size: 2.5em;
+                padding: 20px;
+            }
+        }
+        
         .typing-input {
             width: 100%;
-            padding: 15px;
-            font-size: 1.5em;
+            padding: 12px;
+            font-size: 1.2em;
             text-align: center;
             border: 3px solid #667eea;
             border-radius: 10px;
         }
         
+        @media (min-width: 768px) {
+            .typing-input {
+                padding: 15px;
+                font-size: 1.5em;
+            }
+        }
+        
         .progress {
             text-align: center;
-            font-size: 1.3em;
+            font-size: 1.1em;
             color: #667eea;
             font-weight: bold;
             margin-top: 10px;
         }
         
+        @media (min-width: 768px) {
+            .progress {
+                font-size: 1.3em;
+            }
+        }
+        
         .btn-container {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             justify-content: center;
             margin-top: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .btn-container {
+                flex-direction: row;
+            }
         }
         
         .nav-btn {
             background: #764ba2;
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 12px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: bold;
             transition: all 0.3s;
+            font-family: "Comic Neue", cursive;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-btn {
+                width: auto;
+                padding: 12px 30px;
+                font-size: 1.1em;
+            }
         }
         
         .nav-btn:hover {
@@ -203,37 +344,64 @@
         
         .score {
             text-align: center;
-            font-size: 2em;
+            font-size: 1.5em;
             color: #667eea;
             font-weight: bold;
-            padding: 20px;
+            padding: 15px;
             background: white;
             border-radius: 10px;
             margin-top: 15px;
         }
         
+        @media (min-width: 768px) {
+            .score {
+                font-size: 2em;
+                padding: 20px;
+            }
+        }
+        
         .match-game {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .match-game {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
         }
         
         .match-column {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+        }
+        
+        @media (min-width: 768px) {
+            .match-column {
+                gap: 10px;
+            }
         }
         
         .match-item {
             background: white;
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
             border: 3px solid transparent;
             transition: all 0.3s;
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: bold;
+        }
+        
+        @media (min-width: 768px) {
+            .match-item {
+                padding: 15px;
+                font-size: 1.1em;
+            }
         }
         
         .match-item:hover {
