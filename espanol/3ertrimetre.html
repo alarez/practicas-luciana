@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Español Completa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Fredoka:wght@400;500;600&family=Comic+Neue:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-family: 'Bubblegum Sans', cursive;
+            color: #ff6b9d;
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0px #ffc8dd;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+        }
+
+        .section-title {
+            font-family: 'Bubblegum Sans', cursive;
+            color: #764ba2;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border: 3px dashed #ffc107;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            color: #856404;
+        }
+
+        /* Sección 1: Sílabas */
+        .syllable-group {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px solid #c4b5fd;
+        }
+
+        .syllable-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .word-item {
+            background: #faf5ff;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #e9d5ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .word-text {
+            flex: 1;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .syllable-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #8b5cf6;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .syllable-input.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .syllable-input.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        /* Aumentativos y Diminutivos */
+        .aug-dim-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .aug-dim-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #fbbf24;
+            text-align: center;
+        }
+
+        .base-word {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #7c2d12;
+            margin-bottom: 10px;
+            font-family: 'Bubblegum Sans', cursive;
+        }
+
+        .transform-label {
+            font-size: 1.1em;
+            color: #92400e;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .transform-input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid #fed7aa;
+            border-radius: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .transform-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        .transform-input.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .transform-input.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        /* Palabras Compuestas */
+        .word-bank {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #93c5fd;
+            margin-bottom: 25px;
+        }
+
+        .bank-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .available-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .bank-word {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #1e40af;
+            border: 2px solid #60a5fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bank-word:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .compound-write-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .compound-write-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 3px solid #bfdbfe;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .number-label {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e40af;
+            min-width: 30px;
+        }
+
+        .compound-write-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #bfdbfe;
+            border-radius: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1em;
+        }
+
+        .compound-write-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .compound-write-input.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .compound-write-input.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        /* Orden de Oraciones */
+        .sentence-order-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sentence-order-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #c4b5fd;
+        }
+
+        .words-to-order {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .word-chip {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #6b21a8;
+            border: 2px solid #c4b5fd;
+        }
+
+        .order-input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid #e9d5ff;
+            border-radius: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .order-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+
+        .order-input.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .order-input.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .hint {
+            font-size: 0.9em;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        /* División Silábica */
+        .syllable-division-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .syllable-div-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #fca5a5;
+        }
+
+        .word-to-divide {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #991b1b;
+            margin-bottom: 15px;
+            text-align: center;
+            font-family: 'Bubblegum Sans', cursive;
+        }
+
+        .division-input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid #fecaca;
+            border-radius: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .tonic-label {
+            font-size: 0.95em;
+            color: #7f1d1d;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .tonic-input {
+            width: 100%;
+            padding: 10px;
+            border: 3px solid #fecaca;
+            border-radius: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        .division-input:focus,
+        .tonic-input:focus {
+            outline: none;
+            border-color: #ef4444;
+        }
+
+        .division-input.correct,
+        .tonic-input.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .division-input.incorrect,
+        .tonic-input.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        /* Sección 2: Comprensión de lectura */
+        .reading-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 3px solid #ffc8dd;
+        }
+
+        .reading-text {
+            font-family: 'Comic Neue', cursive;
+            font-size: 1.15em;
+            line-height: 1.8;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .reading-image {
+            float: right;
+            margin: 0 0 15px 15px;
+            font-size: 3em;
+        }
+
+        .question-box {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #3b82f6;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .answer-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bfdbfe;
+            border-radius: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .answer-box.filled {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        /* Sección 3: Crear oraciones */
+        .sentence-creator {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #c4b5fd;
+        }
+
+        .sentence-number {
+            font-family: 'Bubblegum Sans', cursive;
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .sentence-input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #e9d5ff;
+            border-radius: 10px;
+            font-family: 'Comic Neue', cursive;
+            font-size: 1.1em;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .sentence-input:focus {
+            outline: none;
+            border-color: #a78bfa;
+            background: #faf5ff;
+        }
+
+        /* Botones */
+        .btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            font-family: 'Bubblegum Sans', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(245, 87, 108, 0.5);
+        }
+
+        .result {
+            text-align: center;
+            font-size: 1.3em;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px 15px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 5px;
+            }
+
+            .subtitle {
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+
+            .section {
+                padding: 20px 15px;
+                margin-bottom: 30px;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .instructions {
+                font-size: 1em;
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+
+            .syllable-group {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .syllable-header {
+                font-size: 2em;
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .word-item {
+                padding: 15px 12px;
+                margin-bottom: 8px;
+            }
+
+            .word-text {
+                font-size: 1.3em;
+            }
+
+            .syllable-input {
+                width: 100px;
+                padding: 12px 8px;
+                font-size: 1.2em;
+            }
+
+            .reading-container {
+                padding: 20px 15px;
+            }
+
+            .reading-text {
+                font-size: 1.1em;
+                line-height: 1.7;
+            }
+
+            .reading-image {
+                float: none;
+                display: block;
+                text-align: center;
+                margin: 10px 0 15px 0;
+                font-size: 3em;
+            }
+
+            .question-box {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .question-text {
+                font-size: 1em;
+                margin-bottom: 8px;
+            }
+
+            .answer-box {
+                font-size: 1em;
+                padding: 12px;
+                min-height: 80px;
+            }
+
+            .sentence-creator {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .sentence-number {
+                font-size: 1.2em;
+                margin-bottom: 8px;
+            }
+
+            .sentence-input {
+                font-size: 1em;
+                padding: 12px;
+                min-height: 100px;
+            }
+
+            .check-btn {
+                width: 100%;
+                padding: 15px 20px;
+                font-size: 1.2em;
+                margin: 10px 0;
+            }
+
+            .result {
+                font-size: 1.1em;
+                padding: 15px;
+            }
+
+            .btn-container {
+                margin: 20px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+            }
+
+            .syllable-header {
+                font-size: 1.8em;
+            }
+
+            .word-text {
+                font-size: 1.2em;
+            }
+
+            .syllable-input {
+                width: 90px;
+                font-size: 1.1em;
+                padding: 10px;
+            }
+
+            .check-btn {
+                font-size: 1.1em;
+            }
+
+            .aug-dim-container {
+                grid-template-columns: 1fr;
+            }
+
+            .aug-dim-item {
+                padding: 15px;
+            }
+
+            .base-word {
+                font-size: 1.3em;
+            }
+
+            .word-bank {
+                padding: 15px;
+            }
+
+            .bank-word {
+                font-size: 1em;
+                padding: 8px 14px;
+            }
+
+            .compound-write-container {
+                grid-template-columns: 1fr;
+            }
+
+            .compound-write-item {
+                padding: 12px;
+            }
+
+            .number-label {
+                font-size: 1.2em;
+            }
+
+            .compound-write-input {
+                font-size: 1em;
+            }
+
+            .word-chip {
+                font-size: 1em;
+                padding: 8px 15px;
+            }
+
+            .syllable-division-container {
+                grid-template-columns: 1fr;
+            }
+
+            .syllable-div-item {
+                padding: 15px;
+            }
+
+            .word-to-divide {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🌟 Práctica de Español 🌟</h1>
+
+        <!-- SECCIÓN 1: SÍLABAS -->
+        <div class="section">
+            <div class="section-title">📚 Parte 1: Completar Palabras</div>
+            <div class="instructions">
+                <strong>Instrucciones:</strong> Escribe la sílaba que falta para completar cada palabra (br, cr, dr,
+                fr).
+            </div>
+
+            <!-- Grupo BR -->
+            <div class="syllable-group">
+                <div class="syllable-header">br</div>
+                <div class="word-item">
+                    <span class="word-text">Ca___</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">fe___ero</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="3">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">equili___io</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">cere___o</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">a___igo</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___ócoli</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">a___azo</span>
+                    <input type="text" class="syllable-input" data-answer="br" maxlength="2">
+                </div>
+            </div>
+
+            <!-- Grupo CR -->
+            <div class="syllable-group">
+                <div class="syllable-header">cr</div>
+                <div class="word-item">
+                    <span class="word-text">se___to</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="3">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___moso</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">es___ibir</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___eativo</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___istina</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___ecer</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___oqueta</span>
+                    <input type="text" class="syllable-input" data-answer="cr" maxlength="2">
+                </div>
+            </div>
+
+            <!-- Grupo DR -->
+            <div class="syllable-group">
+                <div class="syllable-header">dr</div>
+                <div class="word-item">
+                    <span class="word-text">pa___e</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="3">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">la___ar</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">an___ea</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">la___illo</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">ma___ugada</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">almen___a</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="3">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">vi___io</span>
+                    <input type="text" class="syllable-input" data-answer="dr" maxlength="2">
+                </div>
+            </div>
+
+            <!-- Grupo FR -->
+            <div class="syllable-group">
+                <div class="syllable-header">fr</div>
+                <div class="word-item">
+                    <span class="word-text">___ente</span>
+                    <input type="text" class="syllable-input" data-answer="fr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">Á___ca</span>
+                    <input type="text" class="syllable-input" data-answer="fri" maxlength="3">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___eno</span>
+                    <input type="text" class="syllable-input" data-answer="fr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">dis___utar</span>
+                    <input type="text" class="syllable-input" data-answer="fr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___acaso</span>
+                    <input type="text" class="syllable-input" data-answer="fr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">___ontera</span>
+                    <input type="text" class="syllable-input" data-answer="fr" maxlength="2">
+                </div>
+                <div class="word-item">
+                    <span class="word-text">su___ir</span>
+                    <input type="text" class="syllable-input" data-answer="fr" maxlength="2">
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="check-btn" onclick="checkSyllables()">Revisar Sílabas ✨</button>
+            </div>
+            <div id="syllable-result" class="result"></div>
+        </div>
+
+        <!-- SECCIÓN 1B: AUMENTATIVOS Y DIMINUTIVOS -->
+        <div class="section">
+            <div class="section-title">🔤 Aumentativos y Diminutivos</div>
+            <div class="instructions">
+                <strong>Instrucciones:</strong> Escribe el aumentativo o diminutivo de cada palabra según se indica.
+            </div>
+
+            <div class="aug-dim-container">
+                <div class="aug-dim-item">
+                    <div class="base-word">perro</div>
+                    <div class="transform-label">Aumentativo:</div>
+                    <input type="text" class="transform-input" data-answer="perrazo" placeholder="perr___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">perro</div>
+                    <div class="transform-label">Diminutivo:</div>
+                    <input type="text" class="transform-input" data-answer="perrito" placeholder="perr___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">casa</div>
+                    <div class="transform-label">Aumentativo:</div>
+                    <input type="text" class="transform-input" data-answer="casona" placeholder="cas___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">casa</div>
+                    <div class="transform-label">Diminutivo:</div>
+                    <input type="text" class="transform-input" data-answer="casita" placeholder="cas___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">libro</div>
+                    <div class="transform-label">Aumentativo:</div>
+                    <input type="text" class="transform-input" data-answer="librote" placeholder="libr___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">libro</div>
+                    <div class="transform-label">Diminutivo:</div>
+                    <input type="text" class="transform-input" data-answer="librito" placeholder="libr___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">zapato</div>
+                    <div class="transform-label">Aumentativo:</div>
+                    <input type="text" class="transform-input" data-answer="zapatote" placeholder="zapat___">
+                </div>
+
+                <div class="aug-dim-item">
+                    <div class="base-word">zapato</div>
+                    <div class="transform-label">Diminutivo:</div>
+                    <input type="text" class="transform-input" data-answer="zapatito" placeholder="zapat___">
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="check-btn" onclick="checkAugmentatives()">Revisar Aumentativos y Diminutivos ✨</button>
+            </div>
+            <div id="aug-result" class="result"></div>
+        </div>
+
+        <!-- SECCIÓN 1C: PALABRAS COMPUESTAS -->
+        <div class="section">
+            <div class="section-title">🔗 Palabras Compuestas</div>
+            <div class="instructions">
+                <strong>Instrucciones:</strong> Escribe palabras compuestas usando las palabras que ves abajo. Puedes
+                combinarlas como quieras para formar palabras nuevas.
+            </div>
+
+            <div class="word-bank">
+                <div class="bank-title">💡 Banco de palabras:</div>
+                <div class="available-words">
+                    <span class="bank-word">para</span>
+                    <span class="bank-word">sacar</span>
+                    <span class="bank-word">lava</span>
+                    <span class="bank-word">rompe</span>
+                    <span class="bank-word">abre</span>
+                    <span class="bank-word">mata</span>
+                    <span class="bank-word">guarda</span>
+                    <span class="bank-word">corta</span>
+                    <span class="bank-word">caídas</span>
+                    <span class="bank-word">corchos</span>
+                    <span class="bank-word">platos</span>
+                    <span class="bank-word">cabezas</span>
+                    <span class="bank-word">latas</span>
+                    <span class="bank-word">moscas</span>
+                    <span class="bank-word">bosques</span>
+                    <span class="bank-word">uñas</span>
+                    <span class="bank-word">ropa</span>
+                    <span class="bank-word">sol</span>
+                </div>
+            </div>
+
+            <div class="compound-write-container">
+                <div class="compound-write-item">
+                    <div class="number-label">1.</div>
+                    <input type="text" class="compound-write-input" data-answers="paracaídas,paracaidas"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">2.</div>
+                    <input type="text" class="compound-write-input" data-answers="sacacorchos"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">3.</div>
+                    <input type="text" class="compound-write-input" data-answers="lavaplatos"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">4.</div>
+                    <input type="text" class="compound-write-input" data-answers="rompecabezas"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">5.</div>
+                    <input type="text" class="compound-write-input" data-answers="abrelatas"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">6.</div>
+                    <input type="text" class="compound-write-input" data-answers="matamoscas"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">7.</div>
+                    <input type="text" class="compound-write-input" data-answers="guardabosques"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">8.</div>
+                    <input type="text" class="compound-write-input" data-answers="cortauñas,cortaúñas,cortaunas"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">9.</div>
+                    <input type="text" class="compound-write-input" data-answers="guardarropa"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+
+                <div class="compound-write-item">
+                    <div class="number-label">10.</div>
+                    <input type="text" class="compound-write-input" data-answers="parasol"
+                        placeholder="Escribe una palabra compuesta">
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="check-btn" onclick="checkCompounds()">Revisar Palabras Compuestas ✨</button>
+            </div>
+            <div id="compound-result" class="result"></div>
+        </div>
+
+        <!-- SECCIÓN 1D: ORDEN DE ORACIONES -->
+        <div class="section">
+            <div class="section-title">📝 Orden de Oraciones</div>
+            <div class="instructions">
+                <strong>Instrucciones:</strong> Ordena las palabras para formar oraciones correctas. Escribe la oración
+                completa.
+            </div>
+
+            <div class="sentence-order-container">
+                <div class="sentence-order-item">
+                    <div class="words-to-order">
+                        <span class="word-chip">juega</span>
+                        <span class="word-chip">el</span>
+                        <span class="word-chip">parque</span>
+                        <span class="word-chip">en</span>
+                        <span class="word-chip">niño</span>
+                    </div>
+                    <input type="text" class="order-input" data-answer="el niño juega en el parque"
+                        placeholder="Escribe la oración ordenada">
+                    <div class="hint">💡 Pista: Empieza con "el"</div>
+                </div>
+
+                <div class="sentence-order-item">
+                    <div class="words-to-order">
+                        <span class="word-chip">mariposas</span>
+                        <span class="word-chip">las</span>
+                        <span class="word-chip">vuelan</span>
+                        <span class="word-chip">jardín</span>
+                        <span class="word-chip">en</span>
+                        <span class="word-chip">el</span>
+                    </div>
+                    <input type="text" class="order-input" data-answer="las mariposas vuelan en el jardín"
+                        placeholder="Escribe la oración ordenada">
+                    <div class="hint">💡 Pista: Empieza con "las"</div>
+                </div>
+
+                <div class="sentence-order-item">
+                    <div class="words-to-order">
+                        <span class="word-chip">libro</span>
+                        <span class="word-chip">lee</span>
+                        <span class="word-chip">María</span>
+                        <span class="word-chip">un</span>
+                        <span class="word-chip">interesante</span>
+                    </div>
+                    <input type="text" class="order-input" data-answer="maría lee un libro interesante"
+                        placeholder="Escribe la oración ordenada">
+                    <div class="hint">💡 Pista: Empieza con "María"</div>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="check-btn" onclick="checkSentenceOrder()">Revisar Orden de Oraciones ✨</button>
+            </div>
+            <div id="order-result" class="result"></div>
+        </div>
+
+        <!-- SECCIÓN 1E: DIVISIÓN SILÁBICA -->
+        <div class="section">
+            <div class="section-title">✂️ División Silábica</div>
+            <div class="instructions">
+                <strong>Instrucciones:</strong> Divide las palabras en sílabas y marca la sílaba tónica (la que se
+                pronuncia más fuerte) con una estrella ⭐
+            </div>
+
+            <div class="syllable-division-container">
+                <div class="syllable-div-item">
+                    <div class="word-to-divide">cabra</div>
+                    <input type="text" class="division-input" data-answer="ca-bra" placeholder="Ejemplo: ca-bra">
+                    <div class="tonic-label">Sílaba tónica:</div>
+                    <input type="text" class="tonic-input" data-answer="ca" placeholder="¿Cuál?">
+                </div>
+
+                <div class="syllable-div-item">
+                    <div class="word-to-divide">libro</div>
+                    <input type="text" class="division-input" data-answer="li-bro" placeholder="Escribe las sílabas">
+                    <div class="tonic-label">Sílaba tónica:</div>
+                    <input type="text" class="tonic-input" data-answer="li" placeholder="¿Cuál?">
+                </div>
+
+                <div class="syllable-div-item">
+                    <div class="word-to-divide">secreto</div>
+                    <input type="text" class="division-input" data-answer="se-cre-to" placeholder="Escribe las sílabas">
+                    <div class="tonic-label">Sílaba tónica:</div>
+                    <input type="text" class="tonic-input" data-answer="cre" placeholder="¿Cuál?">
+                </div>
+
+                <div class="syllable-div-item">
+                    <div class="word-to-divide">madrugada</div>
+                    <input type="text" class="division-input" data-answer="ma-dru-ga-da"
+                        placeholder="Escribe las sílabas">
+                    <div class="tonic-label">Sílaba tónica:</div>
+                    <input type="text" class="tonic-input" data-answer="ga" placeholder="¿Cuál?">
+                </div>
+
+                <div class="syllable-div-item">
+                    <div class="word-to-divide">frente</div>
+                    <input type="text" class="division-input" data-answer="fren-te" placeholder="Escribe las sílabas">
+                    <div class="tonic-label">Sílaba tónica:</div>
+                    <input type="text" class="tonic-input" data-answer="fren" placeholder="¿Cuál?">
+                </div>
+
+                <div class="syllable-div-item">
+                    <div class="word-to-divide">almendra</div>
+                    <input type="text" class="division-input" data-answer="al-men-dra"
+                        placeholder="Escribe las sílabas">
+                    <div class="tonic-label">Sílaba tónica:</div>
+                    <input type="text" class="tonic-input" data-answer="men" placeholder="¿Cuál?">
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="check-btn" onclick="checkSyllableDivision()">Revisar División Silábica ✨</button>
+            </div>
+            <div id="division-result" class="result"></div>
+        </div>
+
+        <!-- SECCIÓN 2: COMPRENSIÓN DE LECTURA -->
+        <div class="section">
+            <div class="section-title">📖 Parte 2: Comprensión de Lectura</div>
+
+            <!-- Historia 1: El Rincón Dulce -->
+            <div class="reading-container">
+                <h3 style="color: #be185d; margin-bottom: 15px; font-family: 'Bubblegum Sans', cursive;">🍰 El Rincón
+                    Dulce</h3>
+                <div class="reading-text">
+                    <span class="reading-image">🥖🍰🍪</span>
+                    En un pequeño pueblo, había una panadería llamada "El Rincón Dulce". Todos los días, la señora Rosa
+                    preparaba pan fresco, pasteles y galletas. Los niños del pueblo siempre pasaban por allí después de
+                    la escuela para comprar algo dulce. Un día, la señora Rosa decidió enseñarles a los niños cómo hacer
+                    galletas.
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">1. ¿Cómo se llama la panadería del pueblo?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">2. ¿Qué prepara la señora Rosa todos los días?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">3. ¿Quiénes visitaba la panadería después de la escuela?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">4. ¿Qué decidió hacer la señora Rosa un día?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+            </div>
+
+            <!-- Historia 2: Días de Lluvia -->
+            <div class="reading-container">
+                <h3 style="color: #0891b2; margin-bottom: 15px; font-family: 'Bubblegum Sans', cursive;">☔ Días de
+                    Lluvia</h3>
+                <div class="reading-text">
+                    <span class="reading-image">☔🥾🐕</span>
+                    A Max le encanta jugar bajo la lluvia. Su mamá le compró unas botas de goma amarillas, para que
+                    pueda saltar en charcos. Al perro de Max le gusta saltar en los charcos también. Se manchan mucho de
+                    lodo, así que Max necesita bañarse cuando vuelva a entrar. Su perro tiene un baño también.
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">1. ¿Qué le encanta a Max?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">2. ¿Qué le compró la mamá de Max?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">3. ¿A quién le gusta saltar en los charcos con Max?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+
+                <div class="question-box">
+                    <div class="question-text">4. ¿Por qué Max y su perro necesitan bañarse después de jugar bajo la
+                        lluvia?</div>
+                    <textarea class="answer-box" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: CREAR ORACIONES -->
+        <div class="section">
+            <div class="section-title">✏️ Parte 3: Crea tus Oraciones</div>
+            <div class="instructions">
+                <strong>Instrucciones:</strong> Usando las palabras que completaste en la Parte 1, inventa 5 oraciones
+                con 2 palabras en cada una. ¡Sé creativo!
+            </div>
+
+            <div class="sentence-creator">
+                <div class="sentence-number">Oración 1:</div>
+                <textarea class="sentence-input" placeholder="Escribe tu primera oración aquí..."></textarea>
+            </div>
+
+            <div class="sentence-creator">
+                <div class="sentence-number">Oración 2:</div>
+                <textarea class="sentence-input" placeholder="Escribe tu segunda oración aquí..."></textarea>
+            </div>
+
+            <div class="sentence-creator">
+                <div class="sentence-number">Oración 3:</div>
+                <textarea class="sentence-input" placeholder="Escribe tu tercera oración aquí..."></textarea>
+            </div>
+
+            <div class="sentence-creator">
+                <div class="sentence-number">Oración 4:</div>
+                <textarea class="sentence-input" placeholder="Escribe tu cuarta oración aquí..."></textarea>
+            </div>
+
+            <div class="sentence-creator">
+                <div class="sentence-number">Oración 5:</div>
+                <textarea class="sentence-input" placeholder="Escribe tu quinta oración aquí..."></textarea>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button class="check-btn" onclick="generatePDF()">Descargar Resultados PDF 📄</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function checkSyllables() {
+            const inputs = document.querySelectorAll('.syllable-input');
+            let correct = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correct++;
+                } else if (userAnswer !== '') {
+                    input.classList.add('incorrect');
+                }
+            });
+
+            const resultDiv = document.getElementById('syllable-result');
+            resultDiv.classList.add('show', 'success');
+
+            if (correct === total) {
+                resultDiv.innerHTML = '<span class="emoji">🎉</span> ¡PERFECTO! ¡Todas las sílabas correctas! <span class="emoji">🌟</span>';
+            } else if (correct >= total * 0.7) {
+                resultDiv.innerHTML = `<span class="emoji">😊</span> ¡Muy bien! ${correct} de ${total} correctas <span class="emoji">💪</span>`;
+            } else {
+                resultDiv.innerHTML = `<span class="emoji">📚</span> Sigue practicando. ${correct} de ${total} correctas <span class="emoji">⭐</span>`;
+            }
+        }
+
+        function checkAugmentatives() {
+            const inputs = document.querySelectorAll('.transform-input');
+            let correct = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correct++;
+                } else if (userAnswer !== '') {
+                    input.classList.add('incorrect');
+                }
+            });
+
+            const resultDiv = document.getElementById('aug-result');
+            resultDiv.classList.add('show', 'success');
+
+            if (correct === total) {
+                resultDiv.innerHTML = '<span class="emoji">🎉</span> ¡EXCELENTE! ¡Todos correctos! <span class="emoji">🌟</span>';
+            } else if (correct >= total * 0.7) {
+                resultDiv.innerHTML = `<span class="emoji">😊</span> ¡Muy bien! ${correct} de ${total} correctos <span class="emoji">💪</span>`;
+            } else {
+                resultDiv.innerHTML = `<span class="emoji">📚</span> Sigue intentando. ${correct} de ${total} correctos <span class="emoji">⭐</span>`;
+            }
+        }
+
+        function checkCompounds() {
+            const inputs = document.querySelectorAll('.compound-write-input');
+            let correct = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim().replace(/\s+/g, '');
+                const correctAnswers = input.getAttribute('data-answers').toLowerCase().split(',');
+
+                input.classList.remove('correct', 'incorrect');
+
+                if (correctAnswers.includes(userAnswer)) {
+                    input.classList.add('correct');
+                    correct++;
+                } else if (userAnswer !== '') {
+                    input.classList.add('incorrect');
+                }
+            });
+
+            const resultDiv = document.getElementById('compound-result');
+            resultDiv.classList.add('show', 'success');
+
+            if (correct === total) {
+                resultDiv.innerHTML = '<span class="emoji">🎉</span> ¡PERFECTO! ¡Todas las palabras correctas! <span class="emoji">🌟</span>';
+            } else if (correct >= total * 0.7) {
+                resultDiv.innerHTML = `<span class="emoji">😊</span> ¡Muy bien! ${correct} de ${total} correctas <span class="emoji">💪</span>`;
+            } else {
+                resultDiv.innerHTML = `<span class="emoji">📚</span> Sigue practicando. ${correct} de ${total} correctas <span class="emoji">⭐</span>`;
+            }
+        }
+
+        function checkSentenceOrder() {
+            const inputs = document.querySelectorAll('.order-input');
+            let correct = 0;
+            let total = inputs.length;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correct++;
+                } else if (userAnswer !== '') {
+                    input.classList.add('incorrect');
+                }
+            });
+
+            const resultDiv = document.getElementById('order-result');
+            resultDiv.classList.add('show', 'success');
+
+            if (correct === total) {
+                resultDiv.innerHTML = '<span class="emoji">🎉</span> ¡PERFECTO! ¡Todas las oraciones correctas! <span class="emoji">🌟</span>';
+            } else if (correct >= total * 0.7) {
+                resultDiv.innerHTML = `<span class="emoji">😊</span> ¡Muy bien! ${correct} de ${total} correctas <span class="emoji">💪</span>`;
+            } else {
+                resultDiv.innerHTML = `<span class="emoji">📚</span> Sigue intentando. ${correct} de ${total} correctas <span class="emoji">⭐</span>`;
+            }
+        }
+
+        function checkSyllableDivision() {
+            const divisionInputs = document.querySelectorAll('.division-input');
+            const tonicInputs = document.querySelectorAll('.tonic-input');
+            let correct = 0;
+            let total = divisionInputs.length + tonicInputs.length;
+
+            divisionInputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correct++;
+                } else if (userAnswer !== '') {
+                    input.classList.add('incorrect');
+                }
+            });
+
+            tonicInputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+
+                input.classList.remove('correct', 'incorrect');
+
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correct++;
+                } else if (userAnswer !== '') {
+                    input.classList.add('incorrect');
+                }
+            });
+
+            const resultDiv = document.getElementById('division-result');
+            resultDiv.classList.add('show', 'success');
+
+            if (correct === total) {
+                resultDiv.innerHTML = '<span class="emoji">🎉</span> ¡PERFECTO! ¡Todas correctas! <span class="emoji">🌟</span>';
+            } else if (correct >= total * 0.7) {
+                resultDiv.innerHTML = `<span class="emoji">😊</span> ¡Muy bien! ${correct} de ${total} correctas <span class="emoji">💪</span>`;
+            } else {
+                resultDiv.innerHTML = `<span class="emoji">📚</span> Sigue practicando. ${correct} de ${total} correctas <span class="emoji">⭐</span>`;
+            }
+        }
+
+        // Highlight textareas when typed
+        document.querySelectorAll('.answer-box, .sentence-input').forEach(box => {
+            box.addEventListener('input', function () {
+                if (this.value.trim().length > 0) {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+            });
+        });
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let yPosition = 20;
+            const pageHeight = doc.internal.pageSize.height;
+            const marginBottom = 20;
+
+            // Title
+            doc.setFontSize(20);
+            doc.setTextColor(255, 107, 157);
+            doc.text('Resultados de la Práctica de Español', 105, yPosition, { align: 'center' });
+            yPosition += 15;
+
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Fecha: ' + new Date().toLocaleDateString('es-ES'), 105, yPosition, { align: 'center' });
+            yPosition += 15;
+
+            // Helper function to check if we need a new page
+            function checkNewPage(additionalSpace = 20) {
+                if (yPosition + additionalSpace > pageHeight - marginBottom) {
+                    doc.addPage();
+                    yPosition = 20;
+                    return true;
+                }
+                return false;
+            }
+
+            // Section 1: Syllables
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('1. Completar Palabras con Sílabas', 20, yPosition);
+            yPosition += 8;
+
+            const syllableInputs = document.querySelectorAll('.syllable-input');
+            let syllableCorrect = 0;
+            syllableInputs.forEach(input => {
+                if (input.classList.contains('correct')) syllableCorrect++;
+            });
+
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.text(`Correctas: ${syllableCorrect} de ${syllableInputs.length}`, 20, yPosition);
+            yPosition += 10;
+
+            // Section 2: Augmentatives and Diminutives
+            checkNewPage();
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('2. Aumentativos y Diminutivos', 20, yPosition);
+            yPosition += 8;
+
+            const augInputs = document.querySelectorAll('.transform-input');
+            let augCorrect = 0;
+            augInputs.forEach(input => {
+                if (input.classList.contains('correct')) augCorrect++;
+            });
+
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.text(`Correctas: ${augCorrect} de ${augInputs.length}`, 20, yPosition);
+            yPosition += 10;
+
+            // Section 3: Compound Words
+            checkNewPage();
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('3. Palabras Compuestas', 20, yPosition);
+            yPosition += 8;
+
+            const compoundInputs = document.querySelectorAll('.compound-write-input');
+            let compoundCorrect = 0;
+            let compoundAnswers = [];
+
+            compoundInputs.forEach((input, index) => {
+                if (input.classList.contains('correct')) compoundCorrect++;
+                if (input.value.trim()) {
+                    compoundAnswers.push(`${index + 1}. ${input.value}`);
+                }
+            });
+
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.text(`Correctas: ${compoundCorrect} de ${compoundInputs.length}`, 20, yPosition);
+            yPosition += 8;
+
+            doc.setFontSize(9);
+            compoundAnswers.forEach(answer => {
+                checkNewPage();
+                doc.text(answer, 25, yPosition);
+                yPosition += 6;
+            });
+            yPosition += 5;
+
+            // Section 4: Sentence Order
+            checkNewPage();
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('4. Orden de Oraciones', 20, yPosition);
+            yPosition += 8;
+
+            const orderInputs = document.querySelectorAll('.order-input');
+            let orderCorrect = 0;
+            let orderAnswers = [];
+
+            orderInputs.forEach((input, index) => {
+                if (input.classList.contains('correct')) orderCorrect++;
+                if (input.value.trim()) {
+                    orderAnswers.push(`${index + 1}. ${input.value}`);
+                }
+            });
+
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.text(`Correctas: ${orderCorrect} de ${orderInputs.length}`, 20, yPosition);
+            yPosition += 8;
+
+            doc.setFontSize(9);
+            orderAnswers.forEach(answer => {
+                checkNewPage();
+                const lines = doc.splitTextToSize(answer, 170);
+                lines.forEach(line => {
+                    checkNewPage();
+                    doc.text(line, 25, yPosition);
+                    yPosition += 6;
+                });
+            });
+            yPosition += 5;
+
+            // Section 5: Syllable Division
+            checkNewPage();
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('5. División Silábica', 20, yPosition);
+            yPosition += 8;
+
+            const divisionInputs = document.querySelectorAll('.division-input');
+            const tonicInputs = document.querySelectorAll('.tonic-input');
+            let divisionCorrect = 0;
+
+            divisionInputs.forEach(input => {
+                if (input.classList.contains('correct')) divisionCorrect++;
+            });
+            tonicInputs.forEach(input => {
+                if (input.classList.contains('correct')) divisionCorrect++;
+            });
+
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.text(`Correctas: ${divisionCorrect} de ${divisionInputs.length + tonicInputs.length}`, 20, yPosition);
+            yPosition += 10;
+
+            // Section 6: Reading Comprehension
+            checkNewPage(40);
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('6. Comprensión de Lectura', 20, yPosition);
+            yPosition += 8;
+
+            const readingAnswers = document.querySelectorAll('.answer-box');
+            doc.setFontSize(9);
+            doc.setTextColor(60, 60, 60);
+
+            readingAnswers.forEach((answer, index) => {
+                if (answer.value.trim()) {
+                    checkNewPage(20);
+                    doc.text(`Pregunta ${index + 1}:`, 25, yPosition);
+                    yPosition += 6;
+                    const lines = doc.splitTextToSize(answer.value, 160);
+                    lines.forEach(line => {
+                        checkNewPage();
+                        doc.text(line, 30, yPosition);
+                        yPosition += 5;
+                    });
+                    yPosition += 3;
+                }
+            });
+
+            // Section 7: Sentence Creation
+            checkNewPage(40);
+            doc.setFontSize(14);
+            doc.setTextColor(118, 75, 162);
+            doc.text('7. Crear Oraciones', 20, yPosition);
+            yPosition += 8;
+
+            const sentenceInputs = document.querySelectorAll('.sentence-input');
+            doc.setFontSize(9);
+            doc.setTextColor(60, 60, 60);
+
+            sentenceInputs.forEach((sentence, index) => {
+                if (sentence.value.trim()) {
+                    checkNewPage(20);
+                    doc.text(`Oración ${index + 1}:`, 25, yPosition);
+                    yPosition += 6;
+                    const lines = doc.splitTextToSize(sentence.value, 160);
+                    lines.forEach(line => {
+                        checkNewPage();
+                        doc.text(line, 30, yPosition);
+                        yPosition += 5;
+                    });
+                    yPosition += 3;
+                }
+            });
+
+            // Summary
+            checkNewPage(30);
+            yPosition += 5;
+            doc.setFontSize(16);
+            doc.setTextColor(118, 75, 162);
+            doc.text('Resumen General', 105, yPosition, { align: 'center' });
+            yPosition += 10;
+
+            const totalCorrect = syllableCorrect + augCorrect + compoundCorrect + orderCorrect + divisionCorrect;
+            const totalQuestions = syllableInputs.length + augInputs.length + compoundInputs.length + orderInputs.length + divisionInputs.length + tonicInputs.length;
+            const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+
+            doc.setFontSize(12);
+            doc.setTextColor(60, 60, 60);
+            doc.text(`Total de respuestas correctas: ${totalCorrect} de ${totalQuestions}`, 105, yPosition, { align: 'center' });
+            yPosition += 8;
+            doc.text(`Porcentaje: ${percentage}%`, 105, yPosition, { align: 'center' });
+
+            // Save PDF
+            doc.save('resultados-practica-espanol.pdf');
+        }
+    </script>
+</body>
+
+</html>
