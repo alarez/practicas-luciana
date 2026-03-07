@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Practice - Repaso 1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #4a8c3f;
+    --green-light: #6db85a;
+    --blue: #2b7de9;
+    --purple: #7c3aed;
+    --red: #e53e3e;
+    --orange: #f6993b;
+    --pink: #ec4899;
+    --teal: #14b8a6;
+    --bg: #f0f9ff;
+    --card: #ffffff;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: #333;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  .nav {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .nav h1 {
+    font-family: 'Fredoka One', cursive;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  }
+  .nav h1 .dino { font-size: 1.5rem; }
+  .nav-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: #fff;
+    color: var(--green);
+    border-color: #fff;
+  }
+  .score-badge {
+    background: var(--orange);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 24px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    color: var(--green);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .section-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 24px;
+    font-size: 1rem;
+  }
+
+  /* WORD BANK */
+  .word-bank {
+    background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 28px;
+    border: 3px solid #93c5fd;
+    position: relative;
+  }
+  .word-bank::before {
+    content: 'Word Bank';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--blue);
+    color: #fff;
+    padding: 2px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .word-chip {
+    background: #fff;
+    color: var(--green);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: grab;
+    border: 2px solid var(--green-light);
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .word-chip:hover { transform: scale(1.08); box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+  .word-chip.used { opacity: 0.35; pointer-events: none; transform: scale(0.95); }
+  .word-chip:active { cursor: grabbing; }
+
+  /* SENTENCES */
+  .sentence-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    border-left: 4px solid #e2e8f0;
+  }
+  .sentence-card.correct { border-left-color: var(--green); background: #f0fdf4; }
+  .sentence-card.incorrect { border-left-color: var(--red); background: #fef2f2; }
+  .sentence-num {
+    background: var(--green-light);
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .sentence-text { flex: 1; font-size: 1rem; line-height: 1.6; }
+  .blank-slot {
+    display: inline-block;
+    min-width: 110px;
+    padding: 4px 12px;
+    border: 2px dashed #94a3b8;
+    border-radius: 10px;
+    background: #f8fafc;
+    text-align: center;
+    color: var(--green);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    vertical-align: middle;
+  }
+  .blank-slot:hover { border-color: var(--blue); background: #eff6ff; }
+  .blank-slot.filled { border-style: solid; border-color: var(--green-light); background: #ecfdf5; }
+  .blank-slot.correct-answer { border-color: var(--green); background: #dcfce7; }
+  .blank-slot.wrong-answer { border-color: var(--red); background: #fee2e2; color: var(--red); }
+  .feedback-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* PAGE TABS for vocabulary */
+  .page-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .page-tab {
+    padding: 6px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--green-light);
+    background: #fff;
+    color: var(--green);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .page-tab.active, .page-tab:hover {
+    background: var(--green);
+    color: #fff;
+  }
+  .vocab-page { display: none; }
+  .vocab-page.active { display: block; }
+
+  /* PHONICS TABLE */
+  .phonics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .phonics-table th {
+    background: linear-gradient(135deg, var(--purple), #8b5cf6);
+    color: #fff;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+  .phonics-table td {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .phonics-table td:hover { background: #f0f9ff; }
+  .phonics-table td.speaking {
+    background: #dbeafe;
+    color: var(--blue);
+    animation: pulse 0.5s;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* BLEND CHOICES */
+  .blend-question {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid #e2e8f0;
+  }
+  .blend-question.correct { border-left-color: var(--green); background: #f0fdf4; }
+  .blend-question.incorrect { border-left-color: var(--red); background: #fef2f2; }
+  .blend-word { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+  .blend-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .blend-opt {
+    padding: 6px 18px;
+    border-radius: 20px;
+    border: 2px solid #cbd5e1;
+    background: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+  }
+  .blend-opt:hover { border-color: var(--purple); color: var(--purple); }
+  .blend-opt.selected { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .blend-opt.correct-opt { background: var(--green); color: #fff; border-color: var(--green); }
+  .blend-opt.wrong-opt { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* FILL BLANK PHONICS */
+  .fill-blend-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-left: 4px solid #e2e8f0;
+  }
+  .fill-blend-card.correct { border-left-color: var(--green); background: #f0fdf4; }
+  .fill-blend-card.incorrect { border-left-color: var(--red); background: #fef2f2; }
+  .blend-choice-pair { display: flex; gap: 6px; }
+  .blend-pick {
+    padding: 6px 14px;
+    border-radius: 15px;
+    border: 2px solid #cbd5e1;
+    background: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+  }
+  .blend-pick:hover { border-color: var(--teal); }
+  .blend-pick.selected { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .blend-pick.correct-opt { background: var(--green); color: #fff; border-color: var(--green); }
+  .blend-pick.wrong-opt { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* WORD SORT */
+  .sort-bank {
+    background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 3px solid #f9a8d4;
+    position: relative;
+  }
+  .sort-bank::before {
+    content: 'Word Bank';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--pink);
+    color: #fff;
+    padding: 2px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .sort-chip {
+    background: #fff;
+    color: var(--purple);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    cursor: grab;
+    border: 2px solid #c4b5fd;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .sort-chip:hover { transform: scale(1.08); }
+  .sort-chip.used { opacity: 0.35; pointer-events: none; }
+  .sort-columns {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .sort-col {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    min-height: 180px;
+  }
+  .sort-col-header {
+    background: linear-gradient(135deg, var(--purple), #8b5cf6);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+  .sort-col-body {
+    padding: 10px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sort-col-body.drag-over { background: #f5f3ff; }
+  .sorted-word {
+    background: #ede9fe;
+    color: var(--purple);
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sorted-word:hover { opacity: 0.7; }
+  .sorted-word.correct-sort { background: #dcfce7; color: var(--green); }
+  .sorted-word.wrong-sort { background: #fee2e2; color: var(--red); }
+
+  /* WRITE SENTENCE */
+  .write-area {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .write-label { font-weight: 700; color: var(--purple); margin-bottom: 8px; }
+  .write-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+  .write-input:focus { outline: none; border-color: var(--purple); }
+
+  /* COULD/COULDNT */
+  .remember-box {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 3px solid #6ee7b7;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .remember-box h3 { color: var(--green); font-size: 1.1rem; margin-bottom: 8px; }
+  .remember-box .positive { color: var(--blue); font-weight: 700; }
+  .remember-box .negative { color: var(--purple); font-weight: 700; }
+  .could-btn {
+    padding: 6px 20px;
+    border-radius: 20px;
+    border: 2px solid #cbd5e1;
+    background: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    margin: 0 4px;
+  }
+  .could-btn:hover { border-color: var(--blue); }
+  .could-btn.selected { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .could-btn.correct-opt { background: var(--green); color: #fff; border-color: var(--green); }
+  .could-btn.wrong-opt { background: var(--red); color: #fff; border-color: var(--red); }
+  .could-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid #e2e8f0;
+  }
+  .could-card.correct { border-left-color: var(--green); background: #f0fdf4; }
+  .could-card.incorrect { border-left-color: var(--red); background: #fef2f2; }
+  .could-sentence { font-size: 1rem; line-height: 1.8; }
+  .could-blank { display: inline-flex; gap: 6px; vertical-align: middle; }
+
+  /* COMPARE TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .compare-table th {
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+  .compare-table th:nth-child(2) { background: var(--red); color: #fff; }
+  .compare-table th:nth-child(3) { background: var(--blue); color: #fff; }
+  .compare-table th:first-child { background: #f1f5f9; color: #475569; }
+  .compare-table td {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    vertical-align: top;
+  }
+  .compare-table td:first-child { font-weight: 700; background: #f8fafc; }
+  .compare-input {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+  }
+  .compare-input:focus { outline: none; border-color: var(--blue); }
+  .compare-write {
+    margin-bottom: 24px;
+  }
+  .compare-write h3 { color: var(--green); font-size: 1.1rem; margin-bottom: 10px; }
+  .compare-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+  }
+  .compare-textarea:focus { outline: none; border-color: var(--blue); }
+
+  /* VENN */
+  .venn-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    height: 350px;
+    margin: 0 auto 28px;
+  }
+  .venn-circle {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    top: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .venn-left {
+    left: 20px;
+    background: rgba(239, 68, 68, 0.25);
+    border: 3px solid var(--red);
+    padding-right: 80px;
+  }
+  .venn-right {
+    right: 20px;
+    background: rgba(59, 130, 246, 0.25);
+    border: 3px solid var(--blue);
+    padding-left: 80px;
+    align-items: flex-end;
+  }
+  .venn-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    text-align: center;
+    z-index: 2;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #581c87;
+  }
+  .venn-label {
+    position: absolute;
+    top: 0;
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .venn-left .venn-label { left: 30px; color: var(--red); }
+  .venn-right .venn-label { right: 30px; color: var(--blue); }
+  .venn-center-label {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--purple);
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 3;
+  }
+  .venn-item { margin: 3px 0; }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .btn-check { background: var(--green); color: #fff; }
+  .btn-reset { background: var(--orange); color: #fff; }
+  .btn-next { background: var(--blue); color: #fff; }
+
+  /* CONFETTI */
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+  }
+
+  /* RESULT MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 500;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 24px;
+    padding: 32px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: modal-pop 0.3s ease-out;
+  }
+  @keyframes modal-pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .modal-emoji { font-size: 4rem; margin-bottom: 12px; }
+  .modal-title { font-family: 'Fredoka One', cursive; font-size: 1.5rem; margin-bottom: 8px; }
+  .modal-score { font-size: 1.2rem; color: #666; margin-bottom: 20px; }
+  .modal-close {
+    padding: 10px 28px;
+    border-radius: 25px;
+    border: none;
+    background: var(--green);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .sort-columns { grid-template-columns: repeat(3, 1fr); }
+    .nav h1 { font-size: 1.1rem; width: 100%; }
+    .venn-container { height: 280px; }
+    .venn-circle { width: 220px; height: 220px; }
+    .section { padding: 16px; }
+  }
+  @media (max-width: 480px) {
+    .sort-columns { grid-template-columns: repeat(2, 1fr); }
+    .venn-container { display: none; }
+    .nav-btn { padding: 6px 12px; font-size: 0.75rem; }
+  }
+
+  /* Subsection headers */
+  .subsection-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    margin: 28px 0 16px;
+    padding-left: 12px;
+    border-left: 4px solid;
+  }
+  .subsection-title.purple { color: var(--purple); border-color: var(--purple); }
+  .subsection-title.green { color: var(--green); border-color: var(--green); }
+  .subsection-title.blue { color: var(--blue); border-color: var(--blue); }
+  .subsection-title.pink { color: var(--pink); border-color: var(--pink); }
+
+  /* Selected word for vocab click-to-fill */
+  .word-chip.selected-word {
+    background: var(--green);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 14px rgba(74, 140, 63, 0.4);
+  }
+
+  .instruction-box {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+    border-radius: 14px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    color: #92400e;
+    font-size: 0.9rem;
+  }
+
+  /* FINAL GRADE */
+  .grade-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    text-align: center;
+    max-width: 550px;
+    margin: 0 auto 28px;
+  }
+  .grade-big {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    line-height: 1;
+    margin: 16px 0;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  }
+  .grade-pct {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #475569;
+    margin-bottom: 8px;
+  }
+  .grade-label {
+    font-size: 1.1rem;
+    color: #64748b;
+    margin-bottom: 24px;
+  }
+  .grade-breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    text-align: left;
+  }
+  .grade-breakdown th {
+    padding: 10px 14px;
+    background: #f1f5f9;
+    font-weight: 700;
+    color: #475569;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .grade-breakdown td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+  }
+  .grade-breakdown .section-name { font-weight: 700; }
+  .grade-breakdown .score-bar-cell { width: 40%; }
+  .score-bar-bg {
+    background: #e2e8f0;
+    border-radius: 10px;
+    height: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s ease;
+  }
+  .grade-breakdown .score-text {
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .grade-message {
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 16px;
+    border-radius: 16px;
+    margin-top: 16px;
+  }
+  .grade-not-done {
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    color: #92400e;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .grade-not-done p { margin: 6px 0; }
+  .grade-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .btn-print {
+    background: #6366f1;
+    color: #fff;
+  }
+  @media print {
+    .nav, .btn-row, .grade-actions, .instruction-box { display: none !important; }
+    .section { display: block !important; padding: 10px; }
+    #grade { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <h1><span class="dino">🦖</span> English Practice - Repaso 1</h1>
+  <button class="nav-btn active" onclick="showSection('vocab')">Vocabulary</button>
+  <button class="nav-btn" onclick="showSection('phonics')">Phonics</button>
+  <button class="nav-btn" onclick="showSection('could')">Could/Couldn't</button>
+  <button class="nav-btn" onclick="showSection('compare')">Compare</button>
+  <button class="nav-btn" onclick="showSection('grade')" style="background:rgba(255,215,0,0.3);border-color:rgba(255,215,0,0.7);">Final Grade</button>
+  <div class="score-badge">⭐ <span id="totalScore">0</span> pts</div>
+</nav>
+
+<!-- ==================== SECTION 1: VOCABULARY ==================== -->
+<div id="vocab" class="section active">
+  <div class="section-title">Complete the Sentence</div>
+  <div class="section-subtitle">Click a word, then click the blank to fill it in</div>
+
+  <div class="word-bank" id="vocabBank">
+    <span class="word-chip" data-word="Enormous" onclick="selectWord(this)">Enormous</span>
+    <span class="word-chip" data-word="Hungry" onclick="selectWord(this)">Hungry</span>
+    <span class="word-chip" data-word="Excited" onclick="selectWord(this)">Excited</span>
+    <span class="word-chip" data-word="Explore" onclick="selectWord(this)">Explore</span>
+    <span class="word-chip" data-word="Angry" onclick="selectWord(this)">Angry</span>
+    <span class="word-chip" data-word="Serious" onclick="selectWord(this)">Serious</span>
+    <span class="word-chip" data-word="Hide" onclick="selectWord(this)">Hide</span>
+    <span class="word-chip" data-word="Laugh" onclick="selectWord(this)">Laugh</span>
+    <span class="word-chip" data-word="Afraid" onclick="selectWord(this)">Afraid</span>
+    <span class="word-chip" data-word="Cry" onclick="selectWord(this)">Cry</span>
+  </div>
+
+  <div class="instruction-box">💡 Click a word from the bank, then click a blank space to place it. Click a filled blank to remove the word.</div>
+
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="showVocabPage(0)">Page 1</button>
+    <button class="page-tab" onclick="showVocabPage(1)">Page 2</button>
+    <button class="page-tab" onclick="showVocabPage(2)">Page 3</button>
+    <button class="page-tab" onclick="showVocabPage(3)">Page 4</button>
+  </div>
+
+  <div id="vocabPages"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" onclick="checkVocab()">✓ Check Answers</button>
+    <button class="btn btn-reset" onclick="resetVocab()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- ==================== SECTION 2: PHONICS ==================== -->
+<div id="phonics" class="section">
+  <div class="section-title">Phonics Practice: SP, SL, SM, SK, ST Blends</div>
+  <div class="section-subtitle">Practice reading and identifying consonant blends</div>
+
+  <h3 class="subsection-title purple">Part 1: Read the Words Aloud</h3>
+  <p style="text-align:center;color:#666;margin-bottom:14px;">Click any word to hear it spoken!</p>
+  <table class="phonics-table">
+    <thead><tr><th>SP</th><th>SL</th><th>SM</th><th>SK</th><th>ST</th></tr></thead>
+    <tbody>
+      <tr><td onclick="speak(this)">spot</td><td onclick="speak(this)">sled</td><td onclick="speak(this)">smell</td><td onclick="speak(this)">skin</td><td onclick="speak(this)">step</td></tr>
+      <tr><td onclick="speak(this)">spoon</td><td onclick="speak(this)">slow</td><td onclick="speak(this)">small</td><td onclick="speak(this)">sky</td><td onclick="speak(this)">star</td></tr>
+      <tr><td onclick="speak(this)">spin</td><td onclick="speak(this)">slip</td><td onclick="speak(this)">smile</td><td onclick="speak(this)">skip</td><td onclick="speak(this)">stop</td></tr>
+      <tr><td onclick="speak(this)">spider</td><td onclick="speak(this)">sleep</td><td onclick="speak(this)">smoke</td><td onclick="speak(this)">skull</td><td onclick="speak(this)">stone</td></tr>
+      <tr><td onclick="speak(this)">spell</td><td onclick="speak(this)">slide</td><td onclick="speak(this)">smart</td><td onclick="speak(this)">skate</td><td onclick="speak(this)">stick</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subsection-title purple">Part 2: Circle the Blend You Hear</h3>
+  <div id="blendCircle"></div>
+
+  <h3 class="subsection-title purple">Part 3: Fill in the Blank</h3>
+  <p style="color:#666;margin-bottom:14px;">Choose the correct blend to complete each word.</p>
+  <div id="blendFill"></div>
+
+  <h3 class="subsection-title purple">Part 4: Word Sort</h3>
+  <p style="color:#666;margin-bottom:14px;">Click a word, then click a column to sort it.</p>
+  <div class="sort-bank" id="sortBank"></div>
+  <div class="sort-columns" id="sortColumns"></div>
+
+  <h3 class="subsection-title purple">Part 5: Write Your Own Sentence</h3>
+  <div id="writeSentences"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" onclick="checkPhonics()">✓ Check Answers</button>
+    <button class="btn btn-reset" onclick="resetPhonics()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- ==================== SECTION 3: COULD / COULDN'T ==================== -->
+<div id="could" class="section">
+  <div class="section-title">🦖 Could & Couldn't Practice</div>
+  <div class="section-subtitle">Practice using could and couldn't</div>
+
+  <div class="remember-box">
+    <h3>Remember!</h3>
+    <p class="positive">Could = was able to / was allowed to (positive)</p>
+    <p class="negative">Couldn't = could not = was NOT able to / was NOT allowed to (negative)</p>
+  </div>
+
+  <h3 class="subsection-title blue">Part 1: Fill in the Blank</h3>
+  <div id="couldFill"></div>
+
+  <h3 class="subsection-title blue">Part 2: True or False About You!</h3>
+  <p style="color:#666;margin-bottom:14px;"><em>Write a sentence using could or couldn't about yourself.</em></p>
+  <div class="write-area">
+    <div class="write-label">Something you could do when you were in first grade: → I could</div>
+    <input type="text" class="write-input" placeholder="I could...">
+  </div>
+  <div class="write-area">
+    <div class="write-label">Something you couldn't do when you were a baby: → I couldn't</div>
+    <input type="text" class="write-input" placeholder="I couldn't...">
+  </div>
+  <div class="write-area">
+    <div class="write-label">Something you could do really well last year: → I could</div>
+    <input type="text" class="write-input" placeholder="I could...">
+  </div>
+
+  <h3 class="subsection-title blue">Part 3: Write Your Own!</h3>
+  <p style="color:#666;margin-bottom:14px;"><em>Write 2 sentences of your own — one with could and one with couldn't.</em></p>
+  <div class="write-area">
+    <div class="write-label">🦖 (could)</div>
+    <input type="text" class="write-input" placeholder="Write a sentence with could...">
+  </div>
+  <div class="write-area">
+    <div class="write-label">🦖 (couldn't)</div>
+    <input type="text" class="write-input" placeholder="Write a sentence with couldn't...">
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" onclick="checkCould()">✓ Check Answers</button>
+    <button class="btn btn-reset" onclick="resetCould()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- ==================== SECTION 4: COMPARE & CONTRAST ==================== -->
+<div id="compare" class="section">
+  <div class="section-title">Valentine's Day & President's Day</div>
+  <div class="section-subtitle">Compare & Contrast</div>
+
+  <table class="compare-table">
+    <thead>
+      <tr><th></th><th>Valentine's Day</th><th>President's Day</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>What day is celebrated on?</td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+      </tr>
+      <tr>
+        <td>What category does it belong to?</td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+      </tr>
+      <tr>
+        <td>What does it celebrate?</td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+      </tr>
+      <tr>
+        <td>What month is celebrated in?</td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+      </tr>
+      <tr>
+        <td>Who celebrates it?</td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+        <td><input type="text" class="compare-input" placeholder="Type here..."></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="compare-write">
+    <h3 style="color:var(--green);">How are they alike?</h3>
+    <textarea class="compare-textarea" placeholder="Write how Valentine's Day and President's Day are alike..."></textarea>
+  </div>
+
+  <div class="compare-write">
+    <h3 style="color:var(--green);">How are they different?</h3>
+    <textarea class="compare-textarea" placeholder="Write how they are different..."></textarea>
+  </div>
+
+  <h3 class="subsection-title green" style="margin-top:32px;">Venn Diagram</h3>
+  <div class="venn-container">
+    <div class="venn-center-label">COMPARE</div>
+    <div class="venn-circle venn-left">
+      <div class="venn-label">CONTRAST</div>
+      <div class="venn-item">• Celebrated on February 14th</div>
+      <div class="venn-item">• Celebrates Love</div>
+      <div class="venn-item">• Celebrated All Over the World</div>
+    </div>
+    <div class="venn-center">
+      <div class="venn-item">• Both are Holidays</div>
+      <div class="venn-item">• Both are in Month of February</div>
+    </div>
+    <div class="venn-circle venn-right">
+      <div class="venn-label">CONTRAST</div>
+      <div class="venn-item">• Celebrated on 3rd Monday of February</div>
+      <div class="venn-item">• Celebrates American Presidents</div>
+      <div class="venn-item">• Only Celebrated in America</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 5: FINAL GRADE ==================== -->
+<div id="grade" class="section">
+  <div class="section-title">Final Report Card</div>
+  <div class="section-subtitle">See your overall grade for all exercises</div>
+  <div id="gradeContent"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-emoji" id="modalEmoji">🎉</div>
+    <div class="modal-title" id="modalTitle">Great Job!</div>
+    <div class="modal-score" id="modalScore">You got 8 out of 10!</div>
+    <button class="modal-close" onclick="closeModal()">Keep Going!</button>
+  </div>
+</div>
+
+<!-- CONFETTI -->
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+// ===== GLOBAL STATE =====
+let totalScore = 0;
+let selectedWord = null;
+
+// Per-section score tracking
+const sectionScores = {
+  vocab: { correct: 0, total: 0, checked: false },
+  phonics: { correct: 0, total: 0, checked: false },
+  could: { correct: 0, total: 0, checked: false },
+};
+
+function updateScore(pts) {
+  totalScore += pts;
+  document.getElementById('totalScore').textContent = totalScore;
+}
+
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'grade') renderGrade();
+}
+
+// ===== VOCABULARY =====
+const vocabData = [
+  // Page 1
+  [
+    { before: "After school, Tom was so ", after: " that he ate a big snack.", answer: "Hungry" },
+    { before: "The teacher had a ", after: " face when she told us to be quiet.", answer: "Serious" },
+    { before: "The little girl started to ", after: " when she fell off her bike.", answer: "Cry" },
+    { before: "The elephant at the zoo was ", after: " — bigger than a car!", answer: "Enormous" },
+    { before: "My cat likes to ", after: " under the bed when it is bath time.", answer: "Hide" },
+    { before: "Lily was so ", after: " about her birthday that she jumped up and down.", answer: "Excited" },
+    { before: "The silly clown made all the kids ", after: " at the show.", answer: "Laugh" },
+    { before: "We went to the park to ", after: " and look for bugs and flowers.", answer: "Explore" },
+    { before: "Ben felt ", after: " when his brother took his crayons without asking.", answer: "Angry" },
+    { before: "The dog was ", after: " of the loud thunder outside.", answer: "Afraid" },
+  ],
+  // Page 2
+  [
+    { before: "The baby started to ", after: " when she dropped her bottle.", answer: "Cry" },
+    { before: "Mom had a ", after: " talk with us about not running near the pool.", answer: "Serious" },
+    { before: "Sam's tummy growled because he was ", after: " before lunch.", answer: "Hungry" },
+    { before: "The ", after: " dog was so big it could barely fit through the door.", answer: "Enormous" },
+    { before: "The kids were ", after: " when the teacher said it was movie day.", answer: "Excited" },
+    { before: "The rabbit tried to ", after: " in the tall grass when it heard a loud noise.", answer: "Hide" },
+    { before: "We all started to ", after: " when the puppy chased its own tail.", answer: "Laugh" },
+    { before: "The boys wanted to ", after: " the old barn at the end of the road.", answer: "Explore" },
+    { before: "The girl felt ", after: " when someone cut in front of her in line.", answer: "Angry" },
+    { before: "Tim was ", after: " to go into the dark basement alone.", answer: "Afraid" },
+  ],
+  // Page 3
+  [
+    { before: "She was ", after: " of the big spider she found in her room.", answer: "Afraid" },
+    { before: "The bear in the story got ", after: " when someone ate its porridge.", answer: "Angry" },
+    { before: "My friend made me ", after: " so hard that my belly hurt.", answer: "Laugh" },
+    { before: "Franko was ", after: " to see her grandma after a long time.", answer: "Excited" },
+    { before: "I like to ", after: " my diary so my brother can't read it.", answer: "Hide" },
+    { before: "We saw an ", after: " wave crash onto the beach.", answer: "Enormous" },
+    { before: "I wanted to ", after: " when I lost my favorite pencil at school.", answer: "Cry" },
+    { before: "Jake was ", after: " about winning the spelling bee, so he studied every night.", answer: "Serious" },
+    { before: "The baby bird was ", after: " and kept opening its mouth for food.", answer: "Hungry" },
+    { before: "On our trip, we got to ", after: " a tide pool full of starfish and crabs.", answer: "Explore" },
+  ],
+  // Page 4
+  [
+    { before: "After playing outside all afternoon, Maya was so ", after: " that she ate two sandwiches and an apple.", answer: "Hungry" },
+    { before: "The teacher gave the class a ", after: " look when they started talking during the test.", answer: "Serious" },
+    { before: "The little boy began to ", after: " when he couldn't find his favorite toy.", answer: "Cry" },
+    { before: "The children stared in amazement at the ", after: " elephant at the zoo.", answer: "Enormous" },
+    { before: "During the game, Sofia decided to ", after: " behind the big oak tree in the backyard.", answer: "Hide" },
+    { before: "Jake was so ", after: " about his birthday party that he couldn't fall asleep the night before.", answer: "Excited" },
+    { before: "The funny joke made everyone in the room ", after: " out loud.", answer: "Laugh" },
+    { before: "The curious girl loved to ", after: " the forest near her house and discover new plants and animals.", answer: "Explore" },
+    { before: "Dad was ", after: " when he found out that someone had broken the window while playing ball inside.", answer: "Angry" },
+    { before: "The puppy was ", after: " of the loud thunder and hid under the bed.", answer: "Afraid" },
+  ]
+];
+
+let vocabAnswers = {}; // { "0-3": "Hungry" }
+
+function buildVocabPages() {
+  const container = document.getElementById('vocabPages');
+  container.innerHTML = '';
+  vocabData.forEach((page, pi) => {
+    const div = document.createElement('div');
+    div.className = 'vocab-page' + (pi === 0 ? ' active' : '');
+    div.id = 'vocabPage' + pi;
+    page.forEach((s, si) => {
+      const key = pi + '-' + si;
+      const filled = vocabAnswers[key] || '';
+      div.innerHTML += `
+        <div class="sentence-card" id="vcard-${key}">
+          <div class="sentence-num">${si + 1}</div>
+          <div class="sentence-text">
+            ${s.before}<span class="blank-slot${filled ? ' filled' : ''}" id="vblank-${key}" data-key="${key}" onclick="fillBlank('${key}')">${filled || '______'}</span>${s.after}
+          </div>
+          <span class="feedback-icon" id="vfb-${key}"></span>
+        </div>`;
+    });
+    container.appendChild(div);
+  });
+}
+
+function showVocabPage(idx) {
+  document.querySelectorAll('.vocab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('vocabPage' + idx).classList.add('active');
+  document.querySelectorAll('.page-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+}
+
+function selectWord(el) {
+  if (el.classList.contains('used')) return;
+  document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-word'));
+  if (selectedWord === el.dataset.word) {
+    selectedWord = null;
+  } else {
+    el.classList.add('selected-word');
+    selectedWord = el.dataset.word;
+  }
+}
+
+function fillBlank(key) {
+  const blank = document.getElementById('vblank-' + key);
+  // If already filled, remove the word
+  if (vocabAnswers[key]) {
+    const removed = vocabAnswers[key];
+    delete vocabAnswers[key];
+    blank.textContent = '______';
+    blank.classList.remove('filled', 'correct-answer', 'wrong-answer');
+    document.getElementById('vcard-' + key).classList.remove('correct', 'incorrect');
+    document.getElementById('vfb-' + key).textContent = '';
+    // Un-use the chip — but words can be reused across pages so just refresh
+    refreshWordBank();
+    return;
+  }
+  if (!selectedWord) return;
+  vocabAnswers[key] = selectedWord;
+  blank.textContent = selectedWord;
+  blank.classList.add('filled');
+  // Deselect
+  document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-word'));
+  selectedWord = null;
+  refreshWordBank();
+}
+
+function refreshWordBank() {
+  // Words can be used multiple times (one per sentence across pages)
+  // No restriction needed since each page reuses the same word bank
+  document.querySelectorAll('#vocabBank .word-chip').forEach(c => {
+    c.classList.remove('used');
+  });
+}
+
+function checkVocab() {
+  let correct = 0, total = 0;
+  vocabData.forEach((page, pi) => {
+    page.forEach((s, si) => {
+      total++;
+      const key = pi + '-' + si;
+      const blank = document.getElementById('vblank-' + key);
+      const card = document.getElementById('vcard-' + key);
+      const fb = document.getElementById('vfb-' + key);
+      const ans = vocabAnswers[key];
+      if (ans && ans.toLowerCase() === s.answer.toLowerCase()) {
+        correct++;
+        blank.classList.add('correct-answer');
+        blank.classList.remove('wrong-answer');
+        card.classList.add('correct');
+        card.classList.remove('incorrect');
+        fb.textContent = '✅';
+      } else if (ans) {
+        blank.classList.add('wrong-answer');
+        blank.classList.remove('correct-answer');
+        card.classList.add('incorrect');
+        card.classList.remove('correct');
+        fb.textContent = '❌';
+      }
+    });
+  });
+  sectionScores.vocab = { correct, total, checked: true };
+  updateScore(correct);
+  showModal(correct, total, 'Vocabulary');
+}
+
+function resetVocab() {
+  sectionScores.vocab = { correct: 0, total: 0, checked: false };
+  vocabAnswers = {};
+  selectedWord = null;
+  buildVocabPages();
+  refreshWordBank();
+  document.querySelectorAll('.word-chip').forEach(c => {
+    c.classList.remove('selected-word', 'used');
+  });
+}
+
+// ===== PHONICS =====
+// Part 2: Circle the blend
+const blendCircleData = [
+  { word: "skate", options: ["SP","SL","SM","SK","ST"], answer: "SK" },
+  { word: "spell", options: ["SP","SL","SM","SK","ST"], answer: "SP" },
+  { word: "slim", options: ["SP","SL","SM","SK","ST"], answer: "SL" },
+  { word: "stem", options: ["SP","SL","SM","SK","ST"], answer: "ST" },
+  { word: "smell", options: ["SP","SL","SM","SK","ST"], answer: "SM" },
+];
+let blendCircleAnswers = {};
+
+function buildBlendCircle() {
+  const container = document.getElementById('blendCircle');
+  container.innerHTML = '';
+  blendCircleData.forEach((q, i) => {
+    container.innerHTML += `
+      <div class="blend-question" id="bc-${i}">
+        <div class="blend-word">${i+1}. "${q.word}" →</div>
+        <div class="blend-options">
+          ${q.options.map(o => `<button class="blend-opt${blendCircleAnswers[i]===o?' selected':''}" onclick="pickBlend(${i},'${o}',this)">${o}</button>`).join('')}
+        </div>
+      </div>`;
+  });
+}
+
+function pickBlend(i, val, el) {
+  blendCircleAnswers[i] = val;
+  const parent = el.closest('.blend-question');
+  parent.querySelectorAll('.blend-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Part 3: Fill in the blank
+const blendFillData = [
+  { before: "The dog left a muddy ", partial: "ot on the floor.", choices: ["SP","ST"], answer: "SP" },
+  { before: "She went down the ", partial: "ide at the park.", choices: ["SL","SK"], answer: "SL" },
+  { before: "He gave a big ", partial: "ile to his teacher.", choices: ["SM","SP"], answer: "SM" },
+  { before: "The bird flew up into the ", partial: "y.", choices: ["SK","ST"], answer: "SK" },
+  { before: "We had to ", partial: "op at the red light.", choices: ["ST","SL"], answer: "ST" },
+  { before: "The ", partial: "oon is full and bright tonight.", choices: ["SP","SM"], answer: "SP" },
+  { before: "The ice was very ", partial: "ippery.", choices: ["SL","SK"], answer: "SL" },
+  { before: "The cake had a sweet ", partial: "ell.", choices: ["SM","ST"], answer: "SM" },
+  { before: "She learned to ", partial: "ate at the rink.", choices: ["SK","SP"], answer: "SK" },
+  { before: "He drew a bright ", partial: "ar in his notebook.", choices: ["ST","SL"], answer: "ST" },
+];
+let blendFillAnswers = {};
+
+function buildBlendFill() {
+  const container = document.getElementById('blendFill');
+  container.innerHTML = '';
+  blendFillData.forEach((q, i) => {
+    container.innerHTML += `
+      <div class="fill-blend-card" id="bf-${i}">
+        <div class="sentence-num">${i+1}</div>
+        <div style="flex:1;font-size:1rem;">
+          ${q.before}<strong>___</strong>${q.partial}
+        </div>
+        <div class="blend-choice-pair">
+          ${q.choices.map(c => `<button class="blend-pick${blendFillAnswers[i]===c?' selected':''}" onclick="pickFillBlend(${i},'${c}',this)">${c}</button>`).join('')}
+        </div>
+        <span class="feedback-icon" id="bffb-${i}"></span>
+      </div>`;
+  });
+}
+
+function pickFillBlend(i, val, el) {
+  blendFillAnswers[i] = val;
+  const parent = el.closest('.fill-blend-card');
+  parent.querySelectorAll('.blend-pick').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Part 4: Word Sort
+const sortWords = ["sled","spin","skunk","stem","smell","slap","speck","skate","stone","slim"];
+const sortCorrect = { SP: ["spin","speck"], SL: ["sled","slap","slim"], SM: ["smell"], SK: ["skunk","skate"], ST: ["stem","stone"] };
+const sortCols = ["SP","SL","SM","SK","ST"];
+let sortState = { SP:[], SL:[], SM:[], SK:[], ST:[] };
+let selectedSortWord = null;
+
+function buildSort() {
+  const bank = document.getElementById('sortBank');
+  bank.innerHTML = '';
+  const placed = Object.values(sortState).flat();
+  sortWords.forEach(w => {
+    const used = placed.includes(w);
+    bank.innerHTML += `<span class="sort-chip${used?' used':''}" data-word="${w}" onclick="selectSortWord(this)">${w}</span>`;
+  });
+
+  const cols = document.getElementById('sortColumns');
+  cols.innerHTML = '';
+  sortCols.forEach(col => {
+    let inner = `<div class="sort-col"><div class="sort-col-header">${col}</div><div class="sort-col-body" onclick="placeSortWord('${col}')">`;
+    sortState[col].forEach(w => {
+      inner += `<div class="sorted-word" onclick="removeSortWord('${col}','${w}',event)">${w}</div>`;
+    });
+    inner += '</div></div>';
+    cols.innerHTML += inner;
+  });
+}
+
+function selectSortWord(el) {
+  if (el.classList.contains('used')) return;
+  document.querySelectorAll('.sort-chip').forEach(c => c.classList.remove('selected-word'));
+  if (selectedSortWord === el.dataset.word) {
+    selectedSortWord = null;
+  } else {
+    el.classList.add('selected-word');
+    selectedSortWord = el.dataset.word;
+  }
+}
+
+function placeSortWord(col) {
+  if (!selectedSortWord) return;
+  sortState[col].push(selectedSortWord);
+  selectedSortWord = null;
+  buildSort();
+}
+
+function removeSortWord(col, word, e) {
+  e.stopPropagation();
+  sortState[col] = sortState[col].filter(w => w !== word);
+  buildSort();
+}
+
+// Part 5: Write sentences
+function buildWriteSentences() {
+  const container = document.getElementById('writeSentences');
+  container.innerHTML = '';
+  sortCols.forEach((col, i) => {
+    container.innerHTML += `
+      <div class="write-area">
+        <div class="write-label">${i+1}. (${col})</div>
+        <input type="text" class="write-input" placeholder="Write a sentence using a ${col} word...">
+      </div>`;
+  });
+}
+
+function checkPhonics() {
+  let correct = 0, total = 0;
+
+  // Check blend circle
+  blendCircleData.forEach((q, i) => {
+    total++;
+    const card = document.getElementById('bc-' + i);
+    const btns = card.querySelectorAll('.blend-opt');
+    if (blendCircleAnswers[i] === q.answer) {
+      correct++;
+      card.classList.add('correct');
+      btns.forEach(b => { if (b.classList.contains('selected')) b.classList.add('correct-opt'); });
+    } else if (blendCircleAnswers[i]) {
+      card.classList.add('incorrect');
+      btns.forEach(b => {
+        if (b.classList.contains('selected')) b.classList.add('wrong-opt');
+        if (b.textContent === q.answer) b.classList.add('correct-opt');
+      });
+    }
+  });
+
+  // Check blend fill
+  blendFillData.forEach((q, i) => {
+    total++;
+    const card = document.getElementById('bf-' + i);
+    const btns = card.querySelectorAll('.blend-pick');
+    const fb = document.getElementById('bffb-' + i);
+    if (blendFillAnswers[i] === q.answer) {
+      correct++;
+      card.classList.add('correct');
+      fb.textContent = '✅';
+      btns.forEach(b => { if (b.classList.contains('selected')) b.classList.add('correct-opt'); });
+    } else if (blendFillAnswers[i]) {
+      card.classList.add('incorrect');
+      fb.textContent = '❌';
+      btns.forEach(b => {
+        if (b.classList.contains('selected')) b.classList.add('wrong-opt');
+        if (b.textContent === q.answer) b.classList.add('correct-opt');
+      });
+    }
+  });
+
+  // Check word sort
+  sortCols.forEach(col => {
+    sortState[col].forEach(w => {
+      total++;
+      if (sortCorrect[col].includes(w)) correct++;
+    });
+  });
+  // Visual feedback for sort
+  document.querySelectorAll('.sorted-word').forEach(el => {
+    const word = el.textContent;
+    const col = el.closest('.sort-col').querySelector('.sort-col-header').textContent;
+    if (sortCorrect[col].includes(word)) {
+      el.classList.add('correct-sort');
+    } else {
+      el.classList.add('wrong-sort');
+    }
+  });
+
+  sectionScores.phonics = { correct, total, checked: true };
+  updateScore(correct);
+  showModal(correct, total, 'Phonics');
+}
+
+function resetPhonics() {
+  sectionScores.phonics = { correct: 0, total: 0, checked: false };
+  blendCircleAnswers = {};
+  blendFillAnswers = {};
+  sortState = { SP:[], SL:[], SM:[], SK:[], ST:[] };
+  selectedSortWord = null;
+  buildBlendCircle();
+  buildBlendFill();
+  buildSort();
+}
+
+// TTS
+function speak(el) {
+  if ('speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(el.textContent);
+    u.rate = 0.85;
+    u.lang = 'en-US';
+    speechSynthesis.speak(u);
+    el.classList.add('speaking');
+    setTimeout(() => el.classList.remove('speaking'), 600);
+  }
+}
+
+// ===== COULD/COULDN'T =====
+const couldData = [
+  { before: "When I was a baby, I ", after: " walk, but now I can!", answer: "couldn't" },
+  { before: "She ", after: " find her backpack, so she was late for school.", answer: "couldn't" },
+  { before: "The dog ", after: " jump over the fence — it was too high.", answer: "couldn't" },
+  { before: "Last summer, my brother ", after: " swim really fast.", answer: "could" },
+  { before: "We ", after: " go to the park because it was raining.", answer: "couldn't" },
+  { before: "Tom ", after: " reach the cookies on the top shelf.", answer: "couldn't" },
+  { before: "The little girl ", after: " read when she was three years old.", answer: "couldn't" },
+  { before: "I ", after: " sleep last night because I was too excited!", answer: "couldn't" },
+];
+let couldAnswers = {};
+
+function buildCould() {
+  const container = document.getElementById('couldFill');
+  container.innerHTML = '';
+  couldData.forEach((q, i) => {
+    container.innerHTML += `
+      <div class="could-card" id="cc-${i}">
+        <div class="could-sentence">
+          ${i+1}. ${q.before}
+          <span class="could-blank">
+            <button class="could-btn${couldAnswers[i]==='could'?' selected':''}" onclick="pickCould(${i},'could',this)">could</button>
+            <button class="could-btn${couldAnswers[i]==="couldn't"?' selected':''}" onclick="pickCould(${i},\`couldn't\`,this)">couldn't</button>
+          </span>
+          ${q.after}
+        </div>
+      </div>`;
+  });
+}
+
+function pickCould(i, val, el) {
+  couldAnswers[i] = val;
+  const parent = el.closest('.could-card');
+  parent.querySelectorAll('.could-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function checkCould() {
+  let correct = 0, total = couldData.length;
+  couldData.forEach((q, i) => {
+    const card = document.getElementById('cc-' + i);
+    const btns = card.querySelectorAll('.could-btn');
+    if (couldAnswers[i] === q.answer) {
+      correct++;
+      card.classList.add('correct');
+      card.classList.remove('incorrect');
+      btns.forEach(b => { if (b.classList.contains('selected')) b.classList.add('correct-opt'); });
+    } else if (couldAnswers[i]) {
+      card.classList.add('incorrect');
+      card.classList.remove('correct');
+      btns.forEach(b => {
+        if (b.classList.contains('selected')) b.classList.add('wrong-opt');
+        if (b.textContent === q.answer) b.classList.add('correct-opt');
+      });
+    }
+  });
+  sectionScores.could = { correct, total, checked: true };
+  updateScore(correct);
+  showModal(correct, total, "Could/Couldn't");
+}
+
+function resetCould() {
+  sectionScores.could = { correct: 0, total: 0, checked: false };
+  couldAnswers = {};
+  buildCould();
+}
+
+// ===== MODAL & CONFETTI =====
+function showModal(correct, total, section) {
+  const pct = total > 0 ? correct / total : 0;
+  let emoji, title;
+  if (pct >= 0.9) { emoji = '🏆'; title = 'Amazing!'; }
+  else if (pct >= 0.7) { emoji = '🎉'; title = 'Great Job!'; }
+  else if (pct >= 0.5) { emoji = '👍'; title = 'Good Effort!'; }
+  else { emoji = '💪'; title = 'Keep Trying!'; }
+
+  document.getElementById('modalEmoji').textContent = emoji;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalScore').textContent = `${section}: ${correct} out of ${total} correct!`;
+  document.getElementById('modal').classList.add('show');
+
+  if (pct >= 0.7) launchConfetti();
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confetti');
+  container.innerHTML = '';
+  const colors = ['#e53e3e','#f6993b','#48bb78','#4299e1','#9f7aea','#ed64a6','#ecc94b'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1.5 + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (Math.random() * 8 + 6) + 'px';
+    piece.style.height = (Math.random() * 8 + 6) + 'px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.innerHTML = '', 4000);
+}
+
+// ===== FINAL GRADE =====
+function renderGrade() {
+  const container = document.getElementById('gradeContent');
+  const sections = [
+    { key: 'vocab', name: 'Vocabulary', icon: '📝', color: '#4a8c3f' },
+    { key: 'phonics', name: 'Phonics', icon: '🔤', color: '#7c3aed' },
+    { key: 'could', name: "Could/Couldn't", icon: '💬', color: '#2b7de9' },
+  ];
+
+  const allChecked = sections.every(s => sectionScores[s.key].checked);
+  const checkedSections = sections.filter(s => sectionScores[s.key].checked);
+
+  if (checkedSections.length === 0) {
+    container.innerHTML = `
+      <div class="grade-not-done">
+        <p style="font-size:2.5rem;margin-bottom:8px;">📋</p>
+        <p style="font-size:1.2rem;font-weight:800;">You haven't checked any answers yet!</p>
+        <p>Complete the exercises and click "Check Answers" in each section first.</p>
+        <div class="grade-actions">
+          ${sections.map(s => `<button class="btn btn-next" onclick="showSection('${s.key}')">${s.icon} Go to ${s.name}</button>`).join('')}
+        </div>
+      </div>`;
+    return;
+  }
+
+  let totalCorrect = 0, totalQuestions = 0;
+  sections.forEach(s => {
+    const sc = sectionScores[s.key];
+    if (sc.checked) { totalCorrect += sc.correct; totalQuestions += sc.total; }
+  });
+
+  const pct = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  const { letter, gradeColor, message, emoji } = getGradeInfo(pct);
+
+  let notCheckedWarning = '';
+  const unchecked = sections.filter(s => !sectionScores[s.key].checked);
+  if (unchecked.length > 0) {
+    notCheckedWarning = `
+      <div class="grade-not-done" style="margin-bottom:24px;font-size:0.9rem;">
+        <p>⚠️ You still need to check: <strong>${unchecked.map(s => s.name).join(', ')}</strong></p>
+        <div class="grade-actions" style="margin-top:12px;">
+          ${unchecked.map(s => `<button class="btn btn-next" style="padding:8px 16px;font-size:0.85rem;" onclick="showSection('${s.key}')">${s.icon} ${s.name}</button>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  container.innerHTML = `
+    ${notCheckedWarning}
+    <div class="grade-card">
+      <div style="font-size:1.1rem;font-weight:700;color:#64748b;margin-bottom:4px;">YOUR GRADE</div>
+      <div class="grade-big" style="color:${gradeColor};">${letter}</div>
+      <div class="grade-pct">${pct}%</div>
+      <div class="grade-label">${totalCorrect} correct out of ${totalQuestions} questions</div>
+
+      <table class="grade-breakdown">
+        <thead>
+          <tr><th>Section</th><th>Score</th><th class="score-bar-cell">Progress</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+          ${sections.map(s => {
+            const sc = sectionScores[s.key];
+            if (!sc.checked) return `
+              <tr style="opacity:0.45;">
+                <td class="section-name">${s.icon} ${s.name}</td>
+                <td colspan="3" style="text-align:center;color:#94a3b8;font-style:italic;">Not checked yet</td>
+              </tr>`;
+            const sPct = sc.total > 0 ? Math.round((sc.correct / sc.total) * 100) : 0;
+            const sGrade = getGradeInfo(sPct);
+            return `
+              <tr>
+                <td class="section-name">${s.icon} ${s.name}</td>
+                <td class="score-text">${sc.correct}/${sc.total}</td>
+                <td class="score-bar-cell">
+                  <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:${sPct}%;background:${sGrade.gradeColor};"></div>
+                  </div>
+                </td>
+                <td class="score-text" style="color:${sGrade.gradeColor};">${sGrade.letter} (${sPct}%)</td>
+              </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+
+      <div class="grade-message" style="background:${gradeColor}15;color:${gradeColor};border:2px solid ${gradeColor}40;">
+        ${emoji} ${message}
+      </div>
+
+      <div class="grade-actions">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Print Report</button>
+        <button class="btn btn-reset" onclick="resetAll()">↺ Start Over</button>
+      </div>
+    </div>`;
+}
+
+function getGradeInfo(pct) {
+  if (pct >= 97) return { letter: 'A+', gradeColor: '#16a34a', message: 'Outstanding! Perfect or near-perfect!', emoji: '🏆' };
+  if (pct >= 93) return { letter: 'A', gradeColor: '#16a34a', message: 'Excellent work! You really know this!', emoji: '🌟' };
+  if (pct >= 90) return { letter: 'A-', gradeColor: '#22c55e', message: 'Amazing job! Almost perfect!', emoji: '🎉' };
+  if (pct >= 87) return { letter: 'B+', gradeColor: '#2563eb', message: 'Great work! Keep it up!', emoji: '👏' };
+  if (pct >= 83) return { letter: 'B', gradeColor: '#2563eb', message: 'Good job! You\'re doing well!', emoji: '😊' };
+  if (pct >= 80) return { letter: 'B-', gradeColor: '#3b82f6', message: 'Nice effort! Almost great!', emoji: '👍' };
+  if (pct >= 77) return { letter: 'C+', gradeColor: '#f59e0b', message: 'Not bad! A bit more practice will help.', emoji: '📚' };
+  if (pct >= 73) return { letter: 'C', gradeColor: '#f59e0b', message: 'You\'re getting there! Keep practicing!', emoji: '💪' };
+  if (pct >= 70) return { letter: 'C-', gradeColor: '#f97316', message: 'You need some more practice.', emoji: '📖' };
+  if (pct >= 67) return { letter: 'D+', gradeColor: '#ef4444', message: 'Let\'s review and try again!', emoji: '🔄' };
+  if (pct >= 60) return { letter: 'D', gradeColor: '#ef4444', message: 'Keep studying, you can do better!', emoji: '💭' };
+  return { letter: 'F', gradeColor: '#dc2626', message: 'Don\'t give up! Let\'s study and try again!', emoji: '🌱' };
+}
+
+function resetAll() {
+  totalScore = 0;
+  document.getElementById('totalScore').textContent = 0;
+  sectionScores.vocab = { correct: 0, total: 0, checked: false };
+  sectionScores.phonics = { correct: 0, total: 0, checked: false };
+  sectionScores.could = { correct: 0, total: 0, checked: false };
+  resetVocab();
+  resetPhonics();
+  resetCould();
+  showSection('vocab');
+  // Reset nav button active state
+  const btns = document.querySelectorAll('.nav-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  btns[0].classList.add('active');
+}
+
+// ===== INIT =====
+buildVocabPages();
+buildBlendCircle();
+buildBlendFill();
+buildSort();
+buildWriteSentences();
+buildCould();
+</script>
+</body>
+</html>
