@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica Interactiva - Estudios Sociales</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 30%, #80deea 60%, #4dd0e1 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .marquee-bar {
+    background: linear-gradient(90deg, #1565c0, #0d47a1, #1565c0);
+    color: #fff;
+    padding: 10px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .marquee-content {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+  }
+
+  .header {
+    text-align: center;
+    padding: 80px 20px 30px;
+    background: linear-gradient(180deg, rgba(13,71,161,0.9) 0%, rgba(21,101,192,0.85) 50%, transparent 100%);
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    margin-bottom: 8px;
+  }
+
+  .header p {
+    font-size: 1.15rem;
+    opacity: 0.95;
+  }
+
+  .score-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #0d47a1, #1565c0);
+    color: #fff;
+    padding: 12px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+  }
+
+  .score-bar .stars { font-size: 1.5rem; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+  }
+
+  .section {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    border-left: 6px solid;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    border-radius: 0 0 0 100%;
+    opacity: 0.08;
+  }
+
+  .section:nth-child(1) { border-color: #e91e63; }
+  .section:nth-child(1)::before { background: #e91e63; }
+  .section:nth-child(2) { border-color: #ff9800; }
+  .section:nth-child(2)::before { background: #ff9800; }
+  .section:nth-child(3) { border-color: #4caf50; }
+  .section:nth-child(3)::before { background: #4caf50; }
+  .section:nth-child(4) { border-color: #9c27b0; }
+  .section:nth-child(4)::before { background: #9c27b0; }
+  .section:nth-child(5) { border-color: #2196f3; }
+  .section:nth-child(5)::before { background: #2196f3; }
+  .section:nth-child(6) { border-color: #f44336; }
+  .section:nth-child(6)::before { background: #f44336; }
+
+  .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .s1 .section-number { background: #e91e63; }
+  .s2 .section-number { background: #ff9800; }
+  .s3 .section-number { background: #4caf50; }
+  .s4 .section-number { background: #9c27b0; }
+  .s5 .section-number { background: #2196f3; }
+  .s6 .section-number { background: #f44336; }
+
+  .section h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  .section .subtitle {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    padding-left: 52px;
+  }
+
+  .img-ref {
+    display: block;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 15px auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: 3px solid #e0e0e0;
+  }
+
+  .img-small {
+    max-width: 320px;
+  }
+
+  .img-medium {
+    max-width: 500px;
+  }
+
+  /* Cardinal points interactive */
+  .cardinal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: center;
+  }
+
+  .cardinal-cell {
+    padding: 8px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cardinal-cell input {
+    width: 100%;
+    max-width: 120px;
+    padding: 10px;
+    border: 3px solid #b0bec5;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .cardinal-cell input:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 10px rgba(33,150,243,0.3);
+  }
+
+  .cardinal-cell input.correct {
+    border-color: #4caf50;
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .cardinal-cell input.incorrect {
+    border-color: #f44336;
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  .cardinal-icon {
+    font-size: 2.5rem;
+  }
+
+  /* Questions */
+  .question {
+    margin: 20px 0;
+    padding: 18px;
+    background: #f8f9fa;
+    border-radius: 14px;
+    border: 2px solid #e9ecef;
+  }
+
+  .question p {
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+    font-size: 1.05rem;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .option-btn {
+    padding: 12px 18px;
+    border: 3px solid #dee2e6;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-align: left;
+    font-family: 'Nunito', sans-serif;
+    color: #333;
+  }
+
+  .option-btn:hover {
+    border-color: #90caf9;
+    background: #e3f2fd;
+    transform: translateX(5px);
+  }
+
+  .option-btn.selected-correct {
+    border-color: #4caf50;
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .option-btn.selected-incorrect {
+    border-color: #f44336;
+    background: #ffebee;
+    color: #c62828;
+    text-decoration: line-through;
+  }
+
+  .option-btn.show-correct {
+    border-color: #4caf50;
+    background: #c8e6c9;
+    color: #1b5e20;
+    font-weight: 800;
+  }
+
+  .option-btn:disabled {
+    cursor: default;
+    transform: none !important;
+  }
+
+  /* Matching */
+  .match-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 15px 0;
+  }
+
+  .match-item {
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    user-select: none;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .match-concept {
+    background: #e3f2fd;
+    border: 3px solid #90caf9;
+    color: #1565c0;
+  }
+
+  .match-def {
+    background: #fff3e0;
+    border: 3px solid #ffcc80;
+    color: #e65100;
+    font-weight: 400;
+  }
+
+  .match-item.active {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .match-concept.active { border-color: #1565c0; background: #bbdefb; }
+  .match-def.active { border-color: #e65100; background: #ffe0b2; }
+
+  .match-item.matched {
+    border-color: #4caf50 !important;
+    background: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    cursor: default;
+  }
+
+  .match-item.wrong {
+    animation: shake 0.5s;
+    border-color: #f44336 !important;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  /* Battleship grid */
+  .battleship-wrapper {
+    overflow-x: auto;
+    margin: 15px 0;
+  }
+
+  .battleship {
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 0.9rem;
+  }
+
+  .battleship th {
+    background: #1565c0;
+    color: #fff;
+    padding: 10px 14px;
+    font-weight: 700;
+    border: 2px solid #0d47a1;
+  }
+
+  .battleship td {
+    border: 2px solid #bbdefb;
+    padding: 10px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 42px;
+    background: #e3f2fd;
+  }
+
+  .battleship td:hover { background: #bbdefb; }
+  .battleship td.ship { background: #ff9800; color: #fff; font-weight: 700; }
+  .battleship td.water { background: #90caf9; color: #1565c0; }
+  .battleship .row-header {
+    background: #1565c0;
+    color: #fff;
+    font-weight: 700;
+    cursor: default;
+  }
+
+  /* Fill-in */
+  .fill-input {
+    display: inline-block;
+    width: 150px;
+    padding: 8px 12px;
+    border: 3px solid #b0bec5;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.3s;
+  }
+
+  .fill-input:focus {
+    outline: none;
+    border-color: #7c4dff;
+    box-shadow: 0 0 10px rgba(124,77,255,0.3);
+  }
+
+  .fill-input.correct { border-color: #4caf50; background: #e8f5e9; }
+  .fill-input.incorrect { border-color: #f44336; background: #ffebee; }
+
+  /* Color map */
+  .color-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 15px 0;
+    justify-content: center;
+  }
+
+  .color-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 2px solid rgba(0,0,0,0.15);
+  }
+
+  /* Select dropdown */
+  .styled-select {
+    padding: 10px 14px;
+    border: 3px solid #b0bec5;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 200px;
+  }
+
+  .styled-select:focus {
+    outline: none;
+    border-color: #7c4dff;
+  }
+
+  .styled-select.correct { border-color: #4caf50; background: #e8f5e9; }
+  .styled-select.incorrect { border-color: #f44336; background: #ffebee; }
+
+  /* Check button */
+  .check-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #1565c0, #0d47a1);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(13,71,161,0.3);
+  }
+
+  .check-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(13,71,161,0.4);
+  }
+
+  .check-btn:active { transform: translateY(0); }
+
+  .feedback {
+    margin-top: 10px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    display: none;
+    font-size: 1rem;
+  }
+
+  .feedback.show { display: block; }
+  .feedback.success { background: #e8f5e9; color: #2e7d32; border: 2px solid #a5d6a7; }
+  .feedback.error { background: #ffebee; color: #c62828; border: 2px solid #ef9a9a; }
+
+  .hint-text {
+    font-size: 0.88rem;
+    color: #78909c;
+    font-style: italic;
+    margin-top: 5px;
+  }
+
+  .section-image-row {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 15px 0;
+  }
+
+  .section-image-row img {
+    max-width: 280px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border: 3px solid #e0e0e0;
+  }
+
+  /* True/False */
+  .tf-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tf-row span { flex: 1; min-width: 200px; font-weight: 600; }
+
+  .tf-btn {
+    padding: 8px 20px;
+    border: 3px solid #dee2e6;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+  }
+
+  .tf-btn:hover { transform: scale(1.05); }
+  .tf-btn.selected-correct { border-color: #4caf50; background: #e8f5e9; color: #2e7d32; }
+  .tf-btn.selected-incorrect { border-color: #f44336; background: #ffebee; color: #c62828; }
+  .tf-btn:disabled { cursor: default; transform: none !important; }
+
+  .images-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+
+  .images-gallery img {
+    width: 180px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .images-gallery img:hover {
+    transform: scale(1.05);
+    border-color: #1565c0;
+  }
+
+  .images-gallery img.selected-img {
+    border-color: #1565c0;
+    box-shadow: 0 0 15px rgba(21,101,192,0.4);
+  }
+
+  .images-gallery img.correct-img {
+    border-color: #4caf50;
+    box-shadow: 0 0 15px rgba(76,175,80,0.4);
+  }
+
+  .images-gallery img.incorrect-img {
+    border-color: #f44336;
+    box-shadow: 0 0 15px rgba(244,67,54,0.4);
+    opacity: 0.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.8rem; }
+    .section { padding: 20px 15px; }
+    .match-container { grid-template-columns: 1fr; }
+    .section-image-row img { max-width: 100%; }
+  }
+
+  .reset-all-btn {
+    display: block;
+    margin: 30px auto;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #f44336, #c62828);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(198,40,40,0.3);
+    letter-spacing: 1px;
+  }
+
+  .reset-all-btn:hover { transform: scale(1.05); }
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-content">
+    ⭐ PRÁCTICA INTERACTIVA DE ESTUDIOS SOCIALES ⭐ Coordenadas Geográficas • Puntos Cardinales • Elementos del Mapa • Tipos de Mapas • Paralelos y Meridianos • Latitud y Longitud 🌍🧭🗺️ ¡Demuestra lo que sabes! ⭐
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🌍 Práctica de Estudios Sociales</h1>
+  <p>Coordenadas Geográficas, Mapas y Ubicación — Taller 2 | Eduvision</p>
+</div>
+
+<div class="container">
+
+  <!-- ==================== SECCIÓN 1: PUNTOS CARDINALES ==================== -->
+  <div class="section s1">
+    <h2><span class="section-number">1</span> Los Puntos Cardinales</h2>
+    <p class="subtitle">Observa la imagen y completa los puntos cardinales en su posición correcta.</p>
+
+    <img src="mapas/puntos-cardinales.svg" class="img-ref img-medium" alt="Puntos cardinales" style="border:none;box-shadow:none;">
+    <div class="section-image-row" style="margin-top:10px">
+      <img src="mapas/rosa-vientos.jpg" alt="Rosa de los vientos" style="max-width:200px">
+    </div>
+
+    <div class="cardinal-grid">
+      <div class="cardinal-cell"></div>
+      <div class="cardinal-cell">
+        <input type="text" id="card-n" placeholder="?" maxlength="10">
+      </div>
+      <div class="cardinal-cell"></div>
+
+      <div class="cardinal-cell">
+        <input type="text" id="card-o" placeholder="?" maxlength="10">
+      </div>
+      <div class="cardinal-cell">
+        <span class="cardinal-icon">🧍</span>
+      </div>
+      <div class="cardinal-cell">
+        <input type="text" id="card-e" placeholder="?" maxlength="10">
+      </div>
+
+      <div class="cardinal-cell"></div>
+      <div class="cardinal-cell">
+        <input type="text" id="card-s" placeholder="?" maxlength="10">
+      </div>
+      <div class="cardinal-cell"></div>
+    </div>
+
+    <p class="hint-text">Pista: Escribe el nombre completo del punto cardinal (ej: Norte)</p>
+
+    <div class="question" style="margin-top:20px">
+      <p>¿Cuáles son los 4 puntos cardinales intermedios?</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+        <input type="text" id="pi-1" class="fill-input" placeholder="N__" style="width:120px">
+        <input type="text" id="pi-2" class="fill-input" placeholder="N__" style="width:120px">
+        <input type="text" id="pi-3" class="fill-input" placeholder="S__" style="width:120px">
+        <input type="text" id="pi-4" class="fill-input" placeholder="S__" style="width:120px">
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkSection1()">✅ Verificar Sección 1</button>
+    <div class="feedback" id="fb1"></div>
+  </div>
+
+  <!-- ==================== SECCIÓN 2: ELEMENTOS DEL MAPA ==================== -->
+  <div class="section s2">
+    <h2><span class="section-number">2</span> Los Elementos del Mapa</h2>
+    <p class="subtitle">Une cada elemento del mapa con su descripción correcta.</p>
+
+    <img src="mapas/mapa-costa-rica.jpg" class="img-ref img-medium" alt="Mapa de Costa Rica con elementos">
+
+    <div id="match-area">
+      <div class="match-container" id="match-grid">
+        <!-- Concepts column -->
+        <div>
+          <div class="match-item match-concept" data-id="1" onclick="selectMatch(this,'concept')">1. Título o leyenda</div>
+          <div class="match-item match-concept" data-id="2" onclick="selectMatch(this,'concept')" style="margin-top:10px">2. Rosa de los vientos</div>
+          <div class="match-item match-concept" data-id="3" onclick="selectMatch(this,'concept')" style="margin-top:10px">3. Coordenadas geográficas</div>
+          <div class="match-item match-concept" data-id="4" onclick="selectMatch(this,'concept')" style="margin-top:10px">4. La escala</div>
+          <div class="match-item match-concept" data-id="5" onclick="selectMatch(this,'concept')" style="margin-top:10px">5. La simbología</div>
+          <div class="match-item match-concept" data-id="6" onclick="selectMatch(this,'concept')" style="margin-top:10px">6. Escala cromática</div>
+        </div>
+        <!-- Definitions column (shuffled) -->
+        <div>
+          <div class="match-item match-def" data-id="4" onclick="selectMatch(this,'def')">Número de veces que se reduce un espacio representado en el mapa</div>
+          <div class="match-item match-def" data-id="1" onclick="selectMatch(this,'def')" style="margin-top:10px">Indica el tipo de mapa y la información suministrada</div>
+          <div class="match-item match-def" data-id="6" onclick="selectMatch(this,'def')" style="margin-top:10px">Colores fijados para interpretar cualquier mapa (verde, amarillo, marrón)</div>
+          <div class="match-item match-def" data-id="2" onclick="selectMatch(this,'def')" style="margin-top:10px">Figura en forma de estrella que indica los puntos cardinales</div>
+          <div class="match-item match-def" data-id="5" onclick="selectMatch(this,'def')" style="margin-top:10px">Dibujos, símbolos y figuras para identificar elementos en el mapa</div>
+          <div class="match-item match-def" data-id="3" onclick="selectMatch(this,'def')" style="margin-top:10px">Líneas imaginarias horizontales y verticales para localizar cualquier elemento</div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback" id="fb2"></div>
+  </div>
+
+  <!-- ==================== SECCIÓN 3: TIPOS DE MAPAS ==================== -->
+  <div class="section s3">
+    <h2><span class="section-number">3</span> Tipos de Mapas</h2>
+    <p class="subtitle">Identifica cada tipo de mapa y responde las preguntas.</p>
+
+    <div class="section-image-row">
+      <div style="text-align:center">
+        <img src="mapas/mapa-fisico.jpg" alt="Mapa físico">
+        <p style="font-weight:700;margin-top:5px;color:#4caf50">Mapa físico</p>
+      </div>
+      <div style="text-align:center">
+        <img src="mapas/mapa-politico.jpg" alt="Mapa político">
+        <p style="font-weight:700;margin-top:5px;color:#ff9800">Mapa político</p>
+      </div>
+      <div style="text-align:center">
+        <img src="mapas/mapa-tematico.jpg" alt="Mapa temático">
+        <p style="font-weight:700;margin-top:5px;color:#2196f3">Mapa temático</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>a) ¿Cuál mapa muestra montañas, ríos, vegetación y relieve natural?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'a3','Mapa físico')">Mapa físico</button>
+        <button class="option-btn" onclick="checkOption(this,'a3','Mapa político')">Mapa político</button>
+        <button class="option-btn" onclick="checkOption(this,'a3','Mapa temático')">Mapa temático</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>b) ¿Cuál mapa muestra las divisiones del país, provincias y ciudades?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'b3','Mapa político')">Mapa político</button>
+        <button class="option-btn" onclick="checkOption(this,'b3','Mapa físico')">Mapa físico</button>
+        <button class="option-btn" onclick="checkOption(this,'b3','Mapa temático')">Mapa temático</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>c) ¿Cuál mapa se utiliza para mostrar información sobre un tema específico (clima, cultivos, población)?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'c3','Mapa temático')">Mapa temático</button>
+        <button class="option-btn" onclick="checkOption(this,'c3','Mapa físico')">Mapa físico</button>
+        <button class="option-btn" onclick="checkOption(this,'c3','Mapa político')">Mapa político</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>d) En el mapa físico, ¿qué significan los colores?</p>
+      <div class="color-legend">
+        <div class="color-item">
+          <div class="color-swatch" style="background:#4caf50"></div>
+          <select class="styled-select" id="color-verde" onchange="checkColorSelect(this,'Llanuras')">
+            <option value="">Selecciona...</option>
+            <option>Llanuras</option>
+            <option>Altitudes de 500 a 1500 m</option>
+            <option>Altitudes de 2000 a 2500 m</option>
+            <option>Agua (ríos, mares)</option>
+          </select>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#ffc107"></div>
+          <select class="styled-select" id="color-amarillo" onchange="checkColorSelect(this,'Altitudes de 500 a 1500 m')">
+            <option value="">Selecciona...</option>
+            <option>Llanuras</option>
+            <option>Altitudes de 500 a 1500 m</option>
+            <option>Altitudes de 2000 a 2500 m</option>
+            <option>Agua (ríos, mares)</option>
+          </select>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#795548"></div>
+          <select class="styled-select" id="color-cafe" onchange="checkColorSelect(this,'Altitudes de 2000 a 2500 m')">
+            <option value="">Selecciona...</option>
+            <option>Llanuras</option>
+            <option>Altitudes de 500 a 1500 m</option>
+            <option>Altitudes de 2000 a 2500 m</option>
+            <option>Agua (ríos, mares)</option>
+          </select>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#2196f3"></div>
+          <select class="styled-select" id="color-azul" onchange="checkColorSelect(this,'Agua (ríos, mares)')">
+            <option value="">Selecciona...</option>
+            <option>Llanuras</option>
+            <option>Altitudes de 500 a 1500 m</option>
+            <option>Altitudes de 2000 a 2500 m</option>
+            <option>Agua (ríos, mares)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <!-- ==================== SECCIÓN 4: COORDENADAS - HUNDIR BARCOS ==================== -->
+  <div class="section s4">
+    <h2><span class="section-number">4</span> Coordenadas Geográficas</h2>
+    <p class="subtitle">Igual que en "hundir barcos", usa coordenadas para encontrar las posiciones. ¡Haz clic en las celdas!</p>
+
+    <img src="mapas/cuadricula-barcos.jpg" class="img-ref img-medium" alt="Cuadrícula hundir barcos">
+
+    <p style="font-weight:700;margin:15px 0 5px;text-align:center">Encuentra las posiciones de los barcos según la imagen:</p>
+    <p class="hint-text" style="text-align:center">Haz clic en las celdas correctas para marcar la posición de cada barco.</p>
+
+    <div class="battleship-wrapper">
+      <table class="battleship" id="battleship-grid">
+        <thead>
+          <tr>
+            <th></th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="question" style="margin-top:15px">
+      <p>Según lo aprendido, la línea horizontal en un mapa se llama <input type="text" class="fill-input" id="linea-h" placeholder="P___" style="width:140px"> y la línea vertical se llama <input type="text" class="fill-input" id="linea-v" placeholder="M___" style="width:140px"></p>
+    </div>
+
+    <button class="check-btn" onclick="checkSection4()">✅ Verificar Sección 4</button>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+  <!-- ==================== SECCIÓN 5: PARALELOS Y LATITUD ==================== -->
+  <div class="section s5">
+    <h2><span class="section-number">5</span> Paralelos y Latitud</h2>
+    <p class="subtitle">Observa la imagen y responde sobre los paralelos y la latitud.</p>
+
+    <div class="section-image-row">
+      <img src="mapas/globo-paralelos-ecuador.jpg" alt="Globo con paralelos y Ecuador" style="max-width:220px">
+      <img src="mapas/mapa-paralelos-mundo.jpg" alt="Mapa mundial con paralelos">
+    </div>
+
+    <div class="question">
+      <p>a) Los paralelos son líneas imaginarias trazadas con dirección:</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'a5','De este a oeste (horizontales)')">De este a oeste (horizontales)</button>
+        <button class="option-btn" onclick="checkOption(this,'a5','De norte a sur (verticales)')">De norte a sur (verticales)</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>b) El paralelo principal que divide la Tierra en hemisferio norte y hemisferio sur se llama:</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'b5','Ecuador')">Ecuador</button>
+        <button class="option-btn" onclick="checkOption(this,'b5','Greenwich')">Greenwich</button>
+        <button class="option-btn" onclick="checkOption(this,'b5','Trópico de Cáncer')">Trópico de Cáncer</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>c) ¿En cuál hemisferio se encuentra Costa Rica según los paralelos?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'c5','Hemisferio norte')">Hemisferio norte</button>
+        <button class="option-btn" onclick="checkOption(this,'c5','Hemisferio sur')">Hemisferio sur</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>d) La <strong>latitud</strong> es la distancia entre cualquier punto de la Tierra y...</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'d5','El ecuador terrestre')">El ecuador terrestre</button>
+        <button class="option-btn" onclick="checkOption(this,'d5','El meridiano de Greenwich')">El meridiano de Greenwich</button>
+        <button class="option-btn" onclick="checkOption(this,'d5','El Polo Norte')">El Polo Norte</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>e) ¿Costa Rica tiene latitud norte o sur?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'e5','Latitud norte')">Latitud norte</button>
+        <button class="option-btn" onclick="checkOption(this,'e5','Latitud sur')">Latitud sur</button>
+      </div>
+    </div>
+    <div class="feedback" id="fb5"></div>
+  </div>
+
+  <!-- ==================== SECCIÓN 6: MERIDIANOS Y LONGITUD ==================== -->
+  <div class="section s6">
+    <h2><span class="section-number">6</span> Meridianos y Longitud</h2>
+    <p class="subtitle">Observa la imagen y responde sobre los meridianos y la longitud.</p>
+
+    <div class="section-image-row">
+      <img src="mapas/globo-greenwich.jpg" alt="Globo con meridiano de Greenwich" style="max-width:220px">
+      <img src="mapas/mapa-meridianos-hemisferios.jpg" alt="Mapa mundial con meridianos">
+    </div>
+
+    <div class="question">
+      <p>a) Los meridianos son líneas imaginarias trazadas con dirección:</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'a6','De norte a sur (verticales)')">De norte a sur (verticales)</button>
+        <button class="option-btn" onclick="checkOption(this,'a6','De este a oeste (horizontales)')">De este a oeste (horizontales)</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>b) El meridiano principal se llama:</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'b6','Meridiano de Greenwich')">Meridiano de Greenwich</button>
+        <button class="option-btn" onclick="checkOption(this,'b6','Ecuador')">Ecuador</button>
+        <button class="option-btn" onclick="checkOption(this,'b6','Trópico de Capricornio')">Trópico de Capricornio</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>c) El meridiano de Greenwich divide la Tierra en:</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'c6','Hemisferio este (oriental) y hemisferio oeste (occidental)')">Hemisferio este (oriental) y hemisferio oeste (occidental)</button>
+        <button class="option-btn" onclick="checkOption(this,'c6','Hemisferio norte y hemisferio sur')">Hemisferio norte y hemisferio sur</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>d) La <strong>longitud</strong> es la distancia entre cualquier punto de la Tierra y...</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'d6','El meridiano de Greenwich')">El meridiano de Greenwich</button>
+        <button class="option-btn" onclick="checkOption(this,'d6','El ecuador terrestre')">El ecuador terrestre</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>e) Según los meridianos, ¿Costa Rica está en el hemisferio...?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'e6','Oeste (occidental)')">Oeste (occidental)</button>
+        <button class="option-btn" onclick="checkOption(this,'e6','Este (oriental)')">Este (oriental)</button>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>f) ¿Por qué el meridiano de Greenwich lleva ese nombre?</p>
+      <div class="options">
+        <button class="option-btn" onclick="checkOption(this,'f6','Porque pasa por el antiguo observatorio astronómico de Greenwich, en Londres, Inglaterra')">Porque pasa por el antiguo observatorio astronómico de Greenwich, en Londres, Inglaterra</button>
+        <button class="option-btn" onclick="checkOption(this,'f6','Porque fue descubierto por el explorador John Greenwich')">Porque fue descubierto por el explorador John Greenwich</button>
+        <button class="option-btn" onclick="checkOption(this,'f6','Porque es de color verde (green)')">Porque es de color verde (green)</button>
+      </div>
+    </div>
+    <div class="feedback" id="fb6"></div>
+  </div>
+
+  <!-- RESET BUTTON -->
+  <button class="reset-all-btn" onclick="resetAll()">🔄 REINICIAR TODA LA PRÁCTICA</button>
+
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <span>Puntaje: <span id="score">0</span> / <span id="total">0</span></span>
+  <span class="stars" id="stars"></span>
+</div>
+
+<script>
+  let score = 0;
+  let totalQuestions = 30;
+  let answeredQuestions = new Set();
+
+  function updateScore() {
+    document.getElementById('score').textContent = score;
+    document.getElementById('total').textContent = totalQuestions;
+    let pct = score / totalQuestions;
+    let s = '';
+    if (pct >= 0.2) s += '⭐';
+    if (pct >= 0.4) s += '⭐';
+    if (pct >= 0.6) s += '⭐';
+    if (pct >= 0.8) s += '⭐';
+    if (pct >= 0.95) s += '⭐';
+    document.getElementById('stars').textContent = s;
+  }
+
+  function addScore(id) {
+    if (!answeredQuestions.has(id)) {
+      answeredQuestions.add(id);
+      score++;
+      updateScore();
+    }
+  }
+
+  // ===== SECTION 1: Cardinal Points =====
+  function checkSection1() {
+    const answers = {
+      'card-n': ['norte','n'],
+      'card-s': ['sur','s'],
+      'card-e': ['este','e'],
+      'card-o': ['oeste','o']
+    };
+    const intermedios = {
+      'pi-1': ['noreste','ne','noroeste','no'],
+      'pi-2': ['noroeste','no','noreste','ne'],
+      'pi-3': ['sureste','se','suroeste','so'],
+      'pi-4': ['suroeste','so','sureste','se']
+    };
+
+    let correct = 0;
+    let total = 8;
+
+    for (let [id, vals] of Object.entries(answers)) {
+      let el = document.getElementById(id);
+      let v = el.value.trim().toLowerCase();
+      if (vals.includes(v)) {
+        el.className = 'correct';
+        addScore('s1-' + id);
+        correct++;
+      } else if (v) {
+        el.className = 'incorrect';
+      }
+    }
+
+    // Check intermedios - accept any valid intermediate point
+    let usedInts = [];
+    let intEls = ['pi-1','pi-2','pi-3','pi-4'];
+    let validInts = ['noreste','ne','noroeste','no','sureste','se','suroeste','so'];
+
+    for (let id of intEls) {
+      let el = document.getElementById(id);
+      let v = el.value.trim().toLowerCase();
+      if (validInts.includes(v) && !usedInts.includes(v)) {
+        el.className = 'fill-input correct';
+        usedInts.push(v);
+        // Normalize
+        let norm = v;
+        if (v === 'ne') norm = 'noreste';
+        if (v === 'no') norm = 'noroeste';
+        if (v === 'se') norm = 'sureste';
+        if (v === 'so') norm = 'suroeste';
+        if (!usedInts.includes(norm)) usedInts.push(norm);
+        addScore('s1-int-' + norm);
+        correct++;
+      } else if (v) {
+        el.className = 'fill-input incorrect';
+      }
+    }
+
+    showFeedback('fb1', correct, total);
+  }
+
+  // ===== SECTION 2: Matching =====
+  let selectedConcept = null;
+  let selectedDef = null;
+  let matchedCount = 0;
+
+  function selectMatch(el, type) {
+    if (el.classList.contains('matched')) return;
+
+    if (type === 'concept') {
+      if (selectedConcept) selectedConcept.classList.remove('active');
+      selectedConcept = el;
+      el.classList.add('active');
+    } else {
+      if (selectedDef) selectedDef.classList.remove('active');
+      selectedDef = el;
+      el.classList.add('active');
+    }
+
+    if (selectedConcept && selectedDef) {
+      if (selectedConcept.dataset.id === selectedDef.dataset.id) {
+        selectedConcept.classList.remove('active');
+        selectedConcept.classList.add('matched');
+        selectedDef.classList.remove('active');
+        selectedDef.classList.add('matched');
+        matchedCount++;
+        addScore('s2-match-' + selectedConcept.dataset.id);
+        if (matchedCount === 6) {
+          showFeedback('fb2', 6, 6);
+        }
+      } else {
+        selectedConcept.classList.add('wrong');
+        selectedDef.classList.add('wrong');
+        setTimeout(() => {
+          selectedConcept.classList.remove('active','wrong');
+          selectedDef.classList.remove('active','wrong');
+          selectedConcept = null;
+          selectedDef = null;
+        }, 600);
+        return;
+      }
+      selectedConcept = null;
+      selectedDef = null;
+    }
+  }
+
+  // ===== SECTION 3: Multiple choice =====
+  let optionAnswers = {
+    'a3': 'Mapa físico',
+    'b3': 'Mapa político',
+    'c3': 'Mapa temático',
+    'a5': 'De este a oeste (horizontales)',
+    'b5': 'Ecuador',
+    'c5': 'Hemisferio norte',
+    'd5': 'El ecuador terrestre',
+    'e5': 'Latitud norte',
+    'a6': 'De norte a sur (verticales)',
+    'b6': 'Meridiano de Greenwich',
+    'c6': 'Hemisferio este (oriental) y hemisferio oeste (occidental)',
+    'd6': 'El meridiano de Greenwich',
+    'e6': 'Oeste (occidental)',
+    'f6': 'Porque pasa por el antiguo observatorio astronómico de Greenwich, en Londres, Inglaterra'
+  };
+
+  function checkOption(btn, qId, value) {
+    let parent = btn.closest('.options');
+    let btns = parent.querySelectorAll('.option-btn');
+    if (btns[0].disabled) return;
+
+    btns.forEach(b => b.disabled = true);
+
+    if (value === optionAnswers[qId]) {
+      btn.classList.add('selected-correct');
+      addScore('mc-' + qId);
+    } else {
+      btn.classList.add('selected-incorrect');
+      btns.forEach(b => {
+        if (b.textContent === optionAnswers[qId]) b.classList.add('show-correct');
+      });
+    }
+  }
+
+  function checkColorSelect(sel, correct) {
+    if (sel.value === correct) {
+      sel.classList.remove('incorrect');
+      sel.classList.add('correct');
+      sel.disabled = true;
+      addScore('color-' + correct);
+    } else if (sel.value) {
+      sel.classList.remove('correct');
+      sel.classList.add('incorrect');
+    }
+  }
+
+  // ===== SECTION 4: Battleship =====
+  const shipPositions = {
+    'F8': 'B', 'G3': 'N', 'G4': 'N', 'G5': 'N',
+    'I8': 'S',
+    'E3': 'V', 'E4': 'V', 'E5': 'V'
+  };
+
+  function buildBattleship() {
+    let tbody = document.querySelector('#battleship-grid tbody');
+    let rows = 'ABCDEFGHIJ';
+    for (let r = 0; r < 10; r++) {
+      let tr = document.createElement('tr');
+      let th = document.createElement('td');
+      th.className = 'row-header';
+      th.textContent = rows[r];
+      tr.appendChild(th);
+      for (let c = 1; c <= 9; c++) {
+        let td = document.createElement('td');
+        let key = rows[r] + c;
+        td.dataset.pos = key;
+        td.onclick = function() { clickCell(this); };
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+  }
+
+  function clickCell(td) {
+    if (td.classList.contains('ship') || td.classList.contains('water')) return;
+    let pos = td.dataset.pos;
+    if (shipPositions[pos]) {
+      td.classList.add('ship');
+      td.textContent = '🚢';
+      addScore('ship-' + pos);
+    } else {
+      td.classList.add('water');
+      td.textContent = '~';
+    }
+  }
+
+  function checkSection4() {
+    let lh = document.getElementById('linea-h');
+    let lv = document.getElementById('linea-v');
+    let correct = 0;
+    let total = 2;
+
+    if (['paralelo','paralelos'].includes(lh.value.trim().toLowerCase())) {
+      lh.classList.add('correct');
+      addScore('s4-paralelo');
+      correct++;
+    } else if (lh.value.trim()) {
+      lh.classList.add('incorrect');
+    }
+
+    if (['meridiano','meridianos'].includes(lv.value.trim().toLowerCase())) {
+      lv.classList.add('correct');
+      addScore('s4-meridiano');
+      correct++;
+    } else if (lv.value.trim()) {
+      lv.classList.add('incorrect');
+    }
+
+    showFeedback('fb4', correct, total);
+  }
+
+  // ===== Feedback =====
+  function showFeedback(id, correct, total) {
+    let fb = document.getElementById(id);
+    fb.classList.add('show');
+    if (correct === total) {
+      fb.className = 'feedback show success';
+      fb.textContent = '🎉 ¡Excelente! ¡Todo correcto! ' + correct + '/' + total;
+    } else if (correct > 0) {
+      fb.className = 'feedback show error';
+      fb.textContent = '🤔 Tienes ' + correct + '/' + total + ' correctas. ¡Revisa e intenta de nuevo!';
+    } else {
+      fb.className = 'feedback show error';
+      fb.textContent = '😅 Ninguna correcta aún. ¡Revisa la imagen y vuelve a intentar!';
+    }
+  }
+
+  // ===== RESET =====
+  function resetAll() {
+    if (!confirm('¿Estás seguro de reiniciar toda la práctica?')) return;
+    score = 0;
+    answeredQuestions.clear();
+    matchedCount = 0;
+    selectedConcept = null;
+    selectedDef = null;
+    updateScore();
+
+    // Reset inputs
+    document.querySelectorAll('input[type="text"]').forEach(i => {
+      i.value = '';
+      i.className = i.classList.contains('fill-input') ? 'fill-input' : '';
+      i.disabled = false;
+    });
+
+    // Reset selects
+    document.querySelectorAll('.styled-select').forEach(s => {
+      s.value = '';
+      s.className = 'styled-select';
+      s.disabled = false;
+    });
+
+    // Reset option buttons
+    document.querySelectorAll('.option-btn').forEach(b => {
+      b.className = 'option-btn';
+      b.disabled = false;
+    });
+
+    // Reset matching
+    document.querySelectorAll('.match-item').forEach(m => {
+      m.classList.remove('matched','active','wrong');
+    });
+
+    // Reset battleship
+    document.querySelectorAll('.battleship td:not(.row-header)').forEach(td => {
+      td.classList.remove('ship','water');
+      td.textContent = '';
+    });
+
+    // Reset feedbacks
+    document.querySelectorAll('.feedback').forEach(f => {
+      f.className = 'feedback';
+      f.textContent = '';
+    });
+  }
+
+  // Init
+  buildBattleship();
+  updateScore();
+</script>
+</body>
+</html>
