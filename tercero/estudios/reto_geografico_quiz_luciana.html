@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Reto Geográfico — Quiz de Luciana</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(160deg, #E8F4FD 0%, #FDF6E3 100%);
+    color: #222;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .app {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  /* ---------- Maleta / header ---------- */
+  .suitcase {
+    background: #fff;
+    border: 6px solid #2b2b2b;
+    border-radius: 26px;
+    padding: 20px 22px 26px;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .handle {
+    width: 140px;
+    height: 26px;
+    border: 6px solid #2b2b2b;
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    margin: 0 auto;
+    background: transparent;
+  }
+  h1 {
+    text-align: center;
+    color: #1F4E79;
+    margin: 6px 0 2px;
+    font-size: clamp(24px, 5vw, 34px);
+  }
+  .subtitle {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    margin: 0 0 14px;
+    font-size: clamp(14px, 3vw, 17px);
+  }
+  /* ---------- Pantalla inicio ---------- */
+  .intro-emoji { text-align: center; font-size: 56px; margin: 8px 0; }
+  .choose-label {
+    text-align: center;
+    color: #1F4E79;
+    font-weight: bold;
+    font-size: 19px;
+    margin: 10px 0 14px;
+  }
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .country-btn {
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1F4E79;
+    background: #FFF8DC;
+    border: 3px solid #E0A800;
+    border-radius: 18px;
+    padding: 18px 12px;
+    min-height: 64px;
+    cursor: pointer;
+    transition: transform .1s;
+  }
+  .country-btn:active { transform: scale(.96); background: #ffeeb0; }
+  .country-btn.all {
+    background: #E3F2FD;
+    border-color: #1F4E79;
+  }
+  .country-btn .flag { font-size: 28px; display: block; margin-bottom: 4px; }
+  /* ---------- Quiz ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+  }
+  .progress-wrap {
+    flex: 1;
+    height: 16px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    border-radius: 10px;
+    transition: width .3s;
+  }
+  .score-chip {
+    background: #FFF8DC;
+    border: 2px solid #E0A800;
+    border-radius: 12px;
+    padding: 4px 12px;
+    color: #8a6d00;
+    white-space: nowrap;
+  }
+  .q-category {
+    text-align: center;
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .q-text {
+    text-align: center;
+    font-size: clamp(20px, 4.2vw, 26px);
+    color: #1F4E79;
+    font-weight: bold;
+    margin: 8px 0 18px;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 600px) {
+    .options { grid-template-columns: 1fr 1fr; }
+  }
+  .opt-btn {
+    font-family: inherit;
+    font-size: 19px;
+    text-align: center;
+    background: #fff;
+    color: #333;
+    border: 3px solid #90CAF9;
+    border-radius: 16px;
+    padding: 16px 14px;
+    min-height: 60px;
+    cursor: pointer;
+    transition: transform .08s;
+  }
+  .opt-btn:active { transform: scale(.97); }
+  .opt-btn.correct {
+    background: #E8F5E9;
+    border-color: #4CAF50;
+    color: #1B5E20;
+    font-weight: bold;
+  }
+  .opt-btn.wrong {
+    background: #FFEBEE;
+    border-color: #E57373;
+    color: #B71C1C;
+  }
+  .opt-btn:disabled { opacity: 1; }
+  .feedback {
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    min-height: 30px;
+    margin: 16px 0 6px;
+  }
+  .feedback.good { color: #2E7D32; }
+  .feedback.bad { color: #C62828; }
+  .next-btn, .big-btn {
+    font-family: inherit;
+    display: block;
+    margin: 12px auto 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    background: #1F4E79;
+    border: none;
+    border-radius: 16px;
+    padding: 16px 40px;
+    min-height: 58px;
+    cursor: pointer;
+    visibility: hidden;
+  }
+  .next-btn.show, .big-btn { visibility: visible; }
+  .next-btn:active, .big-btn:active { transform: scale(.97); }
+  /* ---------- Resultado ---------- */
+  .result-emoji { text-align: center; font-size: 72px; margin: 10px 0; }
+  .result-title {
+    text-align: center;
+    font-size: 30px;
+    color: #1F4E79;
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  .result-score {
+    text-align: center;
+    font-size: 22px;
+    color: #555;
+    margin: 6px 0 4px;
+  }
+  .stars { text-align: center; font-size: 40px; letter-spacing: 6px; margin: 8px 0; }
+  .result-msg {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .wheels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 60px;
+    margin-top: -6px;
+  }
+  .wheel {
+    width: 44px; height: 44px;
+    border: 6px solid #2b2b2b;
+    border-radius: 50%;
+    background: #fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 18px;
+  }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="suitcase">
+    <h1>🌍 Reto Geográfico</h1>
+    <p class="subtitle">¡El quiz viajero de Luciana!</p>
+
+    <!-- INICIO -->
+    <div id="screen-start">
+      <div class="intro-emoji">🧳✈️</div>
+      <p class="choose-label">¿A dónde viajamos hoy? Elige tu destino:</p>
+      <div class="country-grid" id="country-grid"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="screen-quiz" class="hidden">
+      <div class="topbar">
+        <span id="q-counter">1/10</span>
+        <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+        <span class="score-chip" id="score-chip">⭐ 0</span>
+      </div>
+      <p class="q-category" id="q-category"></p>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <p class="feedback" id="feedback"></p>
+      <button class="next-btn" id="next-btn">Siguiente ➜</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="screen-result" class="hidden">
+      <div class="result-emoji" id="result-emoji">🏆</div>
+      <p class="result-title" id="result-title">¡Viaje completado!</p>
+      <div class="stars" id="stars"></div>
+      <p class="result-score" id="result-score"></p>
+      <p class="result-msg" id="result-msg"></p>
+      <button class="big-btn" id="retry-btn">Jugar otra vez 🔄</button>
+      <button class="big-btn" id="home-btn" style="background:#E0A800; margin-top:10px;">Elegir otro destino 🧳</button>
+    </div>
+  </div>
+  <div class="wheels">
+    <div class="wheel">✳️</div>
+    <div class="wheel">✳️</div>
+  </div>
+</div>
+
+<script>
+const BANK = {
+  "Portugal": [
+    {q:"¿Cuál es la capital de Portugal?", opts:["Lisboa","Madrid","Roma","París"], a:0},
+    {q:"¿Cuál es el idioma oficial de Portugal?", opts:["Portugués","Español","Italiano","Francés"], a:0},
+    {q:"¿De qué país es esta bandera? 🇵🇹", opts:["Portugal","Italia","España","Alemania"], a:0},
+    {q:"Al Norte y al Este, Portugal limita con el país…", opts:["España","Francia","Italia","Alemania"], a:0},
+    {q:"Al Sur y al Oeste, Portugal limita con el océano…", opts:["Atlántico","Pacífico","Índico","Ártico"], a:0},
+    {q:"La Torre de Belén es un monumento famoso de…", opts:["Portugal","Francia","España","Italia"], a:0},
+    {q:"¿Cuál es el símbolo más icónico de Portugal, que representa buena suerte, justicia y fe?", opts:["El Gallo de Barcelos","El Lobo Italiano","El Águila Federal","La Flor de Lis"], a:0},
+    {q:"¿Cómo se llama la música tradicional más emblemática de Portugal?", opts:["El fado","El flamenco","La ópera","El vals"], a:0},
+    {q:"El 'Pastel de Belém' es…", opts:["Un postre delicioso de Portugal","Un baile típico","Un castillo","Una flor"], a:0},
+    {q:"¿Qué pieza de cerámica esmaltada es esencial en la identidad cultural de Portugal?", opts:["El azulejo","La máscara","La vespa","El bretzel"], a:0},
+    {q:"¿Qué planta crece en gran abundancia en la región del Alentejo (Portugal)?", opts:["La lavanda","El clavel","La margarita","El aciano"], a:0},
+    {q:"Sintra es…", opts:["Un pequeño y pintoresco pueblo portugués","La capital de Portugal","Un volcán","Un museo francés"], a:0}
+  ],
+  "España": [
+    {q:"¿Cuál es la capital de España?", opts:["Madrid","Barcelona","Lisboa","Berlín"], a:0},
+    {q:"¿De qué país es esta bandera? 🇪🇸", opts:["España","Portugal","Alemania","Italia"], a:0},
+    {q:"Al Norte, España limita con el país…", opts:["Francia","Portugal","Italia","Dinamarca"], a:0},
+    {q:"Al Oeste, España limita con el país…", opts:["Portugal","Francia","Suiza","Austria"], a:0},
+    {q:"Al Este, España limita con el mar…", opts:["Mediterráneo","Negro","Caspio","Báltico"], a:0},
+    {q:"La Sagrada Familia, una iglesia gigante y única, está en…", opts:["Barcelona","Madrid","Granada","Segovia"], a:0},
+    {q:"La Alhambra, un antiguo palacio con jardines mágicos, está en…", opts:["Granada","Barcelona","Roma","París"], a:0},
+    {q:"El Acueducto de Segovia es una construcción muy antigua hecha por los…", opts:["Romanos","Vikingos","Egipcios","Griegos"], a:0},
+    {q:"¿Cuál es la flor nacional de España?", opts:["El clavel","La margarita","El aciano","La flor de lis"], a:0},
+    {q:"¿Qué baile español se caracteriza por el zapateado rítmico y movimientos de brazos?", opts:["El flamenco","El fado","El ballet","El tango"], a:0},
+    {q:"¿Qué felino protegido vive en España?", opts:["El Lince Ibérico","El Lobo Italiano","El tigre","El puma"], a:0},
+    {q:"La Paella es…", opts:["Un plato de arroz muy famoso","Un postre","Una danza","Un castillo"], a:0}
+  ],
+  "Francia": [
+    {q:"¿Cuál es la capital de Francia?", opts:["París","Lisboa","Madrid","Roma"], a:0},
+    {q:"¿Cuál es el idioma oficial de Francia?", opts:["Francés","Español","Alemán","Italiano"], a:0},
+    {q:"¿De qué país es esta bandera? 🇫🇷", opts:["Francia","Italia","España","Portugal"], a:0},
+    {q:"Al Sur, Francia limita con el Mar Mediterráneo y el país…", opts:["España","Portugal","Alemania","Dinamarca"], a:0},
+    {q:"Al Oeste, Francia limita con el océano…", opts:["Atlántico","Pacífico","Índico","Ártico"], a:0},
+    {q:"¿Cuál es el símbolo más famoso de Francia, una torre de hierro gigante que brilla por las noches?", opts:["La Torre Eiffel","La Torre de Pisa","La Torre de Belén","El Big Ben"], a:0},
+    {q:"¿En qué museo vive la famosa pintura de la Mona Lisa?", opts:["El Museo del Louvre","El Museo del Prado","La Alhambra","El Coliseo"], a:0},
+    {q:"¿Qué monumento enorme en forma de arco se construyó para celebrar grandes victorias?", opts:["El Arco del Triunfo","La Puerta de Brandeburgo","El Acueducto","Notre Dame"], a:0},
+    {q:"La Catedral de Notre Dame es famosa por…", opts:["Sus torres de piedra y ventanas de colores","Estar inclinada","Ser de hierro","Sus góndolas"], a:0},
+    {q:"¿Cuál es el animal nacional de Francia, que representa la valentía de su gente?", opts:["El Gallo Galo","El Águila Federal","El Lobo","El Lince"], a:0},
+    {q:"¿Cuál es el pan más famoso de Francia: largo, crujiente y delicioso?", opts:["La baguette","El bretzel","El croissant","El pastel de Belém"], a:0},
+    {q:"¿Cómo se llama la carrera de bicicletas más famosa del mundo que recorre toda Francia?", opts:["El Tour de Francia","La Vuelta a España","El Giro","El Rally"], a:0}
+  ],
+  "Italia": [
+    {q:"¿Cuál es la capital de Italia?", opts:["Roma","Venecia","París","Madrid"], a:0},
+    {q:"¿Cuál es el idioma oficial de Italia?", opts:["Italiano","Español","Francés","Portugués"], a:0},
+    {q:"¿De qué país es esta bandera? 🇮🇹", opts:["Italia","Francia","Portugal","España"], a:0},
+    {q:"Al Norte, Italia limita con…", opts:["Suiza y Austria","España y Francia","Polonia y Dinamarca","Portugal"], a:0},
+    {q:"Al Sur, Este y Oeste, Italia limita con el mar…", opts:["Mediterráneo","Negro","Caspio","Báltico"], a:0},
+    {q:"¿Qué anfiteatro gigante y muy antiguo está en Roma?", opts:["El Coliseo Romano","El Acueducto","La Alhambra","El Louvre"], a:0},
+    {q:"¿Por qué es famosa la Torre de Pisa?", opts:["Porque está inclinada y parece que va a caer","Porque es de hierro","Porque brilla de noche","Porque es la más alta"], a:0},
+    {q:"¿En qué ciudad mágica las calles son de agua y la gente viaja en góndolas?", opts:["Venecia","Roma","Pisa","Nápoles"], a:0},
+    {q:"¿Qué ciudad antigua quedó congelada en el tiempo por la ceniza del volcán Vesubio?", opts:["Pompeya","Venecia","Sintra","Granada"], a:0},
+    {q:"¿Qué comida súper famosa nació en Italia?", opts:["La pizza y la pasta","La paella","El bretzel","La baguette"], a:0},
+    {q:"¿Cuál es la flor nacional de Italia?", opts:["La margarita","El clavel","El aciano","La lavanda"], a:0},
+    {q:"¿Cuál es el animal nacional de Italia, que vive protegido en las montañas?", opts:["El Lobo Italiano","El Lince Ibérico","El Gallo Galo","El oso"], a:0}
+  ],
+  "Alemania": [
+    {q:"¿Cuál es la capital de Alemania?", opts:["Berlín","Madrid","Viena","París"], a:0},
+    {q:"¿Cuál es el idioma oficial de Alemania?", opts:["Alemán","Francés","Italiano","Portugués"], a:0},
+    {q:"¿De qué país es esta bandera? 🇩🇪", opts:["Alemania","España","Italia","Francia"], a:0},
+    {q:"Al Norte, Alemania limita con…", opts:["Dinamarca","España","Portugal","Italia"], a:0},
+    {q:"Al Sur, Alemania limita con…", opts:["Suiza y Austria","Portugal y España","Polonia","Dinamarca"], a:0},
+    {q:"Al Este, Alemania limita con…", opts:["Polonia y República Checa","Francia y Bélgica","España","Suiza"], a:0},
+    {q:"¿Qué castillo alemán parece de cuento de hadas y está en lo alto de una montaña?", opts:["Neuschwanstein","La Alhambra","La Torre de Belén","Notre Dame"], a:0},
+    {q:"¿Qué monumento enorme en Berlín representa la paz y la unión?", opts:["La Puerta de Brandeburgo","El Arco del Triunfo","El Coliseo","La Torre Eiffel"], a:0},
+    {q:"¿Quiénes escribieron cuentos famosos como Caperucita Roja y Hansel y Gretel?", opts:["Los Hermanos Grimm","Los Romanos","Los Vikingos","Mozart"], a:0},
+    {q:"¿Cuál es el pan salado alemán con forma de nudo muy divertida?", opts:["El bretzel","La baguette","El pastel de Belém","La pizza"], a:0},
+    {q:"¿Qué animal aparece en el escudo de Alemania y representa la fuerza?", opts:["El Águila Federal","El Gallo Galo","El Lobo","El Lince"], a:0},
+    {q:"¿Cuál es la flor nacional de Alemania, de un color azul brillante?", opts:["El aciano","El clavel","La margarita","La rosa"], a:0}
+  ],
+  "_extra": [
+    {q:"¿Cuál es la moneda oficial de Portugal, España, Francia, Italia y Alemania?", opts:["El Euro (€)","El Dólar","El Peso","La Libra"], a:0, cat:"Europa"},
+    {q:"¿En qué continente están Portugal, España, Francia, Italia y Alemania?", opts:["Europa","América","Asia","África"], a:0, cat:"Europa"}
+  ]
+};
+
+const FLAGS = {"Portugal":"🇵🇹","España":"🇪🇸","Francia":"🇫🇷","Italia":"🇮🇹","Alemania":"🇩🇪"};
+const PRAISE = ["¡Excelente! 🎉","¡Muy bien! 🌟","¡Correcto! ✅","¡Genial! 🥳","¡Eres una crack! 💪"];
+const OOPS = ["¡Casi! La respuesta era: ","Ojo 👀 La respuesta correcta era: ","No pasa nada, era: "];
+
+let questions = [], idx = 0, score = 0, currentMode = "";
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuestion(raw, cat){
+  const correctText = raw.opts[raw.a];
+  const opts = shuffle(raw.opts);
+  return { q: raw.q, opts, a: opts.indexOf(correctText), cat: raw.cat || cat };
+}
+
+function startQuiz(mode){
+  currentMode = mode;
+  let pool = [];
+  if (mode === "todos") {
+    for (const c of Object.keys(FLAGS)) pool.push(...shuffle(BANK[c]).slice(0,4).map(r=>buildQuestion(r,c)));
+    pool.push(...BANK["_extra"].map(r=>buildQuestion(r,"Europa")));
+    questions = shuffle(pool).slice(0, 20);
+  } else {
+    questions = shuffle(BANK[mode].map(r=>buildQuestion(r,mode)));
+  }
+  idx = 0; score = 0;
+  show("screen-quiz");
+  renderQuestion();
+}
+
+function show(id){
+  for (const s of ["screen-start","screen-quiz","screen-result"])
+    document.getElementById(s).classList.toggle("hidden", s !== id);
+}
+
+function renderQuestion(){
+  const q = questions[idx];
+  document.getElementById("q-counter").textContent = (idx+1) + "/" + questions.length;
+  document.getElementById("progress-bar").style.width = (idx / questions.length * 100) + "%";
+  document.getElementById("score-chip").textContent = "⭐ " + score;
+  document.getElementById("q-category").textContent = (FLAGS[q.cat] || "🌍") + " " + q.cat;
+  document.getElementById("q-text").textContent = q.q;
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+  q.opts.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt-btn";
+    b.textContent = opt;
+    b.addEventListener("click", () => answer(i, b), {passive:true});
+    box.appendChild(b);
+  });
+  const fb = document.getElementById("feedback");
+  fb.textContent = ""; fb.className = "feedback";
+  document.getElementById("next-btn").classList.remove("show");
+}
+
+function answer(i, btn){
+  const q = questions[idx];
+  const buttons = document.querySelectorAll(".opt-btn");
+  buttons.forEach(b => b.disabled = true);
+  const fb = document.getElementById("feedback");
+  if (i === q.a) {
+    score++;
+    btn.classList.add("correct");
+    fb.textContent = PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    fb.classList.add("good");
+  } else {
+    btn.classList.add("wrong");
+    buttons[q.a].classList.add("correct");
+    fb.textContent = OOPS[Math.floor(Math.random()*OOPS.length)] + q.opts[q.a];
+    fb.classList.add("bad");
+  }
+  document.getElementById("score-chip").textContent = "⭐ " + score;
+  document.getElementById("next-btn").classList.add("show");
+  document.getElementById("next-btn").textContent = (idx === questions.length-1) ? "Ver resultado 🏁" : "Siguiente ➜";
+}
+
+function finish(){
+  document.getElementById("progress-bar").style.width = "100%";
+  const pct = score / questions.length;
+  const stars = pct === 1 ? 5 : pct >= .9 ? 4 : pct >= .7 ? 3 : pct >= .5 ? 2 : 1;
+  document.getElementById("stars").textContent = "⭐".repeat(stars) + "☆".repeat(5-stars);
+  document.getElementById("result-score").textContent = "Acertaste " + score + " de " + questions.length + " preguntas";
+  const emoji = pct === 1 ? "🏆" : pct >= .7 ? "🎉" : pct >= .5 ? "😊" : "💪";
+  document.getElementById("result-emoji").textContent = emoji;
+  document.getElementById("result-title").textContent =
+    pct === 1 ? "¡PERFECTO, Luciana!" : pct >= .7 ? "¡Muy buen viaje!" : pct >= .5 ? "¡Buen intento!" : "¡Sigue practicando!";
+  document.getElementById("result-msg").textContent =
+    pct === 1 ? "¡Eres una exploradora experta! 🌍✨" :
+    pct >= .7 ? "¡Ya casi te sabes toda Europa!" :
+    pct >= .5 ? "Repasa un poquito más y serás experta." :
+    "Cada viaje te hace más sabia. ¡Inténtalo otra vez!";
+  show("screen-result");
+}
+
+document.getElementById("next-btn").addEventListener("click", () => {
+  if (idx === questions.length - 1) { finish(); return; }
+  idx++;
+  renderQuestion();
+});
+document.getElementById("retry-btn").addEventListener("click", () => startQuiz(currentMode));
+document.getElementById("home-btn").addEventListener("click", () => show("screen-start"));
+
+// Botones de destino
+const grid = document.getElementById("country-grid");
+for (const c of Object.keys(FLAGS)) {
+  const b = document.createElement("button");
+  b.className = "country-btn";
+  b.innerHTML = '<span class="flag">' + FLAGS[c] + '</span>' + c;
+  b.addEventListener("click", () => startQuiz(c), {passive:true});
+  grid.appendChild(b);
+}
+const all = document.createElement("button");
+all.className = "country-btn all";
+all.innerHTML = '<span class="flag">🌍✈️</span>¡Reto completo! (todos)';
+all.addEventListener("click", () => startQuiz("todos"), {passive:true});
+grid.appendChild(all);
+</script>
+</body>
+</html>
