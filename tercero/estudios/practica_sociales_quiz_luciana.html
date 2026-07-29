@@ -149,11 +149,31 @@
   .exit-box .exit-yes { background: #EF5350; color: #fff; }
   .exit-box .exit-no { background: #fff; color: #546E7A; border-color: #CFD8DC; }
   .exit-box button:active { transform: scale(.97); }
+  /* ---------- migas de pan ---------- */
+  .crumbs {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 6px; margin: 0 0 10px; font-size: 14px;
+  }
+  .crumbs a {
+    text-decoration: none; color: #546E7A;
+    background: rgba(255,255,255,.92); border: 2px solid #CFD8DC;
+    border-radius: 16px; padding: 6px 13px; white-space: nowrap;
+  }
+  .crumbs a:active { transform: scale(.96); }
+  .crumbs .sep { color: #B0BEC5; }
+  .crumbs .here { color: #78909C; font-weight: bold; padding: 0 4px; white-space: nowrap; }
   .hidden { display: none !important; }
 </style>
 </head>
 <body>
 <div class="app">
+  <nav class="crumbs">
+    <a href="../../index.html">🏠 Inicio</a><span class="sep">›</span>
+    <a href="../../index.html#tercero">Tercer grado</a><span class="sep">›</span>
+    <a href="../../index.html#tercero/t2">II Trimestre</a><span class="sep">›</span>
+    <a href="../../index.html#tercero/t2/Estudios%20Sociales">Estudios Sociales</a><span class="sep">›</span>
+    <span class="here">Puntarenas y Nicoya</span>
+  </nav>
   <div class="board">
     <h1>🌴 Práctica Estudios Sociales</h1>
     <p class="subtitle">Segundo trimestre — Puntarenas y la Anexión de Nicoya</p>

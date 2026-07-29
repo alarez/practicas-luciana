@@ -219,11 +219,49 @@ let state = { grado: null, trim: null, materia: "todas" };
 const view = document.getElementById("view");
 const bc = document.getElementById("breadcrumb");
 
+/* ---- rutas en el # para poder volver desde una práctica ---- */
+const GRADO_IDS = GRADOS.map(g => g.id).concat(["antes"]);
+let applyingHash = false;
+
+function hashFor(){
+  if (!state.grado) return "";
+  if (!state.trim) return "#" + state.grado;
+  return "#" + state.grado + "/" + state.trim +
+    (state.materia && state.materia !== "todas" ? "/" + encodeURIComponent(state.materia) : "");
+}
+function readHash(){
+  const raw = location.hash.replace(/^#/, "");
+  if (!raw) { state = { grado: null, trim: null, materia: "todas" }; return; }
+  const parts = raw.split("/").map(p => decodeURIComponent(p));
+  const g = parts[0];
+  if (!GRADO_IDS.includes(g)) { state = { grado: null, trim: null, materia: "todas" }; return; }
+  const trims = (TRIMESTRES[g] || []).map(t => t.id).concat(["tx"]);
+  const t = parts[1] && trims.includes(parts[1]) ? parts[1] : (g === "antes" ? "tx" : null);
+  const materias = PRACTICAS.filter(p => p.grado === g && (!t || p.trim === t)).map(p => p.materia);
+  const m = parts[2] && materias.includes(parts[2]) ? parts[2] : "todas";
+  state = { grado: g, trim: t, materia: m };
+}
+function syncHash(){
+  const h = hashFor();
+  const now = location.hash;
+  if (now === h || (h === "" && (now === "" || now === "#"))) return;
+  applyingHash = true;
+  if (h === "") history.replaceState(null, "", location.pathname + location.search);
+  else location.hash = h;
+  setTimeout(() => { applyingHash = false; }, 0);
+}
+window.addEventListener("hashchange", () => {
+  if (applyingHash) return;
+  readHash();
+  render();
+});
+
 function countFor(grado, trim){
   return PRACTICAS.filter(p => p.grado === grado && (!trim || p.trim === trim)).length;
 }
 
 function render(){
+  syncHash();
   renderBreadcrumb();
   if (!state.grado) return renderGrados();
   if (!state.trim) return renderTrimestres();
@@ -327,6 +365,7 @@ function renderPracticas(){
   }
 }
 
+readHash();
 render();
 </script>
 </body>
