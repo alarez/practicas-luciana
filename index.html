@@ -39,6 +39,10 @@
       background: #1F4E79; border-color: #1F4E79; color: #fff; font-weight: bold;
       padding: 6px 14px; border-radius: 20px;
     }
+    .breadcrumb button.back-btn {
+      background: #546E7A; border-color: #546E7A; color: #fff; font-weight: bold;
+    }
+    .breadcrumb button.back-btn:active { transform: scale(.96); background: #37474F; }
 
     /* ---------- botones grandes de navegación ---------- */
     .nav-grid {
@@ -280,6 +284,20 @@ function renderBreadcrumb(){
   const here = label => { const s = document.createElement("span"); s.className = "here"; s.textContent = label; bc.appendChild(s); };
 
   if (!state.grado) { here("Inicio"); return; }
+
+  // botón de atrás: sube un nivel (y primero quita el filtro de materia si está puesto)
+  const back = document.createElement("button");
+  back.className = "back-btn";
+  back.textContent = "← Atrás";
+  back.addEventListener("click", () => {
+    if (!state.trim) state.grado = null;
+    else if (state.grado === "antes") state = { grado:null, trim:null, materia:"todas" };
+    else if (state.materia && state.materia !== "todas") state.materia = "todas";
+    else state.trim = null;
+    render();
+  });
+  bc.appendChild(back);
+
   add("🏠 Inicio", () => { state = { grado:null, trim:null, materia:"todas" }; render(); });
   sep();
   const gName = state.grado === "antes" ? "Años anteriores" : (GRADOS.find(g => g.id === state.grado) || {}).nombre;
