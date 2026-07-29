@@ -13,80 +13,107 @@
       color: #333;
       margin: 0;
       min-height: 100vh;
-      padding: 24px 16px 40px;
+      padding: 22px 16px 40px;
     }
-    .wrap { max-width: 860px; margin: 0 auto; }
-    header { text-align: center; margin-bottom: 26px; }
-    .header-emoji { font-size: 52px; }
-    h1 {
-      color: #1F4E79;
-      margin: 6px 0 4px;
-      font-size: clamp(26px, 6vw, 38px);
-    }
+    .wrap { max-width: 880px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 20px; }
+    .header-emoji { font-size: 48px; }
+    h1 { color: #1F4E79; margin: 4px 0 4px; font-size: clamp(25px, 6vw, 36px); }
     .tagline { color: #888; font-style: italic; margin: 0; font-size: 16px; }
 
-    .trimestre {
-      background: rgba(255, 255, 255, .65);
-      border-radius: 22px;
-      padding: 18px 18px 8px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
+    /* ---------- migas de pan ---------- */
+    .breadcrumb {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 8px;
+      font-size: 15px; color: #90A4AE;
+      margin-bottom: 18px;
     }
-    .trimestre > h2 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #5E35B1;
-      font-size: 20px;
-      margin: 4px 6px 14px;
+    .breadcrumb button {
+      font-family: inherit; font-size: 15px;
+      background: #fff; border: 2px solid #CFD8DC; border-radius: 20px;
+      padding: 6px 14px; color: #546E7A; cursor: pointer;
     }
-    .trimestre > h2 .badge {
-      font-size: 26px;
+    .breadcrumb button:hover { border-color: #90A4AE; }
+    .breadcrumb .here {
+      background: #1F4E79; border-color: #1F4E79; color: #fff; font-weight: bold;
+      padding: 6px 14px; border-radius: 20px;
     }
-    .trimestre.old > h2 { color: #90A4AE; }
 
-    .cards {
+    /* ---------- botones grandes de navegación ---------- */
+    .nav-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 10px;
     }
+    .nav-card {
+      display: flex; align-items: center; gap: 16px;
+      background: #fff;
+      border: 3px solid var(--c, #90CAF9);
+      border-radius: 20px;
+      padding: 18px 20px;
+      min-height: 92px;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+      box-shadow: 0 3px 8px rgba(0,0,0,.07);
+      transition: transform .12s, box-shadow .12s;
+      width: 100%;
+    }
+    .nav-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,.12); }
+    .nav-card:active { transform: scale(.98); }
+    .nav-card .icon {
+      font-size: 34px; flex-shrink: 0;
+      width: 58px; height: 58px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg, #E3F2FD); border-radius: 16px;
+    }
+    .nav-card .info { display: flex; flex-direction: column; gap: 3px; }
+    .nav-card .title { font-size: 19px; font-weight: bold; color: var(--c, #1F4E79); }
+    .nav-card .meta { font-size: 13px; color: #90A4AE; }
+    .nav-card.soon { opacity: .55; cursor: default; }
+    .nav-card.soon:hover { transform: none; box-shadow: 0 3px 8px rgba(0,0,0,.07); }
+
+    /* ---------- filtro por materia ---------- */
+    .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 4px 0 18px; }
+    .chip {
+      font-family: inherit; font-size: 14px; font-weight: bold;
+      background: #fff; border: 2px solid #CFD8DC; color: #546E7A;
+      border-radius: 20px; padding: 7px 15px; cursor: pointer;
+    }
+    .chip.on { background: #1F4E79; border-color: #1F4E79; color: #fff; }
+
+    /* ---------- tarjetas de práctica ---------- */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
     .card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 14px;
       background: #fff;
       border: 3px solid var(--c, #90CAF9);
       border-radius: 18px;
       padding: 14px 16px;
       text-decoration: none;
       color: #333;
-      min-height: 76px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, .07);
+      min-height: 80px;
+      box-shadow: 0 3px 8px rgba(0,0,0,.07);
       transition: transform .12s, box-shadow .12s;
     }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0, 0, 0, .12); }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,.12); }
     .card:active { transform: scale(.97); }
     .card .icon {
-      font-size: 34px;
-      flex-shrink: 0;
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg, #E3F2FD);
-      border-radius: 14px;
+      font-size: 32px; flex-shrink: 0;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg, #E3F2FD); border-radius: 14px;
     }
     .card .info { display: flex; flex-direction: column; gap: 2px; }
     .card .subject {
-      font-size: 12px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--c, #1F4E79);
+      font-size: 11px; font-weight: bold; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--c, #1F4E79);
     }
-    .card .title { font-size: 16px; font-weight: bold; line-height: 1.25; }
+    .card .title { font-size: 15px; font-weight: bold; line-height: 1.3; }
+
+    .empty { text-align: center; color: #B0BEC5; font-size: 16px; padding: 28px 10px; }
 
     /* colores por materia */
     .mate     { --c: #7E57C2; --bg: #F3E5F5; }
@@ -94,13 +121,12 @@
     .ingles   { --c: #E53935; --bg: #FFEBEE; }
     .science  { --c: #00897B; --bg: #E0F2F1; }
     .espanol  { --c: #1E88E5; --bg: #E3F2FD; }
+    .grado    { --c: #1F4E79; --bg: #E3F2FD; }
+    .trim2    { --c: #5E35B1; --bg: #EDE7F6; }
+    .trim1    { --c: #43A047; --bg: #E8F5E9; }
+    .trimx    { --c: #78909C; --bg: #ECEFF1; }
 
-    footer {
-      text-align: center;
-      color: #aaa;
-      font-size: 14px;
-      margin-top: 10px;
-    }
+    footer { text-align: center; color: #B0BEC5; font-size: 14px; margin-top: 26px; }
   </style>
 </head>
 
@@ -112,131 +138,197 @@
       <p class="tagline">¡Elige una práctica y a aprender jugando!</p>
     </header>
 
-    <section class="trimestre">
-      <h2><span class="badge">🚀</span> Tercer grado — 2do trimestre</h2>
-      <div class="cards">
-        <a class="card mate" href="tercero/mate/practica_mate_quiz_luciana.html">
-          <span class="icon">✖️</span>
-          <span class="info">
-            <span class="subject">Matemáticas</span>
-            <span class="title">Práctica Matemáticas: multiplicación, secuencias, gráficos y variables</span>
-          </span>
-        </a>
-        <a class="card sociales" href="tercero/estudios/reto_geografico_quiz_luciana.html">
-          <span class="icon">🌍</span>
-          <span class="info">
-            <span class="subject">Estudios Sociales</span>
-            <span class="title">Reto Geográfico — quiz de Europa</span>
-          </span>
-        </a>
-        <a class="card sociales" href="tercero/estudios/practica_sociales_quiz_luciana.html">
-          <span class="icon">🌴</span>
-          <span class="info">
-            <span class="subject">Estudios Sociales</span>
-            <span class="title">Práctica Estudios Sociales: Puntarenas y Anexión de Nicoya</span>
-          </span>
-        </a>
-        <a class="card ingles" href="tercero/ingles/practica_ingles_vocabulary_luciana.html">
-          <span class="icon">🏕️</span>
-          <span class="info">
-            <span class="subject">Inglés</span>
-            <span class="title">English Practice: Travel &amp; Nature vocabulary + comparatives</span>
-          </span>
-        </a>
-        <a class="card ingles" href="tercero/ingles/practica_spelling_luciana.html">
-          <span class="icon">🦴</span>
-          <span class="info">
-            <span class="subject">Spelling</span>
-            <span class="title">Spelling Practice: The Human Body (14 words)</span>
-          </span>
-        </a>
-      </div>
-    </section>
-
-    <section class="trimestre">
-      <h2><span class="badge">🌱</span> Tercer grado — 1er trimestre</h2>
-      <div class="cards">
-        <a class="card sociales" href="tercero/estudios/practica-estudios-sociales.html">
-          <span class="icon">🗺️</span>
-          <span class="info">
-            <span class="subject">Estudios Sociales</span>
-            <span class="title">Práctica de estudios sociales</span>
-          </span>
-        </a>
-        <a class="card ingles" href="tercero/ingles/english-practice-repaso1.html">
-          <span class="icon">🔤</span>
-          <span class="info">
-            <span class="subject">Inglés</span>
-            <span class="title">Repaso 1</span>
-          </span>
-        </a>
-        <a class="card science" href="tercero/science/formulario_science_luciana.html">
-          <span class="icon">🔬</span>
-          <span class="info">
-            <span class="subject">Science</span>
-            <span class="title">Formulario de science</span>
-          </span>
-        </a>
-      </div>
-    </section>
-
-    <section class="trimestre old">
-      <h2><span class="badge">🗂️</span> Prácticas anteriores</h2>
-      <div class="cards">
-        <a class="card espanol" href="espanol/3ertrimetre.html">
-          <span class="icon">✏️</span>
-          <span class="info">
-            <span class="subject">Español</span>
-            <span class="title">Práctica examen final</span>
-          </span>
-        </a>
-        <a class="card ingles" href="ingles/english_practice_exam.html">
-          <span class="icon">🔤</span>
-          <span class="info">
-            <span class="subject">Inglés</span>
-            <span class="title">Práctica de examen</span>
-          </span>
-        </a>
-        <a class="card ingles" href="ingles/spelling-practice-game.html">
-          <span class="icon">🎯</span>
-          <span class="info">
-            <span class="subject">Inglés</span>
-            <span class="title">Juego de spelling</span>
-          </span>
-        </a>
-        <a class="card science" href="science/science_quiz-3er-trimestre.html">
-          <span class="icon">🔬</span>
-          <span class="info">
-            <span class="subject">Science</span>
-            <span class="title">Práctica examen final</span>
-          </span>
-        </a>
-        <a class="card science" href="science/planets_learning_app.html">
-          <span class="icon">🪐</span>
-          <span class="info">
-            <span class="subject">Science</span>
-            <span class="title">App de planetas</span>
-          </span>
-        </a>
-        <a class="card science" href="science/dwarf_planets_interactive.html">
-          <span class="icon">🌑</span>
-          <span class="info">
-            <span class="subject">Science</span>
-            <span class="title">Planetas enanos</span>
-          </span>
-        </a>
-        <a class="card science" href="science/solar_system_learning_app.html">
-          <span class="icon">☀️</span>
-          <span class="info">
-            <span class="subject">Science</span>
-            <span class="title">Sistema solar</span>
-          </span>
-        </a>
-      </div>
-    </section>
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div id="view"></div>
 
     <footer>Hecho con ❤️ para Luciana</footer>
   </div>
+
+<script>
+/* ---------------- datos ---------------- */
+const GRADOS = [
+  { id: "tercero", nombre: "Tercer grado", meta: "Año actual", icon: "3️⃣", cls: "grado" }
+];
+
+const TRIMESTRES = {
+  tercero: [
+    { id: "t2", nombre: "II Trimestre", meta: "Exámenes de agosto", icon: "🚀", cls: "trim2" },
+    { id: "t1", nombre: "I Trimestre", meta: "Prácticas anteriores", icon: "🌱", cls: "trim1" }
+  ]
+};
+
+const PRACTICAS = [
+  // ---- tercer grado, II trimestre ----
+  { grado:"tercero", trim:"t2", materia:"Matemáticas", cls:"mate", icon:"📘",
+    title:"Práctica Matemáticas: sucesiones, patrones, gráficos, tablas de frecuencia, cálculo mental y moneda",
+    href:"tercero/mate/practica_mate_quiz_luciana.html" },
+  { grado:"tercero", trim:"t2", materia:"Matemáticas", cls:"mate", icon:"✖️",
+    title:"Tablas de multiplicar: en orden, desordenadas y contrarreloj",
+    href:"tercero/mate/practica_tablas_luciana.html" },
+  { grado:"tercero", trim:"t2", materia:"Estudios Sociales", cls:"sociales", icon:"🌴",
+    title:"Puntarenas, el relieve y la Anexión de Nicoya",
+    href:"tercero/estudios/practica_sociales_quiz_luciana.html" },
+  { grado:"tercero", trim:"t2", materia:"Estudios Sociales", cls:"sociales", icon:"🌍",
+    title:"Reto Geográfico — quiz de Europa",
+    href:"tercero/estudios/reto_geografico_quiz_luciana.html" },
+  { grado:"tercero", trim:"t2", materia:"Inglés", cls:"ingles", icon:"🏕️",
+    title:"English Practice: Travel &amp; Nature vocabulary + comparatives",
+    href:"tercero/ingles/practica_ingles_vocabulary_luciana.html" },
+  { grado:"tercero", trim:"t2", materia:"Inglés", cls:"ingles", icon:"🦴",
+    title:"Spelling Practice: The Human Body (14 words)",
+    href:"tercero/ingles/practica_spelling_luciana.html" },
+
+  // ---- tercer grado, I trimestre ----
+  { grado:"tercero", trim:"t1", materia:"Estudios Sociales", cls:"sociales", icon:"🗺️",
+    title:"Práctica de estudios sociales",
+    href:"tercero/estudios/practica-estudios-sociales.html" },
+  { grado:"tercero", trim:"t1", materia:"Inglés", cls:"ingles", icon:"🔤",
+    title:"English Practice — Repaso 1",
+    href:"tercero/ingles/english-practice-repaso1.html" },
+  { grado:"tercero", trim:"t1", materia:"Science", cls:"science", icon:"🔬",
+    title:"Science: cells, key words, bones and muscles",
+    href:"tercero/science/formulario_science_luciana.html" },
+
+  // ---- prácticas de años anteriores ----
+  { grado:"antes", trim:"tx", materia:"Español", cls:"espanol", icon:"✏️",
+    title:"Práctica examen final",
+    href:"espanol/3ertrimetre.html" },
+  { grado:"antes", trim:"tx", materia:"Inglés", cls:"ingles", icon:"🔤",
+    title:"English practice exam",
+    href:"ingles/english_practice_exam.html" },
+  { grado:"antes", trim:"tx", materia:"Inglés", cls:"ingles", icon:"🎯",
+    title:"Spelling practice game",
+    href:"ingles/spelling-practice-game.html" },
+  { grado:"antes", trim:"tx", materia:"Science", cls:"science", icon:"🔬",
+    title:"Science quiz — examen final",
+    href:"science/science_quiz-3er-trimestre.html" },
+  { grado:"antes", trim:"tx", materia:"Science", cls:"science", icon:"🪐",
+    title:"Planets learning app",
+    href:"science/planets_learning_app.html" },
+  { grado:"antes", trim:"tx", materia:"Science", cls:"science", icon:"🌑",
+    title:"Dwarf planets",
+    href:"science/dwarf_planets_interactive.html" },
+  { grado:"antes", trim:"tx", materia:"Science", cls:"science", icon:"☀️",
+    title:"Solar system",
+    href:"science/solar_system_learning_app.html" }
+];
+
+/* ---------------- navegación ---------------- */
+let state = { grado: null, trim: null, materia: "todas" };
+
+const view = document.getElementById("view");
+const bc = document.getElementById("breadcrumb");
+
+function countFor(grado, trim){
+  return PRACTICAS.filter(p => p.grado === grado && (!trim || p.trim === trim)).length;
+}
+
+function render(){
+  renderBreadcrumb();
+  if (!state.grado) return renderGrados();
+  if (!state.trim) return renderTrimestres();
+  renderPracticas();
+}
+
+function renderBreadcrumb(){
+  bc.innerHTML = "";
+  const add = (label, fn) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.addEventListener("click", fn);
+    bc.appendChild(b);
+  };
+  const sep = () => { const s = document.createElement("span"); s.textContent = "›"; bc.appendChild(s); };
+  const here = label => { const s = document.createElement("span"); s.className = "here"; s.textContent = label; bc.appendChild(s); };
+
+  if (!state.grado) { here("Inicio"); return; }
+  add("🏠 Inicio", () => { state = { grado:null, trim:null, materia:"todas" }; render(); });
+  sep();
+  const gName = state.grado === "antes" ? "Años anteriores" : (GRADOS.find(g => g.id === state.grado) || {}).nombre;
+  if (!state.trim) { here(gName); return; }
+  add(gName, () => { state.trim = null; state.materia = "todas"; render(); });
+  sep();
+  const tList = TRIMESTRES[state.grado] || [];
+  const tName = state.trim === "tx" ? "Todas" : (tList.find(t => t.id === state.trim) || {}).nombre;
+  here(tName);
+}
+
+function navCard(cls, icon, title, meta, onClick){
+  const b = document.createElement("button");
+  b.className = "nav-card " + cls;
+  b.innerHTML = '<span class="icon">' + icon + '</span><span class="info">' +
+    '<span class="title">' + title + '</span><span class="meta">' + meta + '</span></span>';
+  b.addEventListener("click", onClick);
+  return b;
+}
+
+function renderGrados(){
+  view.innerHTML = "";
+  const grid = document.createElement("div");
+  grid.className = "nav-grid";
+  for (const g of GRADOS) {
+    grid.appendChild(navCard(g.cls, g.icon, g.nombre, g.meta + " · " + countFor(g.id) + " prácticas",
+      () => { state.grado = g.id; state.trim = null; render(); }));
+  }
+  grid.appendChild(navCard("trimx", "🗂️", "Años anteriores", countFor("antes") + " prácticas guardadas",
+    () => { state.grado = "antes"; state.trim = "tx"; render(); }));
+  view.appendChild(grid);
+}
+
+function renderTrimestres(){
+  view.innerHTML = "";
+  const grid = document.createElement("div");
+  grid.className = "nav-grid";
+  for (const t of (TRIMESTRES[state.grado] || [])) {
+    const n = countFor(state.grado, t.id);
+    grid.appendChild(navCard(t.cls, t.icon, t.nombre, t.meta + " · " + n + " prácticas",
+      () => { state.trim = t.id; state.materia = "todas"; render(); }));
+  }
+  view.appendChild(grid);
+}
+
+function renderPracticas(){
+  view.innerHTML = "";
+  const list = PRACTICAS.filter(p => p.grado === state.grado && p.trim === state.trim);
+  const materias = Array.from(new Set(list.map(p => p.materia)));
+
+  if (materias.length > 1) {
+    const filters = document.createElement("div");
+    filters.className = "filters";
+    const mkChip = (label, val) => {
+      const c = document.createElement("button");
+      c.className = "chip" + (state.materia === val ? " on" : "");
+      c.textContent = label;
+      c.addEventListener("click", () => { state.materia = val; render(); });
+      return c;
+    };
+    filters.appendChild(mkChip("Todas", "todas"));
+    for (const m of materias) filters.appendChild(mkChip(m, m));
+    view.appendChild(filters);
+  }
+
+  const shown = list.filter(p => state.materia === "todas" || p.materia === state.materia);
+  const cards = document.createElement("div");
+  cards.className = "cards";
+  for (const p of shown) {
+    const a = document.createElement("a");
+    a.className = "card " + p.cls;
+    a.href = p.href;
+    a.innerHTML = '<span class="icon">' + p.icon + '</span><span class="info">' +
+      '<span class="subject">' + p.materia + '</span><span class="title">' + p.title + '</span></span>';
+    cards.appendChild(a);
+  }
+  view.appendChild(cards);
+  if (!shown.length) {
+    const e = document.createElement("p");
+    e.className = "empty";
+    e.textContent = "Todavía no hay prácticas aquí.";
+    view.appendChild(e);
+  }
+}
+
+render();
+</script>
 </body>
 
 </html>

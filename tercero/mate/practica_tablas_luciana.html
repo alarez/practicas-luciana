@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Tablas de Multiplicar — Luciana</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(160deg, #FFF3E0 0%, #F3E5F5 100%);
+    color: #222; margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    touch-action: manipulation; -webkit-user-select: none; user-select: none;
+  }
+  .app { max-width: 720px; margin: 0 auto; padding: 14px; min-height: 100vh; display: flex; flex-direction: column; }
+  .board {
+    background: #fff; border: 6px solid #F57C00; border-radius: 26px;
+    padding: 16px 18px 22px; box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    flex: 1; display: flex; flex-direction: column;
+  }
+  h1 { text-align: center; color: #E65100; margin: 4px 0 2px; font-size: clamp(22px, 5vw, 31px); }
+  .subtitle { text-align: center; color: #888; font-style: italic; margin: 0 0 12px; font-size: 15px; }
+  .label { text-align: center; color: #E65100; font-weight: bold; font-size: 18px; margin: 12px 0 10px; }
+  /* selección de tabla */
+  .tab-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .tab-btn {
+    font-family: inherit; font-size: 27px; font-weight: bold;
+    color: #fff; border: none; border-radius: 16px;
+    min-height: 66px; cursor: pointer; transition: transform .1s;
+    box-shadow: 0 3px 0 rgba(0,0,0,.18);
+  }
+  .tab-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.18); }
+  .tab-btn small { display: block; font-size: 11px; font-weight: normal; opacity: .9; }
+  .tab-btn.wide { grid-column: span 4; font-size: 20px; min-height: 58px; background: #5E35B1; }
+  .tab-btn.hard { grid-column: span 4; font-size: 18px; min-height: 54px; background: #C62828; }
+  /* modos */
+  .mode-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 520px) { .mode-grid { grid-template-columns: 1fr 1fr; } }
+  .mode-btn {
+    font-family: inherit; font-size: 18px; font-weight: bold;
+    color: #E65100; background: #FFF3E0; border: 3px solid #FB8C00;
+    border-radius: 16px; padding: 14px 12px; min-height: 62px; cursor: pointer;
+  }
+  .mode-btn:active { transform: scale(.97); }
+  .mode-btn small { display: block; font-size: 12px; color: #999; font-weight: normal; margin-top: 3px; }
+  .back-link {
+    font-family: inherit; display: block; margin: 14px auto 0;
+    background: none; border: none; color: #999; font-size: 15px; cursor: pointer;
+    text-decoration: underline;
+  }
+  /* tarjeta de aprendizaje */
+  .learn-title { text-align: center; font-size: 26px; font-weight: bold; color: #E65100; margin: 6px 0; }
+  .skip-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin: 10px 0 4px; }
+  .skip-strip span {
+    background: #FFF3E0; border: 2px solid #FFB74D; border-radius: 10px;
+    padding: 6px 10px; font-size: 17px; font-weight: bold; color: #E65100;
+  }
+  .trick {
+    background: #E8F5E9; border: 2px dashed #66BB6A; border-radius: 14px;
+    padding: 12px 14px; margin: 12px 0; font-size: 16px; color: #1B5E20; line-height: 1.55;
+  }
+  .trick b { color: #2E7D32; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; margin-top: 8px; }
+  .facts div {
+    background: #F3E5F5; border: 2px solid #CE93D8; border-radius: 10px;
+    text-align: center; padding: 7px 4px; font-size: 16px; font-weight: bold; color: #4A148C;
+  }
+  /* juego */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 15px; color: #666; font-weight: bold; }
+  .progress-wrap { flex: 1; height: 14px; background: #eee; border-radius: 10px; overflow: hidden; border: 2px solid #ddd; }
+  .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #FB8C00, #7E57C2); transition: width .3s; }
+  .streak { background: #FFF3E0; border: 2px solid #FB8C00; border-radius: 12px; padding: 3px 10px; color: #E65100; white-space: nowrap; }
+  .fact {
+    text-align: center;
+    font-size: clamp(46px, 13vw, 76px);
+    font-weight: bold; color: #4A148C;
+    margin: 6px 0 2px; letter-spacing: 2px;
+  }
+  .fact .eq { color: #FB8C00; }
+  .answer-box {
+    text-align: center; font-size: clamp(38px, 11vw, 60px); font-weight: bold;
+    color: #E65100; background: #FFF8E1; border: 4px solid #FFB74D;
+    border-radius: 16px; min-width: 150px; min-height: 74px;
+    width: fit-content; margin: 4px auto 12px; padding: 4px 22px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .answer-box.ok { background: #E8F5E9; border-color: #4CAF50; color: #1B5E20; }
+  .answer-box.bad { background: #FFEBEE; border-color: #E57373; color: #B71C1C; }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 296px; margin: 0 auto; }
+  .key {
+    font-family: inherit; font-size: 26px; font-weight: bold;
+    color: #4A148C; background: #EDE7F6; border: 3px solid #B39DDB;
+    border-radius: 14px; min-height: 54px; cursor: pointer; transition: transform .08s;
+  }
+  .key:active { transform: scale(.93); background: #D1C4E9; }
+  .key.go { background: #43A047; border-color: #2E7D32; color: #fff; }
+  .key.del { background: #FFE0B2; border-color: #FB8C00; color: #E65100; }
+  /* ayuda tras un error */
+  .help {
+    background: #FFFDE7; border: 3px solid #FBC02D; border-radius: 16px;
+    padding: 12px 14px; margin: 12px 0 0; text-align: center;
+  }
+  .help .big { font-size: 30px; font-weight: bold; color: #E65100; margin-bottom: 6px; }
+  .help .how { font-size: 16px; color: #6D4C41; line-height: 1.6; }
+  .help .how b { color: #E65100; }
+  .dots { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 10px 0 4px; }
+  .dots .row { display: flex; gap: 4px; }
+  .dots .row i { width: 13px; height: 13px; border-radius: 50%; background: #FB8C00; display: block; }
+  .dots-lbl { font-size: 13px; color: #999; }
+  .btn {
+    font-family: inherit; display: block; margin: 12px auto 0;
+    font-size: 19px; font-weight: bold; color: #fff; background: #F57C00;
+    border: none; border-radius: 16px; padding: 14px 34px; min-height: 54px; cursor: pointer;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn.alt { background: #5E35B1; }
+  .btn.green { background: #43A047; }
+  /* resultado */
+  .result-emoji { text-align: center; font-size: 66px; margin: 8px 0; }
+  .result-title { text-align: center; font-size: 27px; color: #E65100; font-weight: bold; }
+  .result-score { text-align: center; font-size: 20px; color: #555; margin: 6px 0; }
+  .stars { text-align: center; font-size: 36px; letter-spacing: 5px; }
+  .missed-title { text-align: center; font-size: 17px; color: #C62828; font-weight: bold; margin: 14px 0 6px; }
+  .missed { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 8px; }
+  .missed div {
+    background: #FFEBEE; border: 2px solid #E57373; border-radius: 12px;
+    text-align: center; padding: 8px 4px; font-size: 17px; font-weight: bold; color: #B71C1C;
+  }
+  .perfect-msg { text-align: center; color: #2E7D32; font-weight: bold; font-size: 17px; margin-top: 12px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="board">
+    <h1>✖️ Tablas de Multiplicar</h1>
+    <p class="subtitle">Aprendé rápido y sin miedo — para Luciana</p>
+
+    <!-- 1. elegir tabla -->
+    <div id="s-table">
+      <p class="label">¿Cuál tabla querés practicar?</p>
+      <div class="tab-grid" id="tab-grid"></div>
+    </div>
+
+    <!-- 2. elegir modo -->
+    <div id="s-mode" class="hidden">
+      <p class="label" id="mode-label">Tabla del 7</p>
+      <div class="mode-grid">
+        <button class="mode-btn" id="m-learn">📖 Primero aprenderla<small>Ver el truco y practicar en orden, del 1 al 12</small></button>
+        <button class="mode-btn" id="m-order">🔢 En orden<small>Del 1 al 12, sin ver el truco</small></button>
+        <button class="mode-btn" id="m-shuffle">🔀 Desordenada<small>Salteadas — el reto de verdad</small></button>
+        <button class="mode-btn" id="m-speed">⚡ Contrarreloj<small>¿Cuántas lográs en 60 segundos?</small></button>
+      </div>
+      <button class="back-link" id="back1">← elegir otra tabla</button>
+    </div>
+
+    <!-- 3. tarjeta de aprendizaje -->
+    <div id="s-learn" class="hidden">
+      <p class="learn-title" id="learn-title">Tabla del 7</p>
+      <p class="label" style="margin:4px 0 2px; font-size:15px; color:#999">Contá de 7 en 7 en voz alta 🗣️</p>
+      <div class="skip-strip" id="skip-strip"></div>
+      <div class="trick" id="trick"></div>
+      <div class="facts" id="facts"></div>
+      <button class="btn green" id="learn-go">¡Ya estoy lista! 🚀</button>
+    </div>
+
+    <!-- 4. juego -->
+    <div id="s-play" class="hidden">
+      <div class="topbar">
+        <span id="counter">1/12</span>
+        <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+        <span class="streak" id="streak">🔥 0</span>
+      </div>
+      <div class="fact" id="fact">7 <span class="eq">×</span> 3</div>
+      <div class="answer-box" id="answer-box">?</div>
+      <div class="keypad" id="keypad"></div>
+      <div id="help-area"></div>
+    </div>
+
+    <!-- 5. resultado -->
+    <div id="s-result" class="hidden">
+      <div class="result-emoji" id="r-emoji">🏆</div>
+      <p class="result-title" id="r-title">¡Muy bien!</p>
+      <div class="stars" id="r-stars"></div>
+      <p class="result-score" id="r-score"></p>
+      <div id="r-missed"></div>
+      <button class="btn" id="r-again">Repetir esta tabla 🔄</button>
+      <button class="btn alt hidden" id="r-hard">Practicar solo las que falló 🎯</button>
+      <button class="btn" id="r-home" style="background:#FB8C00">Elegir otra tabla ✖️</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Métodos usados para memorizar rápido:
+   - Conteo salteado (skip counting) antes de empezar
+   - Trucos por tabla (doble del doble, ×10 menos un grupo, dedos del 9…)
+   - Propiedad conmutativa: 7×3 es lo mismo que 3×7
+   - Corrección inmediata: si falla, ve la respuesta, los puntos y el truco
+   - Repetición espaciada tipo Leitner: la que falla vuelve a aparecer
+     y hay que acertarla 2 veces para darla por aprendida
+----------------------------------------------------------------*/
+const TAB_COLORS = { 2:"#EF5350", 3:"#FB8C00", 4:"#FDD835", 5:"#66BB6A", 6:"#26A69A", 7:"#42A5F5", 8:"#7E57C2", 9:"#EC407A" };
+const MAX = 12;
+
+const TRICKS = {
+  2: "Multiplicar por 2 es <b>sumar el número dos veces</b> (el doble). 2×6 → 6+6 = 12. ¡Todos los resultados son pares!",
+  3: "Por 3 es el <b>doble más una vez más</b>. 3×7 → 7+7=14, y 14+7 = 21.",
+  4: "Por 4 es el <b>doble del doble</b>. 4×7 → el doble de 7 es 14, y el doble de 14 es 28.",
+  5: "Por 5: todos terminan en <b>0 o en 5</b>. Truco: multiplicá por 10 y partí a la mitad. 5×8 → 80 ÷ 2 = 40.",
+  6: "Por 6 es <b>por 5 más una vez más</b>. 6×7 → 5×7 = 35, y 35+7 = 42. Además 6×número par termina en ese mismo par (6×4=24).",
+  7: "Por 7 es <b>por 5 más por 2</b>. 7×6 → 30 + 12 = 42. Y acordate: 7×7 = 49, 7×8 = 56 (5-6-7-8 😉).",
+  8: "Por 8 es el <b>doble del doble del doble</b>. 8×6 → 12 → 24 → 48. También es por 10 menos dos veces: 80−16 = 64.",
+  9: "Por 9 es <b>por 10 menos una vez</b>. 9×7 → 70 − 7 = 63. ¡Y los dígitos del resultado siempre suman 9! (6+3 = 9)"
+};
+
+let table = null, mode = "", queue = [], cur = null, done = 0, totalQ = 0;
+let streak = 0, best = 0, correct = 0, missed = [], leitner = {}, typed = "";
+let answered = false, timer = null, timeLeft = 0, speedCount = 0;
+
+const $ = id => document.getElementById(id);
+function show(id){
+  for (const s of ["s-table","s-mode","s-learn","s-play","s-result"])
+    $(s).classList.toggle("hidden", s !== id);
+}
+function shuffle(a){
+  const r = a.slice();
+  for (let i = r.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [r[i],r[j]]=[r[j],r[i]]; }
+  return r;
+}
+const key = f => f[0] + "x" + f[1];
+
+/* ---------- pantalla 1: tablas ---------- */
+const grid = $("tab-grid");
+for (let t = 2; t <= 9; t++){
+  const b = document.createElement("button");
+  b.className = "tab-btn";
+  b.style.background = TAB_COLORS[t];
+  b.innerHTML = t + "<small>tabla del " + t + "</small>";
+  b.addEventListener("click", () => chooseTable(t), {passive:true});
+  grid.appendChild(b);
+}
+const allBtn = document.createElement("button");
+allBtn.className = "tab-btn wide";
+allBtn.innerHTML = "🌟 Todas las tablas (del 2 al 9)";
+allBtn.addEventListener("click", () => chooseTable("todas"), {passive:true});
+grid.appendChild(allBtn);
+const hardBtn = document.createElement("button");
+hardBtn.className = "tab-btn hard";
+hardBtn.innerHTML = "🔥 Las 10 más difíciles<small>6×7, 7×8, 6×8, 7×9, 8×9…</small>";
+hardBtn.addEventListener("click", () => chooseTable("dificiles"), {passive:true});
+grid.appendChild(hardBtn);
+
+function chooseTable(t){
+  table = t;
+  $("mode-label").textContent = t === "todas" ? "Todas las tablas" : t === "dificiles" ? "Las 10 más difíciles" : "Tabla del " + t;
+  $("m-learn").classList.toggle("hidden", typeof t !== "number");
+  show("s-mode");
+}
+$("back1").addEventListener("click", () => show("s-table"), {passive:true});
+
+/* ---------- pantalla 3: aprender ---------- */
+function showLearn(){
+  const t = table;
+  $("learn-title").textContent = "Tabla del " + t;
+  const strip = $("skip-strip");
+  strip.innerHTML = "";
+  for (let i = 1; i <= MAX; i++){
+    const s = document.createElement("span");
+    s.textContent = t * i;
+    strip.appendChild(s);
+  }
+  $("trick").innerHTML = "💡 <b>Truco:</b> " + TRICKS[t];
+  const f = $("facts");
+  f.innerHTML = "";
+  for (let i = 1; i <= MAX; i++){
+    const d = document.createElement("div");
+    d.textContent = t + "×" + i + " = " + (t*i);
+    f.appendChild(d);
+  }
+  show("s-learn");
+}
+$("learn-go").addEventListener("click", () => startGame("order"), {passive:true});
+$("m-learn").addEventListener("click", () => { showLearn(); }, {passive:true});
+$("m-order").addEventListener("click", () => startGame("order"), {passive:true});
+$("m-shuffle").addEventListener("click", () => startGame("shuffle"), {passive:true});
+$("m-speed").addEventListener("click", () => startGame("speed"), {passive:true});
+
+/* ---------- construir la lista de operaciones ---------- */
+const HARD = [[6,7],[7,8],[6,8],[7,9],[8,9],[6,9],[4,7],[3,8],[4,8],[7,7]];
+function makeQueue(m){
+  if (table === "dificiles") return shuffle(HARD.map(f => Math.random() < .5 ? f : [f[1], f[0]]));
+  if (table === "todas") {
+    const all = [];
+    for (let t = 2; t <= 9; t++) for (let i = 2; i <= MAX; i++) all.push([t, i]);
+    return shuffle(all).slice(0, 24);
+  }
+  const list = [];
+  for (let i = 1; i <= MAX; i++) list.push([table, i]);
+  if (m === "order") return list;
+  return shuffle(list);
+}
+
+function startGame(m){
+  mode = m;
+  queue = m === "speed" ? [] : makeQueue(m);
+  totalQ = queue.length;
+  done = 0; correct = 0; streak = 0; best = 0; missed = []; leitner = {}; speedCount = 0;
+  $("streak").textContent = "🔥 0";
+  buildKeypad();
+  show("s-play");
+  if (m === "speed") {
+    timeLeft = 60;
+    startTimer();
+  }
+  nextFact();
+}
+
+function startTimer(){
+  clearInterval(timer);
+  timer = setInterval(() => {
+    timeLeft--;
+    $("counter").textContent = "⏱ " + timeLeft + "s";
+    $("progress-bar").style.width = ((60 - timeLeft) / 60 * 100) + "%";
+    if (timeLeft <= 0) { clearInterval(timer); finish(); }
+  }, 1000);
+}
+
+function nextFact(){
+  if (mode === "speed") {
+    if (!queue.length) queue = makeQueue("shuffle").concat(shuffle(HARD));
+    cur = queue.shift();
+  } else {
+    if (!queue.length) { finish(); return; }
+    cur = queue.shift();
+  }
+  answered = false; typed = "";
+  $("fact").innerHTML = cur[0] + ' <span class="eq">×</span> ' + cur[1];
+  const box = $("answer-box");
+  box.textContent = "?";
+  box.className = "answer-box";
+  $("help-area").innerHTML = "";
+  $("keypad").classList.remove("hidden");
+  $("keypad").querySelectorAll(".key").forEach(b => b.disabled = false);
+  if (mode !== "speed") {
+    $("counter").textContent = (done + 1) + "/" + Math.max(totalQ, done + 1 + queue.length);
+    $("progress-bar").style.width = (done / Math.max(totalQ, done + queue.length + 1) * 100) + "%";
+  }
+}
+
+function buildKeypad(){
+  const pad = $("keypad");
+  pad.innerHTML = "";
+  ["1","2","3","4","5","6","7","8","9","⌫","0","✓"].forEach(k => {
+    const b = document.createElement("button");
+    b.className = "key" + (k === "✓" ? " go" : k === "⌫" ? " del" : "");
+    b.textContent = k;
+    b.addEventListener("click", () => tap(k), {passive:true});
+    pad.appendChild(b);
+  });
+}
+
+function tap(k){
+  if (answered) return;
+  if (k === "⌫") typed = typed.slice(0, -1);
+  else if (k === "✓") { if (typed.length) check(); return; }
+  else if (typed.length < 3) typed += k;
+  $("answer-box").textContent = typed.length ? typed : "?";
+  // autocorrección: si ya escribió la cantidad justa de dígitos, revisa sola
+  const res = String(cur[0] * cur[1]);
+  if (typed.length === res.length) check();
+}
+
+function check(){
+  answered = true;
+  done++;
+  const res = cur[0] * cur[1];
+  const ok = parseInt(typed, 10) === res;
+  const box = $("answer-box");
+  box.classList.add(ok ? "ok" : "bad");
+  box.textContent = ok ? res : typed + "  ✗";
+  $("keypad").querySelectorAll(".key").forEach(b => b.disabled = true);
+
+  const k = key(cur);
+  if (ok) {
+    correct++; streak++; speedCount++;
+    if (streak > best) best = streak;
+    if (leitner[k] !== undefined) {
+      leitner[k]--;
+      if (leitner[k] <= 0) delete leitner[k];
+      else queue.splice(Math.min(queue.length, 3), 0, cur);
+    }
+    setTimeout(() => { if (answered) nextFact(); }, mode === "speed" ? 350 : 650);
+  } else {
+    streak = 0;
+    if (!missed.some(f => key(f) === k)) missed.push(cur.slice());
+    leitner[k] = 2;                                  // hay que acertarla 2 veces
+    queue.splice(Math.min(queue.length, 2), 0, cur);  // vuelve pronto
+    showHelp();
+  }
+  $("streak").textContent = "🔥 " + streak;
+}
+
+function showHelp(){
+  const [a, b] = cur;
+  const res = a * b;
+  const big = a + " × " + b + " = " + res;
+  // conteo salteado hasta la respuesta
+  const steps = [];
+  for (let i = 1; i <= b; i++) steps.push(a * i);
+  const skip = steps.map((v, i) => i === steps.length - 1 ? "<b>" + v + "</b>" : v).join(" → ");
+  const t = TRICKS[a] || TRICKS[b] || "";
+  const rows = [];
+  for (let r = 0; r < Math.min(a, 12); r++) rows.push('<div class="row">' + '<i></i>'.repeat(Math.min(b, 12)) + '</div>');
+  const help = document.createElement("div");
+  help.className = "help";
+  help.innerHTML =
+    '<div class="big">' + big + '</div>' +
+    '<div class="dots">' + rows.join("") + '<div class="dots-lbl">' + a + " filas de " + b + " = " + res + '</div></div>' +
+    '<div class="how">Contando de ' + a + " en " + a + ": " + skip + '</div>' +
+    (t ? '<div class="how" style="margin-top:8px">💡 ' + t + '</div>' : "") +
+    '<div class="how" style="margin-top:8px">Y acordate: <b>' + b + " × " + a + "</b> da lo mismo → " + res + '</div>' +
+    '<button class="btn green" id="got-it">¡Entendido! Seguir ➜</button>';
+  $("help-area").innerHTML = "";
+  $("help-area").appendChild(help);
+  $("keypad").classList.add("hidden");
+  document.getElementById("got-it").addEventListener("click", () => nextFact(), {passive:true});
+}
+
+function finish(){
+  clearInterval(timer);
+  const total = mode === "speed" ? done : Math.max(done, 1);
+  const pct = total ? correct / total : 0;
+  $("progress-bar").style.width = "100%";
+  const stars = pct === 1 ? 5 : pct >= .9 ? 4 : pct >= .75 ? 3 : pct >= .5 ? 2 : 1;
+  $("r-stars").textContent = "⭐".repeat(stars) + "☆".repeat(5 - stars);
+  $("r-emoji").textContent = pct === 1 ? "🏆" : pct >= .75 ? "🎉" : pct >= .5 ? "😊" : "💪";
+  $("r-title").textContent = pct === 1 ? "¡PERFECTO, Luciana!" : pct >= .75 ? "¡Muy bien!" : pct >= .5 ? "¡Buen intento!" : "¡Sigue practicando!";
+  $("r-score").innerHTML = mode === "speed"
+    ? "En 60 segundos acertaste <b>" + correct + "</b> multiplicaciones<br>Mejor racha: 🔥 " + best
+    : "Acertaste <b>" + correct + "</b> de " + total + "<br>Mejor racha: 🔥 " + best;
+  const box = $("r-missed");
+  if (missed.length) {
+    box.innerHTML = '<p class="missed-title">Estas son las que hay que repasar:</p><div class="missed">' +
+      missed.map(f => "<div>" + f[0] + "×" + f[1] + " = " + (f[0]*f[1]) + "</div>").join("") + "</div>";
+    $("r-hard").classList.remove("hidden");
+  } else {
+    box.innerHTML = '<p class="perfect-msg">¡No falló ninguna! 🥳</p>';
+    $("r-hard").classList.add("hidden");
+  }
+  show("s-result");
+}
+
+$("r-again").addEventListener("click", () => startGame(mode === "speed" ? "speed" : mode), {passive:true});
+$("r-hard").addEventListener("click", () => {
+  const list = missed.slice();
+  mode = "shuffle";
+  queue = shuffle(list.concat(list));  // dos veces cada una
+  totalQ = queue.length;
+  done = 0; correct = 0; streak = 0; best = 0; missed = []; leitner = {};
+  buildKeypad(); show("s-play"); nextFact();
+}, {passive:true});
+$("r-home").addEventListener("click", () => { clearInterval(timer); show("s-table"); }, {passive:true});
+</script>
+</body>
+</html>
