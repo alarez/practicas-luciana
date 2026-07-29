@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Reto Matemático — Quiz de Luciana</title>
+<title>Práctica Matemáticas — Segundo Trimestre</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
@@ -308,8 +308,8 @@
 <body>
 <div class="app">
   <div class="board">
-    <h1>🚀 Reto Matemático</h1>
-    <p class="subtitle">¡El quiz de mate de Luciana!</p>
+    <h1>📘 Práctica Matemáticas</h1>
+    <p class="subtitle">Segundo trimestre — ¡el quiz de Luciana!</p>
 
     <!-- INICIO -->
     <div id="screen-start">
@@ -336,7 +336,7 @@
     <!-- RESULTADO -->
     <div id="screen-result" class="hidden">
       <div class="result-emoji" id="result-emoji">🏆</div>
-      <p class="result-title" id="result-title">¡Reto completado!</p>
+      <p class="result-title" id="result-title">¡Práctica completada!</p>
       <div class="stars" id="stars"></div>
       <p class="result-score" id="result-score"></p>
       <p class="result-msg" id="result-msg"></p>
@@ -743,7 +743,7 @@ for (const [key, icon, label] of TOPICS) {
 }
 const all = document.createElement("button");
 all.className = "topic-btn all";
-all.innerHTML = '<span class="icon">🚀</span>¡Reto completo! (todos)';
+all.innerHTML = '<span class="icon">🚀</span>¡Práctica completa! (todos)';
 all.addEventListener("click", () => startQuiz("todos"), {passive:true});
 grid.appendChild(all);
 </script>
