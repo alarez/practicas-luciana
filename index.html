@@ -3,103 +3,219 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Listado de Prácticas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prácticas de Luciana</title>
   <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 2rem;
+      font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+      background: linear-gradient(160deg, #E8F4FD 0%, #FDF0F6 50%, #FDF6E3 100%);
+      color: #333;
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px 40px;
     }
-
+    .wrap { max-width: 860px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 26px; }
+    .header-emoji { font-size: 52px; }
     h1 {
-      margin-bottom: 1rem;
+      color: #1F4E79;
+      margin: 6px 0 4px;
+      font-size: clamp(26px, 6vw, 38px);
     }
+    .tagline { color: #888; font-style: italic; margin: 0; font-size: 16px; }
 
-    h2 {
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
+    .trimestre {
+      background: rgba(255, 255, 255, .65);
+      border-radius: 22px;
+      padding: 18px 18px 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
     }
-
-    h3 {
-      margin: 1rem 0 .25rem;
-      font-size: 1rem;
-      color: #444;
+    .trimestre > h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #5E35B1;
+      font-size: 20px;
+      margin: 4px 6px 14px;
     }
-
-    ul {
-      margin: .25rem 0 1rem 1.5rem;
+    .trimestre > h2 .badge {
+      font-size: 26px;
     }
+    .trimestre.old > h2 { color: #90A4AE; }
 
-    a {
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 3px solid var(--c, #90CAF9);
+      border-radius: 18px;
+      padding: 14px 16px;
       text-decoration: none;
-      color: #0066cc;
+      color: #333;
+      min-height: 76px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, .07);
+      transition: transform .12s, box-shadow .12s;
     }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0, 0, 0, .12); }
+    .card:active { transform: scale(.97); }
+    .card .icon {
+      font-size: 34px;
+      flex-shrink: 0;
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg, #E3F2FD);
+      border-radius: 14px;
+    }
+    .card .info { display: flex; flex-direction: column; gap: 2px; }
+    .card .subject {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--c, #1F4E79);
+    }
+    .card .title { font-size: 16px; font-weight: bold; line-height: 1.25; }
 
-    a:hover {
-      text-decoration: underline;
+    /* colores por materia */
+    .mate     { --c: #7E57C2; --bg: #F3E5F5; }
+    .sociales { --c: #FB8C00; --bg: #FFF3E0; }
+    .ingles   { --c: #E53935; --bg: #FFEBEE; }
+    .science  { --c: #00897B; --bg: #E0F2F1; }
+    .espanol  { --c: #1E88E5; --bg: #E3F2FD; }
+
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 14px;
+      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
-  <h1>Listado de Prácticas</h1>
+  <div class="wrap">
+    <header>
+      <div class="header-emoji">📚✨</div>
+      <h1>Prácticas de Luciana</h1>
+      <p class="tagline">¡Elige una práctica y a aprender jugando!</p>
+    </header>
 
-  <div class="folder">
-    <h2>Tercer grado — 2do trimestre</h2>
+    <section class="trimestre">
+      <h2><span class="badge">🚀</span> Tercer grado — 2do trimestre</h2>
+      <div class="cards">
+        <a class="card mate" href="tercero/mate/practica_mate_quiz_luciana.html">
+          <span class="icon">✖️</span>
+          <span class="info">
+            <span class="subject">Matemáticas</span>
+            <span class="title">Quiz de mate: multiplicación, secuencias, gráficos y variables</span>
+          </span>
+        </a>
+        <a class="card sociales" href="tercero/estudios/reto_geografico_quiz_luciana.html">
+          <span class="icon">🌍</span>
+          <span class="info">
+            <span class="subject">Estudios Sociales</span>
+            <span class="title">Reto Geográfico — quiz de Europa</span>
+          </span>
+        </a>
+      </div>
+    </section>
 
-    <h3>Matemáticas</h3>
-    <ul>
-      <li><a href="tercero/mate/practica_mate_quiz_luciana.html">Quiz de matemáticas (multiplicación, secuencias, gráficos y variables)</a></li>
-    </ul>
+    <section class="trimestre">
+      <h2><span class="badge">🌱</span> Tercer grado — 1er trimestre</h2>
+      <div class="cards">
+        <a class="card sociales" href="tercero/estudios/practica-estudios-sociales.html">
+          <span class="icon">🗺️</span>
+          <span class="info">
+            <span class="subject">Estudios Sociales</span>
+            <span class="title">Práctica de estudios sociales</span>
+          </span>
+        </a>
+        <a class="card ingles" href="tercero/ingles/english-practice-repaso1.html">
+          <span class="icon">🔤</span>
+          <span class="info">
+            <span class="subject">Inglés</span>
+            <span class="title">Repaso 1</span>
+          </span>
+        </a>
+        <a class="card science" href="tercero/science/formulario_science_luciana.html">
+          <span class="icon">🔬</span>
+          <span class="info">
+            <span class="subject">Science</span>
+            <span class="title">Formulario de science</span>
+          </span>
+        </a>
+      </div>
+    </section>
 
-    <h3>Estudios Sociales</h3>
-    <ul>
-      <li><a href="tercero/estudios/reto_geografico_quiz_luciana.html">Reto Geográfico — quiz de Europa</a></li>
-    </ul>
+    <section class="trimestre old">
+      <h2><span class="badge">🗂️</span> Prácticas anteriores</h2>
+      <div class="cards">
+        <a class="card espanol" href="espanol/3ertrimetre.html">
+          <span class="icon">✏️</span>
+          <span class="info">
+            <span class="subject">Español</span>
+            <span class="title">Práctica examen final</span>
+          </span>
+        </a>
+        <a class="card ingles" href="ingles/english_practice_exam.html">
+          <span class="icon">🔤</span>
+          <span class="info">
+            <span class="subject">Inglés</span>
+            <span class="title">Práctica de examen</span>
+          </span>
+        </a>
+        <a class="card ingles" href="ingles/spelling-practice-game.html">
+          <span class="icon">🎯</span>
+          <span class="info">
+            <span class="subject">Inglés</span>
+            <span class="title">Juego de spelling</span>
+          </span>
+        </a>
+        <a class="card science" href="science/science_quiz-3er-trimestre.html">
+          <span class="icon">🔬</span>
+          <span class="info">
+            <span class="subject">Science</span>
+            <span class="title">Práctica examen final</span>
+          </span>
+        </a>
+        <a class="card science" href="science/planets_learning_app.html">
+          <span class="icon">🪐</span>
+          <span class="info">
+            <span class="subject">Science</span>
+            <span class="title">App de planetas</span>
+          </span>
+        </a>
+        <a class="card science" href="science/dwarf_planets_interactive.html">
+          <span class="icon">🌑</span>
+          <span class="info">
+            <span class="subject">Science</span>
+            <span class="title">Planetas enanos</span>
+          </span>
+        </a>
+        <a class="card science" href="science/solar_system_learning_app.html">
+          <span class="icon">☀️</span>
+          <span class="info">
+            <span class="subject">Science</span>
+            <span class="title">Sistema solar</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <footer>Hecho con ❤️ para Luciana</footer>
   </div>
-
-  <div class="folder">
-    <h2>Tercer grado — 1er trimestre</h2>
-
-    <h3>Estudios Sociales</h3>
-    <ul>
-      <li><a href="tercero/estudios/practica-estudios-sociales.html">Práctica de estudios sociales</a></li>
-    </ul>
-
-    <h3>Inglés</h3>
-    <ul>
-      <li><a href="tercero/ingles/english-practice-repaso1.html">Repaso 1</a></li>
-    </ul>
-
-    <h3>Science</h3>
-    <ul>
-      <li><a href="tercero/science/formulario_science_luciana.html">Formulario de science</a></li>
-    </ul>
-  </div>
-
-  <div class="folder">
-    <h2>Prácticas anteriores</h2>
-
-    <h3>Español</h3>
-    <ul>
-      <li><a href="espanol/3ertrimetre.html">Práctica examen final</a></li>
-    </ul>
-
-    <h3>Inglés</h3>
-    <ul>
-      <li><a href="ingles/english_practice_exam.html">Práctica de examen</a></li>
-      <li><a href="ingles/spelling-practice-game.html">Juego de spelling</a></li>
-    </ul>
-
-    <h3>Science</h3>
-    <ul>
-      <li><a href="science/science_quiz-3er-trimestre.html">Práctica examen final</a></li>
-      <li><a href="science/planets_learning_app.html">App de planetas</a></li>
-      <li><a href="science/dwarf_planets_interactive.html">Planetas enanos</a></li>
-      <li><a href="science/solar_system_learning_app.html">Sistema solar</a></li>
-    </ul>
-  </div>
-
 </body>
 
 </html>
