@@ -206,6 +206,59 @@
   .bar-val { font-size: 14px; font-weight: bold; color: #555; margin-bottom: 2px; }
   .bar { width: 40px; border-radius: 6px 6px 0 0; }
   .bar-label { font-size: 26px; margin-top: 4px; }
+  /* ---------- Pictograma ---------- */
+  .picto {
+    background: #FFFDE7;
+    border: 2px solid #FBC02D;
+    border-radius: 12px;
+    padding: 10px 14px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .picto .key {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #8a6d00;
+    background: #fff;
+    border: 2px dashed #FBC02D;
+    border-radius: 10px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+  }
+  .picto .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #555;
+    margin: 6px 0;
+  }
+  .picto .row .lbl { width: 96px; flex-shrink: 0; text-align: right; }
+  .picto .row .icons { font-size: 24px; letter-spacing: 3px; }
+  /* ---------- Gráfico circular ---------- */
+  .pie-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .pie {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #555;
+  }
+  .pie-legend { font-size: 17px; font-weight: bold; color: #555; }
+  .pie-legend div { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+  .pie-legend .dot {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 2px solid #555;
+    flex-shrink: 0;
+  }
   /* ---------- Multiplicación vertical ---------- */
   .mult-box {
     font-family: "Courier New", monospace;
@@ -416,6 +469,113 @@ function genChart(){
   return { cat: "📊 Gráficos", q: "¿Cuántos votos MÁS tiene " + animals[maxI][1] + " " + animals[maxI][0] + " que " + animals[minI][1] + " " + animals[minI][0] + "?", visual, opts, a };
 }
 
+// ---------- pictograma ----------
+const PICTO_THEMES = [
+  ["🍦", "niños", "¿cuántos niños", ["Chocolate","Vainilla","Fresa","Limón"]],
+  ["🍎", "manzanas", "¿cuántas manzanas", ["Lunes","Martes","Miércoles","Jueves"]],
+  ["⚽", "goles", "¿cuántos goles", ["Ana","Luis","Marta","Pedro"]],
+  ["📚", "libros", "¿cuántos libros", ["Ana","Luis","Marta","Pedro"]]
+];
+function pictoVisual(){
+  const [icon, unidad, pregunta, cats0] = pick(PICTO_THEMES);
+  const cats = shuffle(cats0).slice(0, 3);
+  const key = pick([2, 3, 5, 10]);
+  let counts;
+  do { counts = cats.map(() => rand(1, 5)); } while (new Set(counts).size < 3);
+  const rows = cats.map((c, i) =>
+    '<div class="row"><span class="lbl">' + c + '</span><span class="icons">' + icon.repeat(counts[i]) + '</span></div>'
+  ).join("");
+  const visual = '<div class="picto"><div class="key">Clave: 1 ' + icon + ' = ' + key + ' ' + unidad + '</div>' + rows + '</div>';
+  return { visual, icon, unidad, pregunta, cats, counts, key };
+}
+function genPicto(){
+  const p = pictoVisual();
+  const type = pick(["count","count","max","min"]);
+  if (type === "count") {
+    const i = rand(0, 2);
+    const correct = p.counts[i] * p.key;
+    const { opts, a } = makeOptions(correct, [p.counts[i], correct + p.key, correct - p.key, correct + 1, p.key]);
+    return { cat: "📊 Gráficos", q: "Según el pictograma, " + p.pregunta + " hay en “" + p.cats[i] + "”?", visual: p.visual, opts, a };
+  }
+  const maxI = p.counts.indexOf(Math.max(...p.counts));
+  const minI = p.counts.indexOf(Math.min(...p.counts));
+  const correct = type === "max" ? p.cats[maxI] : p.cats[minI];
+  const opts = shuffle(p.cats.concat(["Ninguna"]));
+  return { cat: "📊 Gráficos", q: type === "max" ? "¿Cuál tiene MÁS " + p.icon + " en el pictograma?" : "¿Cuál tiene MENOS " + p.icon + " en el pictograma?", visual: p.visual, opts, a: opts.indexOf(correct) };
+}
+
+// ---------- gráfico circular ----------
+const PIE_SETS = [
+  [["Chocolate","#8D6E63"],["Vainilla","#FFD54F"],["Fresa","#F06292"],["Limón","#66BB6A"]],
+  [["Fútbol","#42A5F5"],["Baile","#F06292"],["Natación","#26C6DA"],["Ciclismo","#FFA726"]],
+  [["Perro","#EF5350"],["Gato","#42A5F5"],["Conejo","#FFD54F"],["Pez","#66BB6A"]]
+];
+function pieVisual(){
+  const set = shuffle(pick(PIE_SETS)).slice(0, 4);
+  const values = shuffle([2, 4, 6, 9]); // bien separados para que se vea claro
+  const total = values.reduce((s, v) => s + v, 0);
+  let acc = 0;
+  const stops = set.map((s, i) => {
+    const from = acc / total * 360;
+    acc += values[i];
+    const to = acc / total * 360;
+    return s[1] + " " + from.toFixed(1) + "deg " + to.toFixed(1) + "deg";
+  }).join(", ");
+  const legend = set.map(s => '<div><span class="dot" style="background:' + s[1] + '"></span>' + s[0] + '</div>').join("");
+  const visual = '<div class="pie-wrap"><div class="pie" style="background: conic-gradient(' + stops + ')"></div><div class="pie-legend">' + legend + '</div></div>';
+  return { visual, cats: set.map(s => s[0]), values };
+}
+function genPieRead(){
+  const p = pieVisual();
+  const type = pick(["max","min"]);
+  const idx = p.values.indexOf(type === "max" ? Math.max(...p.values) : Math.min(...p.values));
+  const opts = shuffle(p.cats);
+  return {
+    cat: "📊 Gráficos",
+    q: type === "max" ? "En el gráfico circular, ¿cuál es la parte MÁS grande (la más elegida)?" : "En el gráfico circular, ¿cuál es la parte MÁS pequeña (la menos elegida)?",
+    visual: p.visual, opts, a: opts.indexOf(p.cats[idx])
+  };
+}
+
+// ---------- identificar tipo de gráfico ----------
+const GRAPH_NAMES = ["Gráfico circular","Pictograma","Gráfico de barras","Tabla de datos"];
+function genTypeId(){
+  const kind = pick(["pie","picto","bars"]);
+  let visual, correct;
+  if (kind === "pie") { visual = pieVisual().visual; correct = "Gráfico circular"; }
+  else if (kind === "picto") { visual = pictoVisual().visual; correct = "Pictograma"; }
+  else {
+    const animals = shuffle(ANIMALS).slice(0, 4);
+    const bars = animals.map((an, i) => {
+      const v = rand(2, 9);
+      return '<div class="bar-col"><div class="bar-val">' + v + '</div><div class="bar" style="height:' + (v * 18) + 'px; background:' + BAR_COLORS[i] + '"></div><div class="bar-label">' + an[0] + '</div></div>';
+    }).join("");
+    visual = '<div class="chart">' + bars + '</div>';
+    correct = "Gráfico de barras";
+  }
+  const opts = shuffle(GRAPH_NAMES);
+  return { cat: "📊 Gráficos", q: "¿Cómo se llama este tipo de gráfico?", visual, opts, a: opts.indexOf(correct) };
+}
+
+// ---------- conceptos de gráficos ----------
+const GRAPH_CONCEPTS = [
+  ["¿Qué gráfico muestra las partes de un todo, como las rebanadas de una pizza? 🍕", "Gráfico circular", ["Pictograma","Gráfico de barras","Tabla de datos"]],
+  ["¿Qué gráfico usa dibujos para contar cantidades?", "Pictograma", ["Gráfico circular","Gráfico de barras","Tabla de datos"]],
+  ["¿Qué gráfico usa barras de distinto alto para comparar cantidades?", "Gráfico de barras", ["Pictograma","Gráfico circular","Tabla de datos"]],
+  ["En un pictograma, ¿para qué sirve la clave?", "Para saber cuánto vale cada dibujo", ["Para colorear los dibujos","Para contar las barras","Para hacer el gráfico más bonito"]],
+  ["En un gráfico de barras, la barra MÁS alta significa…", "La mayor cantidad", ["La menor cantidad","Un error del gráfico","Que es la más bonita"]],
+  ["Un gráfico nos ayuda a…", "Ver los datos de un vistazo y compararlos", ["Hacer la tarea más larga","Esconder los datos","Sumar sin pensar"]],
+  ["En un gráfico circular, todas las partes juntas forman…", "El círculo completo (el total)", ["La mitad del círculo","Una barra","Un dibujo"]],
+  ["Si en un pictograma la clave es 1 🍦 = 2 niños y hay 4 🍦, ¿cuántos niños son?", "8 niños", ["4 niños","6 niños","2 niños"]]
+];
+let conceptPool = [];
+function genConcept(){
+  if (conceptPool.length === 0) conceptPool = shuffle(GRAPH_CONCEPTS);
+  const [q, correct, wrong] = conceptPool.pop();
+  const opts = shuffle([correct].concat(wrong));
+  return { cat: "📊 Gráficos", q, visual: "", opts, a: opts.indexOf(correct) };
+}
+
 const VARS = [
   ["El color de camiseta favorito", "cuali"],
   ["El número de velas en tu pastel", "cuanti"],
@@ -459,7 +619,7 @@ function genVar(){
 const GENS = {
   "mult":    () => genMult(),
   "seq":     () => pick([genSeqNext, genSeqHole, genSeqDir])(),
-  "chart":   () => genChart(),
+  "chart":   () => pick([genChart, genPicto, genPieRead, genTypeId, genConcept])(),
   "vars":    () => genVar()
 };
 const TOPICS = [
@@ -486,6 +646,7 @@ function buildRound(mode){
 function startQuiz(mode){
   currentMode = mode;
   varPool = [];
+  conceptPool = [];
   questions = buildRound(mode).map(q => {
     if (q.fix !== undefined) { q.a = q.opts.indexOf(q.fix); delete q.fix; } // gráficos max/min
     return q;
