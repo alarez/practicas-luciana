@@ -306,7 +306,7 @@
   </nav>
   <div class="suitcase">
     <h1>🌍 Reto Geográfico</h1>
-    <p class="subtitle">¡El quiz viajero de Luciana!</p>
+    <p class="subtitle">Tesoros históricos y culturales de Europa</p>
 
     <!-- INICIO -->
     <div id="screen-start">
@@ -361,7 +361,9 @@ const BANK = {
     {q:"El 'Pastel de Belém' es…", opts:["Un postre delicioso de Portugal","Un baile típico","Un castillo","Una flor"], a:0},
     {q:"¿Qué pieza de cerámica esmaltada es esencial en la identidad cultural de Portugal?", opts:["El azulejo","La máscara","La vespa","El bretzel"], a:0},
     {q:"¿Qué planta crece en gran abundancia en la región del Alentejo (Portugal)?", opts:["La lavanda","El clavel","La margarita","El aciano"], a:0},
-    {q:"Sintra es…", opts:["Un pequeño y pintoresco pueblo portugués","La capital de Portugal","Un volcán","Un museo francés"], a:0}
+    {q:"Sintra es…", opts:["Un pequeño y pintoresco pueblo portugués","La capital de Portugal","Un volcán","Un museo francés"], a:0},
+    {q:"¿Qué transporte antiguo y amarillo sube y baja por las calles empinadas de Lisboa?", opts:["Los tranvías","Los teleféricos","Los trineos","Los tuk-tuks"], a:0},
+    {q:"¿Cómo se llama el barrio más antiguo de Lisboa, de callecitas estrechas y donde se canta fado?", opts:["El barrio de Alfama","Sintra","Belém","Barcelos"], a:0}
   ],
   "España": [
     {q:"¿Cuál es la capital de España?", opts:["Madrid","Barcelona","Lisboa","Berlín"], a:0},
@@ -375,7 +377,8 @@ const BANK = {
     {q:"¿Cuál es la flor nacional de España?", opts:["El clavel","La margarita","El aciano","La flor de lis"], a:0},
     {q:"¿Qué baile español se caracteriza por el zapateado rítmico y movimientos de brazos?", opts:["El flamenco","El fado","El ballet","El tango"], a:0},
     {q:"¿Qué felino protegido vive en España?", opts:["El Lince Ibérico","El Lobo Italiano","El tigre","El puma"], a:0},
-    {q:"La Paella es…", opts:["Un plato de arroz muy famoso","Un postre","Una danza","Un castillo"], a:0}
+    {q:"La Paella es…", opts:["Un plato de arroz muy famoso","Un postre","Una danza","Un castillo"], a:0},
+    {q:"¿Qué instrumento de cuerdas es un tesoro de España y acompaña al flamenco?", opts:["La guitarra española","El acordeón","El violín","El arpa"], a:0}
   ],
   "Francia": [
     {q:"¿Cuál es la capital de Francia?", opts:["París","Lisboa","Madrid","Roma"], a:0},
@@ -389,7 +392,9 @@ const BANK = {
     {q:"La Catedral de Notre Dame es famosa por…", opts:["Sus torres de piedra y ventanas de colores","Estar inclinada","Ser de hierro","Sus góndolas"], a:0},
     {q:"¿Cuál es el animal nacional de Francia, que representa la valentía de su gente?", opts:["El Gallo Galo","El Águila Federal","El Lobo","El Lince"], a:0},
     {q:"¿Cuál es el pan más famoso de Francia: largo, crujiente y delicioso?", opts:["La baguette","El bretzel","El croissant","El pastel de Belém"], a:0},
-    {q:"¿Cómo se llama la carrera de bicicletas más famosa del mundo que recorre toda Francia?", opts:["El Tour de Francia","La Vuelta a España","El Giro","El Rally"], a:0}
+    {q:"¿Cómo se llama la carrera de bicicletas más famosa del mundo que recorre toda Francia?", opts:["El Tour de Francia","La Vuelta a España","El Giro","El Rally"], a:0},
+    {q:"¿Qué símbolo con forma de flor aparece en los escudos antiguos de Francia?", opts:["La flor de lis","El clavel","La margarita","El aciano"], a:0},
+    {q:"Francia es famosa en todo el mundo por su…", opts:["Queso","Sushi","Chocolate suizo","Pizza"], a:0}
   ],
   "Italia": [
     {q:"¿Cuál es la capital de Italia?", opts:["Roma","Venecia","París","Madrid"], a:0},
@@ -403,7 +408,9 @@ const BANK = {
     {q:"¿Qué ciudad antigua quedó congelada en el tiempo por la ceniza del volcán Vesubio?", opts:["Pompeya","Venecia","Sintra","Granada"], a:0},
     {q:"¿Qué comida súper famosa nació en Italia?", opts:["La pizza y la pasta","La paella","El bretzel","La baguette"], a:0},
     {q:"¿Cuál es la flor nacional de Italia?", opts:["La margarita","El clavel","El aciano","La lavanda"], a:0},
-    {q:"¿Cuál es el animal nacional de Italia, que vive protegido en las montañas?", opts:["El Lobo Italiano","El Lince Ibérico","El Gallo Galo","El oso"], a:0}
+    {q:"¿Cuál es el animal nacional de Italia, que vive protegido en las montañas?", opts:["El Lobo Italiano","El Lince Ibérico","El Gallo Galo","El oso"], a:0},
+    {q:"¿Qué motoneta italiana es famosa en todo el mundo?", opts:["La Vespa","El tuk-tuk","El trineo","El rickshaw"], a:0},
+    {q:"¿En qué ciudad italiana se usan máscaras muy decoradas para el carnaval?", opts:["Venecia","Roma","Pisa","Pompeya"], a:0}
   ],
   "Alemania": [
     {q:"¿Cuál es la capital de Alemania?", opts:["Berlín","Madrid","Viena","París"], a:0},
@@ -417,15 +424,32 @@ const BANK = {
     {q:"¿Quiénes escribieron cuentos famosos como Caperucita Roja y Hansel y Gretel?", opts:["Los Hermanos Grimm","Los Romanos","Los Vikingos","Mozart"], a:0},
     {q:"¿Cuál es el pan salado alemán con forma de nudo muy divertida?", opts:["El bretzel","La baguette","El pastel de Belém","La pizza"], a:0},
     {q:"¿Qué animal aparece en el escudo de Alemania y representa la fuerza?", opts:["El Águila Federal","El Gallo Galo","El Lobo","El Lince"], a:0},
-    {q:"¿Cuál es la flor nacional de Alemania, de un color azul brillante?", opts:["El aciano","El clavel","La margarita","La rosa"], a:0}
+    {q:"¿Cuál es la flor nacional de Alemania, de un color azul brillante?", opts:["El aciano","El clavel","La margarita","La rosa"], a:0},
+    {q:"¿Qué catedral alemana es famosa por sus dos torres altísimas y oscuras?", opts:["La Catedral de Colonia","La Catedral de Notre Dame","La Sagrada Familia","El Partenón"], a:0},
+    {q:"¿Cómo se llama el pueblo medieval alemán que parece salido de un cuento?", opts:["Rothenburg ob der Tauber","Sintra","Santorini","Alfama"], a:0},
+    {q:"¿Qué instrumento musical es un tesoro tradicional de Alemania?", opts:["El acordeón","La guitarra española","El arpa","La flauta"], a:0}
+  ],
+  "Grecia": [
+    {q:"¿Cuál es la capital de Grecia?", opts:["Atenas","Roma","Lisboa","Berlín"], a:0},
+    {q:"¿Cuál es el idioma oficial de Grecia?", opts:["El griego","El italiano","El alemán","El francés"], a:0},
+    {q:"¿De qué país es esta bandera? 🇬🇷", opts:["Grecia","Italia","Francia","Portugal"], a:0},
+    {q:"¿Cómo se llama el templo más famoso de Grecia, que está en lo alto de la Acrópolis de Atenas?", opts:["El Partenón","El Coliseo","La Alhambra","La Torre Eiffel"], a:0},
+    {q:"¿A qué diosa estaba dedicado el Partenón?", opts:["A la diosa Atenea","A Zeus","A Poseidón","A Apolo"], a:0},
+    {q:"¿Qué isla griega es famosa por sus casitas blancas con techos azules?", opts:["Santorini","Sicilia","Mallorca","Córcega"], a:0},
+    {q:"Grecia está rodeada por el mar…", opts:["Mediterráneo","Negro","Báltico","Caspio"], a:0},
+    {q:"¿En qué país nacieron los Juegos Olímpicos?", opts:["En Grecia","En Italia","En Francia","En Alemania"], a:0},
+    {q:"Según los antiguos griegos, ¿en qué monte vivían sus dioses?", opts:["El monte Olimpo","El Vesubio","Los Alpes","Los Pirineos"], a:0},
+    {q:"¿Qué tesoro se saca de las aceitunas y se usa en toda la comida griega?", opts:["El aceite de oliva","La miel","El vino","La leche"], a:0},
+    {q:"¿De qué material son las famosas esculturas de la antigua Grecia?", opts:["De mármol blanco","De chocolate","De plástico","De papel"], a:0},
+    {q:"¿Qué forma de gobierno, en la que el pueblo decide, nació en la antigua Atenas?", opts:["La democracia","La monarquía","La dictadura","El imperio"], a:0}
   ],
   "_extra": [
-    {q:"¿Cuál es la moneda oficial de Portugal, España, Francia, Italia y Alemania?", opts:["El Euro (€)","El Dólar","El Peso","La Libra"], a:0, cat:"Europa"},
-    {q:"¿En qué continente están Portugal, España, Francia, Italia y Alemania?", opts:["Europa","América","Asia","África"], a:0, cat:"Europa"}
+    {q:"¿Cuál es la moneda oficial de Portugal, España, Francia, Italia, Alemania y Grecia?", opts:["El Euro (€)","El Dólar","El Peso","La Libra"], a:0, cat:"Europa"},
+    {q:"¿En qué continente están Portugal, España, Francia, Italia, Alemania y Grecia?", opts:["Europa","América","Asia","África"], a:0, cat:"Europa"}
   ]
 };
 
-const FLAGS = {"Portugal":"🇵🇹","España":"🇪🇸","Francia":"🇫🇷","Italia":"🇮🇹","Alemania":"🇩🇪"};
+const FLAGS = {"Portugal":"🇵🇹","España":"🇪🇸","Francia":"🇫🇷","Italia":"🇮🇹","Alemania":"🇩🇪","Grecia":"🇬🇷"};
 const PRAISE = ["¡Excelente! 🎉","¡Muy bien! 🌟","¡Correcto! ✅","¡Genial! 🥳","¡Eres una crack! 💪"];
 const OOPS = ["¡Casi! La respuesta era: ","Ojo 👀 La respuesta correcta era: ","No pasa nada, era: "];
 
@@ -450,7 +474,7 @@ function startQuiz(mode){
   currentMode = mode;
   let pool = [];
   if (mode === "todos") {
-    for (const c of Object.keys(FLAGS)) pool.push(...shuffle(BANK[c]).slice(0,4).map(r=>buildQuestion(r,c)));
+    for (const c of Object.keys(FLAGS)) pool.push(...shuffle(BANK[c]).slice(0,3).map(r=>buildQuestion(r,c)));
     pool.push(...BANK["_extra"].map(r=>buildQuestion(r,"Europa")));
     questions = shuffle(pool).slice(0, 20);
   } else {
