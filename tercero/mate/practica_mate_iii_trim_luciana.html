@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Práctica Matemáticas — Tercer Trimestre</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(160deg, #F3E8FD 0%, #E3F6F0 100%);
+    color: #222;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .app { max-width: 760px; margin: 0 auto; padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
+  .board {
+    background: #fff;
+    border: 6px solid #5E35B1;
+    border-radius: 26px;
+    padding: 20px 22px 26px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    flex: 1; display: flex; flex-direction: column;
+  }
+  h1 { text-align: center; color: #5E35B1; margin: 6px 0 2px; font-size: clamp(24px, 5vw, 34px); }
+  .subtitle { text-align: center; color: #777; font-style: italic; margin: 0 0 14px; font-size: clamp(14px, 3vw, 17px); }
+
+  /* ---------- Inicio ---------- */
+  .intro-emoji { text-align: center; font-size: 56px; margin: 8px 0; }
+  .choose-label { text-align: center; color: #5E35B1; font-weight: bold; font-size: 19px; margin: 10px 0 14px; }
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .topic-btn {
+    font-family: inherit; font-size: 19px; font-weight: bold;
+    color: #4A148C; background: #F3E5F5;
+    border: 3px solid #9C27B0; border-radius: 18px;
+    padding: 18px 12px; min-height: 64px; cursor: pointer; transition: transform .1s;
+  }
+  .topic-btn:active { transform: scale(.96); background: #E1BEE7; }
+  .topic-btn.all { background: #E0F2F1; border-color: #00897B; color: #004D40; }
+  .topic-btn .icon { font-size: 28px; display: block; margin-bottom: 4px; }
+
+  /* ---------- Quiz ---------- */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 16px; color: #555; font-weight: bold; }
+  .close-btn {
+    font-family: inherit; font-size: 18px; font-weight: bold; line-height: 1;
+    color: #90A4AE; background: #fff; border: 2px solid #CFD8DC;
+    border-radius: 50%; width: 34px; height: 34px; flex-shrink: 0; cursor: pointer;
+  }
+  .close-btn:active { transform: scale(.92); background: #ECEFF1; }
+  .progress-wrap { flex: 1; height: 16px; background: #eee; border-radius: 10px; overflow: hidden; border: 2px solid #ddd; }
+  .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #7E57C2, #26A69A); border-radius: 10px; transition: width .3s; }
+  .score-chip { background: #F3E5F5; border: 2px solid #9C27B0; border-radius: 12px; padding: 4px 12px; color: #6A1B9A; white-space: nowrap; }
+  .q-category { text-align: center; font-size: 15px; color: #888; margin-bottom: 4px; }
+  .q-visual { margin: 6px 0 4px; }
+  .q-text {
+    text-align: center; font-size: clamp(19px, 4.2vw, 25px); color: #4A148C; font-weight: bold;
+    margin: 8px 0 18px; min-height: 50px; display: flex; align-items: center; justify-content: center;
+  }
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .options.two { grid-template-columns: 1fr; }
+  @media (min-width: 600px) { .options.two { grid-template-columns: 1fr 1fr; } }
+  .opt-btn {
+    font-family: inherit; font-size: 20px; text-align: center;
+    background: #fff; color: #333; border: 3px solid #B39DDB; border-radius: 16px;
+    padding: 16px 14px; min-height: 60px; cursor: pointer; transition: transform .08s;
+  }
+  .opt-btn:active { transform: scale(.97); }
+  .opt-btn.correct { background: #E8F5E9; border-color: #4CAF50; color: #1B5E20; font-weight: bold; }
+  .opt-btn.wrong { background: #FFEBEE; border-color: #E57373; color: #B71C1C; }
+  .feedback { text-align: center; font-size: 19px; font-weight: bold; min-height: 30px; margin: 16px 0 6px; }
+  .feedback.good { color: #2E7D32; }
+  .feedback.bad { color: #C62828; }
+  .next-btn, .big-btn {
+    font-family: inherit; display: block; margin: 12px auto 0;
+    font-size: 20px; font-weight: bold; color: #fff; background: #5E35B1;
+    border: none; border-radius: 16px; padding: 16px 40px; min-height: 58px; cursor: pointer; visibility: hidden;
+  }
+  .next-btn.show, .big-btn { visibility: visible; }
+  .next-btn:active, .big-btn:active { transform: scale(.97); }
+
+  /* ---------- Operación vertical / caja de cuenta ---------- */
+  .vert-op {
+    font-family: "Courier New", monospace; font-size: 30px; font-weight: bold; color: #333;
+    background: #FAFAFA; border: 2px dashed #B39DDB; border-radius: 12px;
+    width: fit-content; margin: 0 auto; padding: 10px 26px; text-align: right; line-height: 1.3;
+  }
+  .vert-op .line { border-top: 3px solid #333; margin-top: 3px; }
+  .op-box {
+    text-align: center; font-size: clamp(24px, 6vw, 34px); font-weight: bold; color: #00695C;
+    background: #E0F2F1; border: 2px dashed #26A69A; border-radius: 12px; padding: 14px 10px; letter-spacing: 1px;
+  }
+  .op-box .hole {
+    display: inline-block; background: #fff; border: 2px solid #FF7043; border-radius: 8px;
+    min-width: 58px; padding: 0 8px; color: #FF7043;
+  }
+
+  /* ---------- Reparto (división) ---------- */
+  .rep-box { background: #FFF8E1; border: 2px dashed #FBC02D; border-radius: 14px; padding: 12px 14px; }
+  .rep-items { text-align: center; font-size: clamp(22px, 5.5vw, 30px); line-height: 1.35; letter-spacing: 2px; }
+  .rep-sep { text-align: center; color: #8a6d00; font-weight: bold; font-size: 15px; margin: 8px 0 4px; }
+  .rep-groups { text-align: center; font-size: clamp(26px, 6.5vw, 34px); letter-spacing: 8px; }
+  .story-box {
+    background: #FFF8E1; border: 2px dashed #FBC02D; border-radius: 12px;
+    padding: 12px 16px; font-size: clamp(16px, 3.6vw, 19px); color: #5D4037; line-height: 1.45; text-align: center;
+  }
+  .story-box .price, .story-box b { color: #BF360C; font-weight: bold; }
+
+  /* ---------- Cuadrícula de posición ---------- */
+  .compass {
+    text-align: center; font-size: 14px; font-weight: bold; color: #00695C;
+    background: #E0F2F1; border: 2px solid #26A69A; border-radius: 20px;
+    padding: 5px 12px; width: fit-content; margin: 0 auto 8px;
+  }
+  .grid-wrap { display: flex; justify-content: center; }
+  .grid {
+    display: grid; grid-template-columns: 26px repeat(6, 1fr);
+    gap: 5px; width: 100%; max-width: 420px;
+  }
+  .cell {
+    aspect-ratio: 1 / 1; border: 2px solid #B39DDB; border-radius: 9px; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(17px, 4.6vw, 25px);
+  }
+  .cell.tappable { cursor: pointer; background: #FAF6FF; }
+  .cell.tappable:active { transform: scale(.94); }
+  .cell.cok { background: #E8F5E9; border-color: #4CAF50; border-width: 3px; }
+  .cell.cbad { background: #FFEBEE; border-color: #E57373; border-width: 3px; }
+  .rlab, .clab {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: bold; color: #6A1B9A;
+  }
+  .rlab { background: #EDE7F6; border-radius: 50%; }
+  .clab { background: #EDE7F6; border-radius: 8px; padding: 2px 0; }
+  .tap-hint { text-align: center; font-size: 15px; color: #888; margin-top: 10px; }
+
+  /* ---------- Polígonos ---------- */
+  .poly-box { display: flex; justify-content: center; }
+  .poly-box svg { background: #FAFAFA; border: 2px dashed #B39DDB; border-radius: 14px; }
+
+  /* ---------- Teclado numérico ---------- */
+  .calc-display {
+    text-align: center; font-family: "Courier New", monospace;
+    font-size: clamp(30px, 8vw, 42px); font-weight: bold; color: #4A148C;
+    background: #F1F8F7; border: 3px solid #B39DDB; border-radius: 12px;
+    padding: 8px 16px; min-height: 60px; width: fit-content; min-width: 190px;
+    margin: 0 auto 14px; letter-spacing: 2px;
+  }
+  .calc-display.ok { background: #E8F5E9; border-color: #4CAF50; color: #1B5E20; }
+  .calc-display.bad { background: #FFEBEE; border-color: #E57373; color: #B71C1C; }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; max-width: 300px; margin: 0 auto; }
+  .key {
+    font-family: inherit; font-size: 26px; font-weight: bold;
+    color: #4A148C; background: #EDE7F6; border: 3px solid #B39DDB;
+    border-radius: 14px; min-height: 56px; cursor: pointer; transition: transform .08s;
+  }
+  .key:active { transform: scale(.93); background: #D1C4E9; }
+  .key.act { background: #7E57C2; color: #fff; border-color: #5E35B1; font-size: 20px; }
+
+  /* ---------- Resultado ---------- */
+  .result-emoji { text-align: center; font-size: 70px; margin: 10px 0 4px; }
+  .result-title { text-align: center; font-size: clamp(22px, 5vw, 30px); font-weight: bold; color: #5E35B1; margin: 4px 0; }
+  .stars { text-align: center; font-size: 38px; letter-spacing: 4px; margin: 6px 0; }
+  .result-score { text-align: center; font-size: 20px; color: #555; margin: 6px 0 2px; }
+  .result-msg { text-align: center; font-size: 17px; color: #777; font-style: italic; margin: 2px 0 16px; }
+
+  /* ---------- Salir ---------- */
+  .exit-ov {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 50;
+  }
+  .exit-box { background: #fff; border: 5px solid #5E35B1; border-radius: 22px; padding: 22px; max-width: 340px; text-align: center; }
+  .exit-box p { font-size: 19px; color: #4A148C; font-weight: bold; margin: 4px 0 16px; }
+  .exit-box button {
+    font-family: inherit; font-size: 18px; font-weight: bold; display: block; width: 100%;
+    margin: 8px 0 0; padding: 14px; min-height: 54px; border-radius: 14px;
+    border: 3px solid #5E35B1; background: #5E35B1; color: #fff; cursor: pointer;
+  }
+  .exit-box .exit-no { background: #fff; color: #546E7A; border-color: #CFD8DC; }
+  .exit-box button:active { transform: scale(.97); }
+
+  /* ---------- migas de pan ---------- */
+  .crumbs { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; margin: 0 0 10px; font-size: 14px; }
+  .crumbs a { text-decoration: none; color: #546E7A; background: rgba(255,255,255,.92); border: 2px solid #CFD8DC; border-radius: 16px; padding: 6px 13px; white-space: nowrap; }
+  .crumbs a:active { transform: scale(.96); }
+  .crumbs .sep { color: #B0BEC5; }
+  .crumbs .here { color: #78909C; font-weight: bold; padding: 0 4px; white-space: nowrap; }
+  .crumbs .back-btn {
+    font-family: inherit; font-size: 14px; font-weight: bold; color: #fff;
+    background: #546E7A; border: 2px solid #546E7A; border-radius: 16px; padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .crumbs .back-btn:active { transform: scale(.96); background: #37474F; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="crumbs">
+    <button class="back-btn" onclick="if (history.length > 1) { history.back(); } else { location.href = '../../index.html#tercero/t3/Matem%C3%A1ticas'; }">← Atrás</button>
+    <a href="../../index.html">🏠 Inicio</a><span class="sep">›</span>
+    <a href="../../index.html#tercero">Tercer grado</a><span class="sep">›</span>
+    <a href="../../index.html#tercero/t3">III Trimestre</a><span class="sep">›</span>
+    <a href="../../index.html#tercero/t3/Matemáticas">Matemáticas</a><span class="sep">›</span>
+    <span class="here">Práctica Matemáticas</span>
+  </nav>
+  <div class="board">
+    <h1>📐 Práctica Matemáticas</h1>
+    <p class="subtitle">Tercer trimestre — ¡el repaso de Luciana!</p>
+
+    <!-- INICIO -->
+    <div id="screen-start">
+      <div class="intro-emoji">🧮✏️</div>
+      <p class="choose-label">¿Qué quieres practicar hoy?</p>
+      <div class="topic-grid" id="topic-grid"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="screen-quiz" class="hidden">
+      <div class="topbar">
+        <button class="close-btn" id="close-btn" aria-label="Salir">✕</button>
+        <span id="q-counter">1/10</span>
+        <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+        <span class="score-chip" id="score-chip">⭐ 0</span>
+      </div>
+      <p class="q-category" id="q-category"></p>
+      <div class="q-visual" id="q-visual"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <p class="feedback" id="feedback"></p>
+      <button class="next-btn" id="next-btn">Siguiente ➜</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="screen-result" class="hidden">
+      <div class="result-emoji" id="result-emoji">🏆</div>
+      <p class="result-title" id="result-title">¡Práctica completada!</p>
+      <div class="stars" id="stars"></div>
+      <p class="result-score" id="result-score"></p>
+      <p class="result-msg" id="result-msg"></p>
+      <button class="big-btn" id="retry-btn">Jugar otra vez 🔄</button>
+      <button class="big-btn" id="home-btn" style="background:#00897B; margin-top:10px;">Elegir otro tema 🧮</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------- utilidades ----------
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const pick = arr => arr[rand(0, arr.length - 1)];
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// separador de miles con punto, como se escribe en Costa Rica (1.250)
+const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+// opciones numéricas únicas: respuesta correcta + distractores
+function makeOptions(correct, distractors, n = 4){
+  const set = [correct];
+  for (const d of shuffle(distractors)) {
+    if (set.length >= n) break;
+    if (d !== correct && !set.includes(d) && d >= 0 && Number.isInteger(d)) set.push(d);
+  }
+  let bump = 1;
+  while (set.length < n) {
+    const extra = correct + bump * pick([-1,1]) * pick([1,2,3,10]);
+    if (!set.includes(extra) && extra >= 0) set.push(extra);
+    bump++;
+  }
+  const opts = shuffle(set.map(fmt));
+  return { opts, a: opts.indexOf(fmt(correct)) };
+}
+
+// opciones de texto únicas
+function makeText(correct, distractors, n = 4){
+  const set = [correct];
+  for (const d of shuffle(distractors)) {
+    if (set.length >= n) break;
+    if (d !== correct && !set.includes(d)) set.push(d);
+  }
+  const opts = shuffle(set);
+  return { opts, a: opts.indexOf(correct) };
+}
+
+/* ==========================================================
+   1. MULTIPLICAR POR 10, 100 Y 1000
+   ========================================================== */
+// [recipiente, emoji, contenido, emoji, género del contenido]
+const PAQUETES = [
+  ["cajas", "📦", "lápices", "✏️", "m"],
+  ["bolsas", "🛍️", "galletas", "🍪", "f"],
+  ["paquetes", "📚", "hojas", "📄", "f"],
+  ["cajas", "📦", "crayones", "🖍️", "m"],
+  ["bolsas", "🛍️", "confites", "🍬", "m"],
+  ["canastas", "🧺", "huevos", "🥚", "m"]
+];
+const cuantos = g => (g === "f" ? "¿Cuántas " : "¿Cuántos ");
+function genMult10(){
+  const kind = pick(["directo","directo","inverso","faltante","palabra"]);
+  const mults = [10, 100, 1000];
+
+  if (kind === "directo") {
+    const m = pick(mults);
+    const a = m === 10 ? rand(11, 99) : (m === 100 ? rand(2, 99) : rand(2, 25));
+    const c = a * m;
+    const dist = [c * 10, Math.floor(c / 10), c + m, a + m, c - m, a * (m * 10)];
+    const { opts, a: ai } = makeOptions(c, dist);
+    return {
+      cat: "🔟 Multiplicar por 10, 100 y 1000",
+      q: "¿Cuánto es " + a + " × " + fmt(m) + "?",
+      visual: '<div class="op-box">' + a + " × " + fmt(m) + " = <span class='hole'>?</span></div>",
+      opts, a: ai
+    };
+  }
+
+  if (kind === "inverso") {
+    const m = pick(mults);
+    const a = rand(2, 45);
+    const c = a * m;
+    const { opts, a: ai } = makeOptions(m, [10, 100, 1000], 3);
+    return {
+      cat: "🔟 Multiplicar por 10, 100 y 1000",
+      q: "¿Por cuál número hay que multiplicar " + a + " para obtener " + fmt(c) + "?",
+      visual: '<div class="op-box">' + a + " × <span class='hole'>?</span> = " + fmt(c) + "</div>",
+      opts, a: ai
+    };
+  }
+
+  if (kind === "faltante") {
+    const m = pick(mults);
+    const a = m === 1000 ? rand(2, 25) : rand(11, 99);
+    const c = a * m;
+    const dist = [a * 10, Math.floor(a / 10), a + 1, a - 1, a * 100, c];
+    const { opts, a: ai } = makeOptions(a, dist);
+    return {
+      cat: "🔟 Multiplicar por 10, 100 y 1000",
+      q: "¿Qué número falta?",
+      visual: '<div class="op-box"><span class="hole">?</span> × ' + fmt(m) + " = " + fmt(c) + "</div>",
+      opts, a: ai
+    };
+  }
+
+  const p = pick(PAQUETES);
+  const m = pick(mults);
+  const n = rand(3, 9);
+  const c = n * m;
+  const dist = [c * 10, Math.floor(c / 10), c + m, n + m, c - m];
+  const { opts, a: ai } = makeOptions(c, dist);
+  return {
+    cat: "🔟 Multiplicar por 10, 100 y 1000",
+    q: cuantos(p[4]) + p[2] + " hay en total?",
+    visual: '<div class="story-box">Hay <b>' + n + " " + p[0] + "</b> " + p[1] + " y en cada una vienen <b>" +
+            fmt(m) + " " + p[2] + "</b> " + p[3] + ".</div>",
+    opts, a: ai
+  };
+}
+
+/* ==========================================================
+   2. DIVISIÓN: REPARTO EQUITATIVO Y AGRUPAMIENTO
+   ========================================================== */
+// [nombre en plural, emoji, género]
+const COSAS = [
+  ["fresas", "🍓", "f"], ["galletas", "🍪", "f"], ["manzanas", "🍎", "f"], ["bolinchas", "🔮", "f"],
+  ["estrellas", "⭐", "f"], ["flores", "🌻", "f"], ["bananos", "🍌", "m"], ["uvas", "🍇", "f"],
+  ["lápices", "✏️", "m"], ["globos", "🎈", "m"]
+];
+const NINOS = ["👧", "👦", "🧒", "👶"];
+const RECIPIENTES = [
+  ["macetas", "🪴", "f"], ["platos", "🍽️", "m"], ["cajas", "📦", "f"],
+  ["canastas", "🧺", "f"], ["bolsas", "🛍️", "f"]
+];
+
+function repartoVisual(cosaEmoji, total, grupoEmoji, grupos){
+  let items = "";
+  for (let i = 0; i < total; i++) items += cosaEmoji;
+  let gs = "";
+  for (let i = 0; i < grupos; i++) gs += grupoEmoji;
+  return '<div class="rep-box"><div class="rep-items">' + items + '</div>' +
+         '<div class="rep-sep">▼ repartir en partes iguales ▼</div>' +
+         '<div class="rep-groups">' + gs + '</div></div>';
+}
+
+function genDivision(){
+  const kind = pick(["reparto","agrupa","simple","simple","terminos","exacta","sobra","equitativo"]);
+
+  if (kind === "reparto") {
+    const cosa = pick(COSAS);
+    const grupos = rand(2, 5);
+    const cada = rand(2, 6);
+    const total = grupos * cada;
+    const ninos = [];
+    for (let i = 0; i < grupos; i++) ninos.push(NINOS[i % NINOS.length]);
+    const dist = [total, grupos, cada + 1, cada - 1, total - grupos, cada + 2];
+    const { opts, a } = makeOptions(cada, dist);
+    return {
+      cat: "➗ División",
+      q: cuantos(cosa[2]) + cosa[0] + " le tocan a cada niño?",
+      visual: '<div class="rep-box"><div class="rep-items">' + cosa[1].repeat(total) + '</div>' +
+              '<div class="rep-sep">▼ repartir entre ' + grupos + ' niños en partes iguales ▼</div>' +
+              '<div class="rep-groups">' + ninos.join("") + '</div></div>',
+      opts, a
+    };
+  }
+
+  if (kind === "agrupa") {
+    const cosa = pick(COSAS);
+    const rec = pick(RECIPIENTES);
+    const cada = rand(2, 5);
+    const grupos = rand(2, 6);
+    const total = cada * grupos;
+    const dist = [total, cada, grupos + 1, grupos - 1, total - cada];
+    const { opts, a } = makeOptions(grupos, dist);
+    return {
+      cat: "➗ División",
+      q: cuantos(rec[2]) + rec[0] + " se necesitan?",
+      visual: '<div class="story-box">Hay <b>' + total + " " + cosa[0] + "</b> " + cosa[1] +
+              " y se colocan <b>" + cada + "</b> en cada " + rec[0].slice(0, -1) + " " + rec[1] + ".</div>",
+      opts, a
+    };
+  }
+
+  if (kind === "simple") {
+    const divisor = rand(2, 9);
+    const cociente = rand(2, 9);
+    const dividendo = divisor * cociente;
+    if (Math.random() < .5) {
+      return {
+        cat: "➗ División",
+        type: "keypad",
+        q: "Resuelve la división",
+        visual: '<div class="op-box">' + dividendo + " ÷ " + divisor + " = <span class='hole'>?</span></div>",
+        answer: cociente
+      };
+    }
+    const dist = [cociente + 1, cociente - 1, divisor, dividendo, cociente + 2, dividendo - divisor];
+    const { opts, a } = makeOptions(cociente, dist);
+    return {
+      cat: "➗ División",
+      q: "¿Cuánto es " + dividendo + " ÷ " + divisor + "?",
+      visual: '<div class="op-box">' + dividendo + " ÷ " + divisor + " = <span class='hole'>?</span></div>",
+      opts, a
+    };
+  }
+
+  if (kind === "terminos") {
+    const divisor = rand(2, 6);
+    const cociente = rand(2, 6);
+    const dividendo = divisor * cociente;
+    const parte = pick([
+      [dividendo, "Dividendo"],
+      [divisor, "Divisor"],
+      [cociente, "Cociente"]
+    ]);
+    const { opts, a } = makeText(parte[1], ["Dividendo", "Divisor", "Cociente"], 3);
+    return {
+      cat: "➗ División",
+      q: "En esta división, ¿cómo se llama el número " + parte[0] + "?",
+      visual: '<div class="op-box">' + dividendo + " ÷ " + divisor + " = " + cociente + "</div>",
+      opts, a
+    };
+  }
+
+  if (kind === "exacta") {
+    const divisor = rand(2, 9);
+    const exacta = Math.random() < .5;
+    const dividendo = exacta ? divisor * rand(2, 9) : divisor * rand(2, 9) + rand(1, divisor - 1);
+    const correcta = (dividendo % divisor === 0) ? "Exacta" : "Inexacta";
+    const { opts, a } = makeText(correcta, ["Exacta", "Inexacta"], 2);
+    return {
+      cat: "➗ División",
+      q: "¿Esta división es exacta o inexacta?",
+      visual: '<div class="op-box">' + dividendo + " ÷ " + divisor + "</div>",
+      two: true, opts, a
+    };
+  }
+
+  if (kind === "sobra") {
+    const cosa = pick(COSAS);
+    const grupos = rand(3, 6);
+    const sobran = rand(1, grupos - 1);
+    const total = grupos * rand(2, 5) + sobran;
+    const dist = [sobran + 1, sobran - 1, grupos, total - grupos, sobran + 2];
+    const { opts, a } = makeOptions(sobran, dist);
+    return {
+      cat: "➗ División",
+      q: cuantos(cosa[2]) + cosa[0] + " sobran?",
+      visual: '<div class="story-box">Se reparten <b>' + total + " " + cosa[0] + "</b> " + cosa[1] +
+              " entre <b>" + grupos + " niños</b> en partes iguales.</div>",
+      opts, a
+    };
+  }
+
+  const cosa = pick(COSAS);
+  const grupos = rand(2, 5);
+  const puede = Math.random() < .5;
+  const total = puede ? grupos * rand(2, 6) : grupos * rand(2, 6) + rand(1, grupos - 1);
+  const correcta = (total % grupos === 0)
+    ? "Sí, el reparto es equitativo"
+    : "No, el reparto no es equitativo";
+  const { opts, a } = makeText(correcta, ["Sí, el reparto es equitativo", "No, el reparto no es equitativo"], 2);
+  return {
+    cat: "➗ División",
+    q: "¿Se puede repartir en partes iguales?",
+    visual: '<div class="story-box">Hay <b>' + total + " " + cosa[0] + "</b> " + cosa[1] +
+            " para repartir entre <b>" + grupos + " niños</b>.</div>",
+    two: true, opts, a
+  };
+}
+
+/* ==========================================================
+   3. TABLAS DE MULTIPLICAR (2 al 9)
+   ========================================================== */
+function genTablas(){
+  const kind = pick(["mc","mc","teclado","falta","division"]);
+  const a = rand(2, 9);
+  const b = rand(2, 9);
+  const c = a * b;
+
+  if (kind === "teclado") {
+    return {
+      cat: "✖️ Tablas de multiplicar",
+      type: "keypad",
+      q: "Escribe el resultado",
+      visual: '<div class="op-box">' + a + " × " + b + " = <span class='hole'>?</span></div>",
+      answer: c
+    };
+  }
+
+  if (kind === "falta") {
+    const dist = [b + 1, b - 1, a, c, b + 2, Math.abs(b - 2)];
+    const { opts, a: ai } = makeOptions(b, dist);
+    return {
+      cat: "✖️ Tablas de multiplicar",
+      q: "¿Qué número falta?",
+      visual: '<div class="op-box">' + a + " × <span class='hole'>?</span> = " + c + "</div>",
+      opts, a: ai
+    };
+  }
+
+  if (kind === "division") {
+    const dist = [b + 1, b - 1, a, c, b + 2];
+    const { opts, a: ai } = makeOptions(b, dist);
+    return {
+      cat: "✖️ Tablas de multiplicar",
+      q: "¿Qué número multiplicado por " + a + " da " + c + "?",
+      visual: '<div class="op-box">' + a + " × <span class='hole'>?</span> = " + c + "</div>",
+      opts, a: ai
+    };
+  }
+
+  const dist = [c + a, c - a, c + b, c - b, a * (b + 1), a * (b - 1), c + 10];
+  const { opts, a: ai } = makeOptions(c, dist);
+  return {
+    cat: "✖️ Tablas de multiplicar",
+    q: "¿Cuánto es " + a + " × " + b + "?",
+    visual: "",
+    opts, a: ai
+  };
+}
+
+/* ==========================================================
+   4. POSICIÓN Y LOCALIZACIÓN
+   ========================================================== */
+const FILAS = ["a", "b", "c", "d", "e"]; // a abajo (sur), e arriba (norte)
+const COLS = 6;
+const OBJETOS = [
+  ["👶", "el bebé"], ["🚗", "el carro"], ["🐶", "el perro"], ["🎁", "el regalo"],
+  ["🎹", "el piano"], ["✏️", "el lápiz"], ["🐱", "el gato"], ["⚽", "la bola"],
+  ["🌳", "el árbol"], ["🏠", "la casa"], ["🦆", "el pato"], ["🐸", "la rana"],
+  ["🦋", "la mariposa"], ["🐢", "la tortuga"]
+];
+const coordTxt = o => "(" + o.c + ", " + o.r + ")";
+
+function colocar(n){
+  const elegidos = shuffle(OBJETOS).slice(0, n);
+  const usadas = [];
+  return elegidos.map(o => {
+    let c, r, id;
+    do { c = rand(1, COLS); r = pick(FILAS); id = c + r; } while (usadas.includes(id));
+    usadas.push(id);
+    return { emoji: o[0], nombre: o[1], c, r };
+  });
+}
+
+function gridHTML(objs, conBrujula){
+  let h = conBrujula ? '<div class="compass">🧭 Norte ⬆️ · Sur ⬇️ · Este ➡️ · Oeste ⬅️</div>' : "";
+  h += '<div class="grid-wrap"><div class="grid">';
+  for (let i = FILAS.length - 1; i >= 0; i--) {
+    const fila = FILAS[i];
+    h += '<div class="rlab">' + fila + "</div>";
+    for (let c = 1; c <= COLS; c++) {
+      const o = objs.find(o => o.c === c && o.r === fila);
+      h += '<div class="cell" data-cell="' + c + fila + '">' + (o ? o.emoji : "") + "</div>";
+    }
+  }
+  h += '<div class="rlab"></div>';
+  for (let c = 1; c <= COLS; c++) h += '<div class="clab">' + c + "</div>";
+  h += "</div></div>";
+  return h;
+}
+
+function otrasCoords(o, n){
+  const out = [];
+  let intentos = 0;
+  while (out.length < n && intentos < 60) {
+    intentos++;
+    const c = rand(1, COLS), r = pick(FILAS);
+    const t = "(" + c + ", " + r + ")";
+    if (t !== coordTxt(o) && !out.includes(t)) out.push(t);
+  }
+  return out;
+}
+
+function genPosicion(){
+  const kind = pick(["ubicar","quehay","mover","tocar","direccion","distancia"]);
+
+  if (kind === "ubicar") {
+    const objs = colocar(5);
+    const o = pick(objs);
+    const cercanas = [
+      "(" + o.c + ", " + FILAS[Math.min(FILAS.indexOf(o.r) + 1, FILAS.length - 1)] + ")",
+      "(" + Math.min(o.c + 1, COLS) + ", " + o.r + ")",
+      "(" + Math.max(o.c - 1, 1) + ", " + o.r + ")"
+    ].concat(otrasCoords(o, 4));
+    const { opts, a } = makeText(coordTxt(o), cercanas);
+    return {
+      cat: "🧭 Posición y localización",
+      q: "¿En qué cuadro está " + o.nombre + " " + o.emoji + "?",
+      visual: gridHTML(objs, false),
+      opts, a
+    };
+  }
+
+  if (kind === "quehay") {
+    const objs = colocar(5);
+    const o = pick(objs);
+    const otros = objs.filter(x => x !== o).map(x => x.nombre + " " + x.emoji);
+    const { opts, a } = makeText(o.nombre + " " + o.emoji, otros);
+    return {
+      cat: "🧭 Posición y localización",
+      q: "¿Qué hay en el cuadro " + coordTxt(o) + "?",
+      visual: gridHTML(objs, false),
+      opts, a
+    };
+  }
+
+  if (kind === "mover") {
+    const objs = colocar(4);
+    const o = pick(objs);
+    const fi = FILAS.indexOf(o.r);
+    const dxs = [-2, -1, 0, 1, 2].filter(d => o.c + d >= 1 && o.c + d <= COLS);
+    const dys = [-1, 0, 1].filter(d => fi + d >= 0 && fi + d <= FILAS.length - 1);
+    let dx, dy;
+    do { dx = pick(dxs); dy = pick(dys); } while (dx === 0 && dy === 0);
+    const nc = o.c + dx;
+    const nf = FILAS[fi + dy];
+    const destino = "(" + nc + ", " + nf + ")";
+    const partes = [];
+    if (dx !== 0) partes.push(Math.abs(dx) + " cuadro" + (Math.abs(dx) > 1 ? "s" : "") + (dx > 0 ? " a la derecha" : " a la izquierda"));
+    if (dy !== 0) partes.push("1 cuadro " + (dy > 0 ? "hacia arriba" : "hacia abajo"));
+    const dist = otrasCoords({ c: nc, r: nf }, 6);
+    const { opts, a } = makeText(destino, dist);
+    return {
+      cat: "🧭 Posición y localización",
+      q: "Si " + o.nombre + " " + o.emoji + " se mueve " + partes.join(" y ") + ", ¿en qué cuadro queda?",
+      visual: gridHTML(objs, false),
+      opts, a
+    };
+  }
+
+  if (kind === "tocar") {
+    const objs = colocar(4);
+    let c, r;
+    do { c = rand(1, COLS); r = pick(FILAS); } while (objs.some(o => o.c === c && o.r === r));
+    return {
+      cat: "🧭 Posición y localización",
+      type: "grid",
+      q: "Toca el cuadro (" + c + ", " + r + ")",
+      visual: "",
+      objs, compass: false, answer: c + r,
+      hint: "Primero busca el número abajo, luego la letra a la izquierda."
+    };
+  }
+
+  if (kind === "direccion") {
+    const objs = colocar(4);
+    const a1 = objs[0];
+    let a2 = objs[1];
+    // alinear el segundo con el primero en fila o columna
+    const mismaFila = Math.random() < .5;
+    if (mismaFila) {
+      let nc;
+      do { nc = rand(1, COLS); } while (nc === a1.c || objs.some(o => o.c === nc && o.r === a1.r));
+      a2.c = nc; a2.r = a1.r;
+    } else {
+      let nf;
+      do { nf = pick(FILAS); } while (nf === a1.r || objs.some(o => o.c === a1.c && o.r === nf));
+      a2.c = a1.c; a2.r = nf;
+    }
+    const correcta = mismaFila
+      ? (a2.c > a1.c ? "Al este ➡️" : "Al oeste ⬅️")
+      : (FILAS.indexOf(a2.r) > FILAS.indexOf(a1.r) ? "Al norte ⬆️" : "Al sur ⬇️");
+    const { opts, a } = makeText(correcta, ["Al norte ⬆️", "Al sur ⬇️", "Al este ➡️", "Al oeste ⬅️"]);
+    return {
+      cat: "🧭 Posición y localización",
+      q: "¿En qué dirección está " + a2.nombre + " " + a2.emoji + " con respecto a " + a1.nombre + " " + a1.emoji + "?",
+      visual: gridHTML(objs, true),
+      opts, a
+    };
+  }
+
+  const objs = colocar(4);
+  const o1 = objs[0];
+  const o2 = objs[1];
+  const mismaFila = Math.random() < .5;
+  if (mismaFila) {
+    let nc;
+    do { nc = rand(1, COLS); } while (nc === o1.c || objs.some(o => o.c === nc && o.r === o1.r));
+    o2.c = nc; o2.r = o1.r;
+  } else {
+    let nf;
+    do { nf = pick(FILAS); } while (nf === o1.r || objs.some(o => o.c === o1.c && o.r === nf));
+    o2.c = o1.c; o2.r = nf;
+  }
+  const pasos = mismaFila
+    ? Math.abs(o2.c - o1.c)
+    : Math.abs(FILAS.indexOf(o2.r) - FILAS.indexOf(o1.r));
+  const rumbo = mismaFila
+    ? (o2.c > o1.c ? "al este ➡️" : "al oeste ⬅️")
+    : (FILAS.indexOf(o2.r) > FILAS.indexOf(o1.r) ? "al norte ⬆️" : "al sur ⬇️");
+  const { opts, a } = makeOptions(pasos, [pasos + 1, pasos - 1, pasos + 2, o1.c, o2.c]);
+  return {
+    cat: "🧭 Posición y localización",
+    q: "¿Cuántos cuadros " + rumbo + " debe avanzar " + o1.nombre + " " + o1.emoji + " para llegar donde está " + o2.nombre + " " + o2.emoji + "?",
+    visual: gridHTML(objs, true),
+    opts, a
+  };
+}
+
+/* ==========================================================
+   5. POLÍGONOS
+   ========================================================== */
+const POLIGONOS = [
+  [3, "Triángulo"], [4, "Cuadrilátero"], [5, "Pentágono"],
+  [6, "Hexágono"], [7, "Heptágono"], [8, "Octágono"]
+];
+const NOMBRE_DE = n => (POLIGONOS.find(p => p[0] === n) || [])[1];
+const ANGULOS = { 3: 60, 4: 90, 5: 108, 6: 120, 8: 135 };
+
+function svgPoly(n, regular){
+  const cx = 95, cy = 92, R = 72;
+  const step = 2 * Math.PI / n;
+
+  // vértices bien marcados: ningún ángulo casi recto (si no, cuesta contar los lados)
+  function intento(){
+    const p = [];
+    for (let i = 0; i < n; i++) {
+      const r = regular ? R : R * (0.5 + Math.random() * 0.5);
+      const ang = -Math.PI / 2 + i * step + (regular ? 0 : (Math.random() - 0.5) * step * 0.4);
+      p.push([cx + r * Math.cos(ang), cy + r * Math.sin(ang)]);
+    }
+    return p;
+  }
+  function sirve(p){
+    if (regular) return true;
+    // que se note que es irregular: lados de distinta medida
+    const largos = p.map((b, i) => {
+      const c = p[(i + 1) % n];
+      return Math.hypot(c[0] - b[0], c[1] - b[1]);
+    });
+    if (Math.max.apply(null, largos) / Math.min.apply(null, largos) < 1.5) return false;
+    for (let i = 0; i < n; i++) {
+      const a = p[(i - 1 + n) % n], b = p[i], c = p[(i + 1) % n];
+      const v1 = [a[0] - b[0], a[1] - b[1]], v2 = [c[0] - b[0], c[1] - b[1]];
+      const m1 = Math.hypot(v1[0], v1[1]), m2 = Math.hypot(v2[0], v2[1]);
+      if (m1 < 22 || m2 < 22) return false;                       // lados muy cortitos
+      const cos = (v1[0] * v2[0] + v1[1] * v2[1]) / (m1 * m2);
+      const ang = Math.acos(Math.min(1, Math.max(-1, cos))) * 180 / Math.PI;
+      if (ang > 162) return false;                                 // vértice casi plano
+    }
+    return true;
+  }
+  let crudos = intento(), tries = 0;
+  while (!sirve(crudos) && tries < 40) { crudos = intento(); tries++; }
+  const pts = crudos.map(p => [p[0].toFixed(1), p[1].toFixed(1)]);
+  let svg = '<svg width="190" height="184" viewBox="0 0 190 184">';
+  svg += '<polygon points="' + pts.map(p => p[0] + "," + p[1]).join(" ") +
+         '" fill="#F3E5F5" stroke="#7E57C2" stroke-width="4" stroke-linejoin="round"/>';
+  for (const p of pts) svg += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="5" fill="#FF7043"/>';
+  svg += "</svg>";
+  return '<div class="poly-box">' + svg + "</div>";
+}
+
+function genPoligonos(){
+  const kind = pick(["nombre","nombre","tipo","partes","concepto","angulo","descripcion"]);
+
+  if (kind === "nombre") {
+    const n = pick([3, 4, 5, 6, 7, 8]);
+    const nombre = NOMBRE_DE(n);
+    const { opts, a } = makeText(nombre, POLIGONOS.map(p => p[1]));
+    return {
+      cat: "🔷 Polígonos",
+      q: "¿Cómo se llama este polígono?",
+      visual: svgPoly(n, false),
+      opts, a
+    };
+  }
+
+  if (kind === "tipo") {
+    const n = pick([3, 4, 5, 6, 8]);
+    const regular = Math.random() < .5;
+    const correcta = regular ? "Regular" : "Irregular";
+    const { opts, a } = makeText(correcta, ["Regular", "Irregular"], 2);
+    return {
+      cat: "🔷 Polígonos",
+      q: "¿Este polígono es regular o irregular?",
+      visual: svgPoly(n, regular),
+      two: true, opts, a
+    };
+  }
+
+  if (kind === "partes") {
+    const n = pick([3, 4, 5, 6, 7, 8]);
+    const parte = pick(["lados", "vértices", "ángulos"]);
+    const { opts, a } = makeOptions(n, [n + 1, n - 1, n + 2, n - 2, n * 2]);
+    return {
+      cat: "🔷 Polígonos",
+      q: "¿Cuántos " + parte + " tiene un " + NOMBRE_DE(n).toLowerCase() + "?",
+      visual: svgPoly(n, Math.random() < .5),
+      opts, a
+    };
+  }
+
+  if (kind === "concepto") {
+    const preguntas = [
+      ["¿Cómo se llama el punto donde se unen dos lados?", "El vértice", ["El lado", "El ángulo", "La base"]],
+      ["¿Cómo se llama cada segmento que forma el polígono?", "El lado", ["El vértice", "El ángulo", "La curva"]],
+      ["Un polígono con todos sus lados y ángulos iguales es...", "Regular", ["Irregular", "Abierto", "Curvo"]],
+      ["Un polígono con lados de diferente medida es...", "Irregular", ["Regular", "Cerrado", "Recto"]],
+      ["¿Qué significa la palabra polígono?", "Muchos ángulos", ["Muchos colores", "Muchas curvas", "Muchos puntos"]],
+      ["¿Cuál de estas figuras NO es un polígono?", "El círculo", ["El triángulo", "El pentágono", "El hexágono"]]
+    ];
+    const p = pick(preguntas);
+    const { opts, a } = makeText(p[1], p[2]);
+    return { cat: "🔷 Polígonos", q: p[0], visual: "", opts, a };
+  }
+
+  if (kind === "angulo") {
+    const n = pick([3, 4, 5, 6, 8]);
+    const ang = ANGULOS[n];
+    const nombre = n === 3 ? "triángulo equilátero" : (n === 4 ? "cuadrado" : NOMBRE_DE(n).toLowerCase() + " regular");
+    const { opts, a } = makeOptions(ang, [60, 90, 108, 120, 135, 180]);
+    return {
+      cat: "🔷 Polígonos",
+      q: "¿Cuánto mide cada ángulo de un " + nombre + "?",
+      visual: svgPoly(n, true),
+      opts: opts.map(o => o + "°"), a
+    };
+  }
+
+  const n = pick([3, 4, 5, 6, 7, 8]);
+  const regular = Math.random() < .5;
+  const correcta = NOMBRE_DE(n) + " " + (regular ? "regular" : "irregular");
+  const distractores = [
+    NOMBRE_DE(n) + " " + (regular ? "irregular" : "regular"),
+    NOMBRE_DE(n === 8 ? 6 : n + 1) + " " + (regular ? "regular" : "irregular"),
+    NOMBRE_DE(n === 3 ? 5 : n - 1) + " " + (regular ? "regular" : "irregular")
+  ];
+  const { opts, a } = makeText(correcta, distractores);
+  return {
+    cat: "🔷 Polígonos",
+    q: "Un polígono de " + n + (regular ? " lados congruentes y " + n + " ángulos iguales" : " lados que no miden todos igual") + " se llama...",
+    visual: "",
+    opts, a
+  };
+}
+
+/* ==========================================================
+   6. MONEDA (colones)
+   ========================================================== */
+const ITEMS = [
+  ["un cuaderno","📓",900,2500],["un lápiz","✏️",200,700],["una regla","📏",400,1200],
+  ["un borrador","🧽",150,500],["una mochila","🎒",6000,15000],["un helado","🍦",600,1500],
+  ["una pulsera","💍",500,1500],["un jugo","🧃",400,900],["un libro","📚",2500,6000],
+  ["una bola","⚽",3000,9000],["un pan","🍞",700,1600],["un llavero","🔑",800,2000]
+];
+const money = n => "₡" + fmt(n);
+function roundTo(n, m){ return Math.round(n / m) * m; }
+function pickItem(){ const it = pick(ITEMS); return { name: it[0], emoji: it[1], price: roundTo(rand(it[2], it[3]), 50) }; }
+
+function genMoneda(){
+  const type = pick(["total","vuelto","venta","ahorro","falta"]);
+
+  if (type === "total") {
+    const a = pickItem(); let b = pickItem();
+    while (b.name === a.name) b = pickItem();
+    const correct = a.price + b.price;
+    const txt = "Luciana compra " + a.name + " " + a.emoji + " de <b>" + money(a.price) + "</b> y " +
+      b.name + " " + b.emoji + " de <b>" + money(b.price) + "</b>.";
+    const { opts, a: ai } = makeOptions(correct, [correct + 100, Math.abs(a.price - b.price), correct + 1000, correct - 100, correct + 50]);
+    return { cat: "💰 Moneda", q: "¿Cuánto paga en total?", visual: '<div class="story-box">' + txt + "</div>", opts: opts.map(o => "₡" + o), a: ai };
+  }
+
+  if (type === "vuelto") {
+    const it = pickItem();
+    const billetes = [2000, 5000, 10000, 20000].filter(b => b > it.price);
+    const paga = pick(billetes);
+    const correct = paga - it.price;
+    const txt = "Luciana compra " + it.name + " " + it.emoji + " de <b>" + money(it.price) +
+      "</b> y paga con un billete de <b>" + money(paga) + "</b>.";
+    const { opts, a } = makeOptions(correct, [correct + 100, correct - 100, it.price, paga + it.price, correct + 1000]);
+    return { cat: "💰 Moneda", q: "¿Cuánto dinero le devuelven?", visual: '<div class="story-box">' + txt + "</div>", opts: opts.map(o => "₡" + o), a };
+  }
+
+  if (type === "venta") {
+    const it = pickItem();
+    const n = rand(3, 8);
+    const correct = it.price * n;
+    const txt = "Luciana vende <b>" + n + "</b> unidades de " + it.name + " " + it.emoji +
+      " a <b>" + money(it.price) + "</b> cada una.";
+    const { opts, a } = makeOptions(correct, [it.price * (n + 1), it.price * (n - 1), correct + 100, correct - 500, it.price + n]);
+    return { cat: "💰 Moneda", q: "¿Cuánto dinero recibe en total?", visual: '<div class="story-box">' + txt + "</div>", opts: opts.map(o => "₡" + o), a };
+  }
+
+  if (type === "ahorro") {
+    const semana = pick([250, 500, 750, 1000]);
+    const n = rand(4, 9);
+    const correct = semana * n;
+    const txt = "Luciana ahorra <b>" + money(semana) + "</b> cada semana en su alcancía 🐷 durante <b>" + n + "</b> semanas.";
+    const { opts, a } = makeOptions(correct, [semana * (n + 1), semana * (n - 1), correct + 500, correct - 250, semana + n]);
+    return { cat: "💰 Moneda", q: "¿Cuánto dinero ahorra en total?", visual: '<div class="story-box">' + txt + "</div>", opts: opts.map(o => "₡" + o), a };
+  }
+
+  const it = pickItem();
+  const tiene = roundTo(rand(Math.floor(it.price * .2), Math.floor(it.price * .8)), 50);
+  const correct = it.price - tiene;
+  const txt = "Luciana quiere " + it.name + " " + it.emoji + " que cuesta <b>" + money(it.price) +
+    "</b> y solo tiene <b>" + money(tiene) + "</b> ahorrados.";
+  const { opts, a } = makeOptions(correct, [correct + 100, correct - 50, it.price + tiene, tiene, correct + 500]);
+  return { cat: "💰 Moneda", q: "¿Cuánto dinero le falta?", visual: '<div class="story-box">' + txt + "</div>", opts: opts.map(o => "₡" + o), a };
+}
+
+/* ==========================================================
+   Armado de rondas
+   ========================================================== */
+const GENS = {
+  "mult10":   () => genMult10(),
+  "division": () => genDivision(),
+  "tablas":   () => genTablas(),
+  "posicion": () => genPosicion(),
+  "poligono": () => genPoligonos(),
+  "moneda":   () => genMoneda()
+};
+const TOPICS = [
+  ["mult10",   "🔟", "Por 10, 100 y 1000"],
+  ["division", "➗", "División"],
+  ["tablas",   "✖️", "Tablas de multiplicar"],
+  ["posicion", "🧭", "Posición y localización"],
+  ["poligono", "🔷", "Polígonos"],
+  ["moneda",   "💰", "Moneda"]
+];
+
+let questions = [], idx = 0, score = 0, currentMode = "";
+const PRAISE = ["¡Excelente! 🎉","¡Muy bien! 🌟","¡Correcto! ✅","¡Genial! 🥳","¡Eres una crack! 💪"];
+const OOPS = ["¡Casi! La respuesta era: ","Ojo 👀 La respuesta correcta era: ","No pasa nada, era: "];
+
+function buildRound(mode){
+  const qs = [];
+  if (mode === "todos") {
+    for (const [key] of TOPICS) for (let i = 0; i < 2; i++) qs.push(GENS[key]());
+    return shuffle(qs);
+  }
+  for (let i = 0; i < 10; i++) qs.push(GENS[mode]());
+  return qs;
+}
+
+function startQuiz(mode){
+  currentMode = mode;
+  questions = buildRound(mode);
+  idx = 0; score = 0;
+  show("screen-quiz");
+  renderQuestion();
+}
+
+function show(id){
+  for (const s of ["screen-start","screen-quiz","screen-result"])
+    document.getElementById(s).classList.toggle("hidden", s !== id);
+}
+
+let answered = false, calcState = null;
+
+function renderQuestion(){
+  const q = questions[idx];
+  answered = false;
+  document.getElementById("q-counter").textContent = (idx + 1) + "/" + questions.length;
+  document.getElementById("progress-bar").style.width = (idx / questions.length * 100) + "%";
+  document.getElementById("score-chip").textContent = "⭐ " + score;
+  document.getElementById("q-category").textContent = q.cat;
+  document.getElementById("q-visual").innerHTML = q.visual || "";
+  document.getElementById("q-text").textContent = q.q;
+  const box = document.getElementById("options");
+  box.className = "options" + (q.two ? " two" : "");
+  box.innerHTML = "";
+  const fb = document.getElementById("feedback");
+  fb.textContent = ""; fb.className = "feedback";
+  document.getElementById("next-btn").classList.remove("show");
+
+  if (q.type === "keypad") { box.className = ""; renderKeypad(q, box); return; }
+  if (q.type === "grid") { box.className = ""; renderGrid(q, box); return; }
+
+  q.opts.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt-btn";
+    b.textContent = opt;
+    b.addEventListener("click", () => answer(i, b), {passive:true});
+    box.appendChild(b);
+  });
+}
+
+/* ----- tocar el cuadro en la cuadrícula ----- */
+function renderGrid(q, box){
+  const wrap = document.createElement("div");
+  wrap.innerHTML = gridHTML(q.objs, q.compass);
+  box.appendChild(wrap);
+  const cells = wrap.querySelectorAll(".cell");
+  cells.forEach(el => {
+    el.classList.add("tappable");
+    el.addEventListener("click", () => tapCell(el, q, wrap), {passive:true});
+  });
+  if (q.hint) {
+    const h = document.createElement("p");
+    h.className = "tap-hint";
+    h.textContent = q.hint;
+    box.appendChild(h);
+  }
+}
+function tapCell(el, q, wrap){
+  if (answered) return;
+  answered = true;
+  const ok = el.getAttribute("data-cell") === q.answer;
+  el.classList.add(ok ? "cok" : "cbad");
+  if (!ok) {
+    const good = wrap.querySelector('[data-cell="' + q.answer + '"]');
+    if (good) good.classList.add("cok");
+  }
+  wrap.querySelectorAll(".cell").forEach(c => c.classList.remove("tappable"));
+  finishAnswer(ok, "(" + q.answer.slice(0, -1) + ", " + q.answer.slice(-1) + ")");
+}
+
+/* ----- teclado numérico ----- */
+function renderKeypad(q, box){
+  calcState = { val: "" };
+  const disp = document.createElement("div");
+  disp.className = "calc-display";
+  disp.textContent = "?";
+  const pad = document.createElement("div");
+  pad.className = "keypad";
+  const keys = ["1","2","3","4","5","6","7","8","9","⌫","0","✓"];
+  keys.forEach(k => {
+    const b = document.createElement("button");
+    b.className = "key" + (k === "✓" || k === "⌫" ? " act" : "");
+    b.textContent = k;
+    b.addEventListener("click", () => tapKey(k, q), {passive:true});
+    pad.appendChild(b);
+  });
+  box.appendChild(disp); box.appendChild(pad);
+  calcState.dispEl = disp;
+  calcState.padEl = pad;
+}
+function tapKey(k, q){
+  if (answered) return;
+  const st = calcState;
+  if (k === "⌫") st.val = st.val.slice(0, -1);
+  else if (k === "✓") { if (st.val.length) checkKeypad(q); return; }
+  else if (st.val.length < 7) st.val += k;
+  st.dispEl.textContent = st.val.length ? fmt(parseInt(st.val, 10)) : "?";
+}
+function checkKeypad(q){
+  answered = true;
+  const st = calcState;
+  const ok = parseInt(st.val, 10) === q.answer;
+  st.dispEl.classList.add(ok ? "ok" : "bad");
+  if (!ok) st.dispEl.textContent = fmt(q.answer);
+  st.padEl.querySelectorAll(".key").forEach(b => b.disabled = true);
+  finishAnswer(ok, fmt(q.answer));
+}
+
+function answer(i, btn){
+  if (answered) return;
+  answered = true;
+  const q = questions[idx];
+  const buttons = document.querySelectorAll(".opt-btn");
+  buttons.forEach(b => b.disabled = true);
+  const ok = i === q.a;
+  btn.classList.add(ok ? "correct" : "wrong");
+  if (!ok && buttons[q.a]) buttons[q.a].classList.add("correct");
+  finishAnswer(ok, q.opts[q.a]);
+}
+
+function finishAnswer(ok, correctText){
+  const fb = document.getElementById("feedback");
+  if (ok) {
+    score++;
+    fb.textContent = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+    fb.classList.add("good");
+  } else {
+    fb.textContent = OOPS[Math.floor(Math.random() * OOPS.length)] + correctText;
+    fb.classList.add("bad");
+  }
+  document.getElementById("score-chip").textContent = "⭐ " + score;
+  const nb = document.getElementById("next-btn");
+  nb.classList.add("show");
+  nb.textContent = (idx === questions.length - 1) ? "Ver resultado 🏁" : "Siguiente ➜";
+}
+
+function finish(){
+  document.getElementById("progress-bar").style.width = "100%";
+  const pct = score / questions.length;
+  const stars = pct === 1 ? 5 : pct >= .9 ? 4 : pct >= .7 ? 3 : pct >= .5 ? 2 : 1;
+  document.getElementById("stars").textContent = "⭐".repeat(stars) + "☆".repeat(5 - stars);
+  document.getElementById("result-score").textContent = "Acertaste " + score + " de " + questions.length + " preguntas";
+  const emoji = pct === 1 ? "🏆" : pct >= .7 ? "🎉" : pct >= .5 ? "😊" : "💪";
+  document.getElementById("result-emoji").textContent = emoji;
+  document.getElementById("result-title").textContent =
+    pct === 1 ? "¡PERFECTO, Luciana!" : pct >= .7 ? "¡Muy bien hecho!" : pct >= .5 ? "¡Buen intento!" : "¡Sigue practicando!";
+  document.getElementById("result-msg").textContent =
+    pct === 1 ? "¡Eres una genia de las mates! 🧠✨" :
+    pct >= .7 ? "¡Ya casi lo dominas todo!" :
+    pct >= .5 ? "Practica un poquito más y serás experta." :
+    "Cada intento te hace más fuerte. ¡Otra vez!";
+  show("screen-result");
+}
+
+document.getElementById("next-btn").addEventListener("click", () => {
+  if (idx === questions.length - 1) { finish(); return; }
+  idx++;
+  renderQuestion();
+});
+document.getElementById("retry-btn").addEventListener("click", () => startQuiz(currentMode));
+document.getElementById("home-btn").addEventListener("click", () => show("screen-start"));
+
+/* ---------- botón de salir de la práctica ---------- */
+(function(){
+  const ov = document.createElement("div");
+  ov.className = "exit-ov hidden";
+  ov.innerHTML = '<div class="exit-box"><p>¿Querés salir de la práctica?</p>' +
+    '<button class="exit-yes">Sí, salir 🚪</button>' +
+    '<button class="exit-no">Seguir practicando 💪</button></div>';
+  document.body.appendChild(ov);
+  const hide = () => ov.classList.add("hidden");
+  ov.querySelector(".exit-no").addEventListener("click", hide, {passive:true});
+  ov.querySelector(".exit-yes").addEventListener("click", () => { hide(); show("screen-start"); }, {passive:true});
+  document.getElementById("close-btn").addEventListener("click", () => ov.classList.remove("hidden"), {passive:true});
+})();
+
+// Botones de tema
+const grid = document.getElementById("topic-grid");
+for (const [key, icon, label] of TOPICS) {
+  const b = document.createElement("button");
+  b.className = "topic-btn";
+  b.innerHTML = '<span class="icon">' + icon + '</span>' + label;
+  b.addEventListener("click", () => startQuiz(key), {passive:true});
+  grid.appendChild(b);
+}
+const all = document.createElement("button");
+all.className = "topic-btn all";
+all.innerHTML = '<span class="icon">🚀</span>¡Práctica completa! (todos)';
+all.addEventListener("click", () => startQuiz("todos"), {passive:true});
+grid.appendChild(all);
+</script>
+</body>
+</html>

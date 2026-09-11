@@ -126,6 +126,7 @@
     .science  { --c: #00897B; --bg: #E0F2F1; }
     .espanol  { --c: #1E88E5; --bg: #E3F2FD; }
     .grado    { --c: #1F4E79; --bg: #E3F2FD; }
+    .trim3    { --c: #00897B; --bg: #E0F2F1; }
     .trim2    { --c: #5E35B1; --bg: #EDE7F6; }
     .trim1    { --c: #43A047; --bg: #E8F5E9; }
     .trimx    { --c: #78909C; --bg: #ECEFF1; }
@@ -156,12 +157,18 @@ const GRADOS = [
 
 const TRIMESTRES = {
   tercero: [
+    { id: "t3", nombre: "III Trimestre", meta: "Exámenes de setiembre", icon: "🏁", cls: "trim3" },
     { id: "t2", nombre: "II Trimestre", meta: "Exámenes de agosto", icon: "🚀", cls: "trim2" },
     { id: "t1", nombre: "I Trimestre", meta: "Prácticas anteriores", icon: "🌱", cls: "trim1" }
   ]
 };
 
 const PRACTICAS = [
+  // ---- tercer grado, III trimestre ----
+  { grado:"tercero", trim:"t3", materia:"Matemáticas", cls:"mate", icon:"📐",
+    title:"Práctica Matemáticas: por 10, 100 y 1000, división, tablas, posición y localización, polígonos y moneda",
+    href:"tercero/mate/practica_mate_iii_trim_luciana.html" },
+
   // ---- tercer grado, II trimestre ----
   { grado:"tercero", trim:"t2", materia:"Matemáticas", cls:"mate", icon:"📘",
     title:"Práctica Matemáticas: sucesiones, patrones, gráficos, tablas de frecuencia, cálculo mental y moneda",
