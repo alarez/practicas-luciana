@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Science Practice — Weather (Third Term)</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(160deg, #E0F2F1 0%, #E3F2FD 100%);
+    color: #222;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  input { -webkit-user-select: text; user-select: text; }
+  .app { max-width: 760px; margin: 0 auto; padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
+  .board {
+    background: #fff;
+    border: 6px solid #00897B;
+    border-radius: 26px;
+    padding: 20px 22px 26px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    flex: 1; display: flex; flex-direction: column;
+  }
+  h1 { text-align: center; color: #00695C; margin: 6px 0 2px; font-size: clamp(24px, 5vw, 34px); }
+  .subtitle { text-align: center; color: #777; font-style: italic; margin: 0 0 14px; font-size: clamp(14px, 3vw, 17px); }
+
+  /* ---------- Start ---------- */
+  .intro-emoji { text-align: center; font-size: 56px; margin: 8px 0; }
+  .choose-label { text-align: center; color: #00695C; font-weight: bold; font-size: 19px; margin: 10px 0 14px; }
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+  .topic-btn {
+    font-family: inherit; font-size: 18px; font-weight: bold;
+    color: #004D40; background: #E0F2F1;
+    border: 3px solid #26A69A; border-radius: 18px;
+    padding: 18px 12px; min-height: 64px; cursor: pointer; transition: transform .1s;
+  }
+  .topic-btn:active { transform: scale(.96); background: #B2DFDB; }
+  .topic-btn.all { background: #E8EAF6; border-color: #5C6BC0; color: #283593; }
+  .topic-btn .icon { font-size: 28px; display: block; margin-bottom: 4px; }
+  .topic-btn .count { display: block; font-size: 13px; font-weight: normal; color: #00796B; margin-top: 3px; }
+
+  /* ---------- Quiz ---------- */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 16px; color: #555; font-weight: bold; }
+  .close-btn {
+    font-family: inherit; font-size: 18px; font-weight: bold; line-height: 1;
+    color: #90A4AE; background: #fff; border: 2px solid #CFD8DC;
+    border-radius: 50%; width: 34px; height: 34px; flex-shrink: 0; cursor: pointer;
+  }
+  .close-btn:active { transform: scale(.92); background: #ECEFF1; }
+  .progress-wrap { flex: 1; height: 16px; background: #eee; border-radius: 10px; overflow: hidden; border: 2px solid #ddd; }
+  .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #26A69A, #42A5F5); border-radius: 10px; transition: width .3s; }
+  .score-chip { background: #E0F2F1; border: 2px solid #26A69A; border-radius: 12px; padding: 4px 12px; color: #00695C; white-space: nowrap; }
+  .q-category { text-align: center; font-size: 15px; color: #888; margin-bottom: 4px; }
+  .q-kind {
+    display: block; width: fit-content; margin: 0 auto 8px;
+    font-size: 13px; font-weight: bold; letter-spacing: .5px;
+    color: #00695C; background: #E0F2F1; border: 2px solid #26A69A;
+    border-radius: 20px; padding: 3px 12px;
+  }
+  .q-text {
+    text-align: center; font-size: clamp(19px, 4.2vw, 25px); color: #004D40; font-weight: bold;
+    margin: 8px 0 18px; min-height: 50px; display: flex; align-items: center; justify-content: center;
+  }
+  .options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .options.two { grid-template-columns: 1fr 1fr; }
+  .opt-btn {
+    font-family: inherit; font-size: 19px; text-align: center;
+    background: #fff; color: #333; border: 3px solid #80CBC4; border-radius: 16px;
+    padding: 16px 14px; min-height: 60px; cursor: pointer; transition: transform .08s;
+  }
+  .opt-btn:active { transform: scale(.98); }
+  .opt-btn.correct { background: #E8F5E9; border-color: #4CAF50; color: #1B5E20; font-weight: bold; }
+  .opt-btn.wrong { background: #FFEBEE; border-color: #E57373; color: #B71C1C; }
+
+  /* ---------- Typed answers ---------- */
+  .typed { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .typed-input {
+    font-family: inherit; font-size: clamp(19px, 4.5vw, 23px); text-align: center;
+    width: 100%; max-width: 420px; padding: 14px 16px; min-height: 60px;
+    border: 3px solid #80CBC4; border-radius: 16px; background: #F1F8F7; color: #004D40;
+  }
+  .typed-input:focus { outline: none; border-color: #00897B; background: #fff; }
+  .typed-input.ok { background: #E8F5E9; border-color: #4CAF50; color: #1B5E20; }
+  .typed-input.bad { background: #FFEBEE; border-color: #E57373; color: #B71C1C; }
+  .check-btn {
+    font-family: inherit; font-size: 19px; font-weight: bold; color: #fff;
+    background: #00897B; border: none; border-radius: 16px;
+    padding: 14px 34px; min-height: 56px; cursor: pointer;
+  }
+  .check-btn:active { transform: scale(.97); }
+  .check-btn:disabled { background: #B0BEC5; }
+  .self-btn {
+    font-family: inherit; font-size: 16px; font-weight: bold; color: #00695C;
+    background: #fff; border: 3px dashed #26A69A; border-radius: 14px;
+    padding: 10px 18px; min-height: 48px; margin: 10px auto 0; display: block; cursor: pointer;
+  }
+  .self-btn:active { transform: scale(.97); background: #E0F2F1; }
+
+  .feedback { text-align: center; font-size: 19px; font-weight: bold; min-height: 28px; margin: 16px 0 4px; }
+  .feedback.good { color: #2E7D32; }
+  .feedback.bad { color: #C62828; }
+  .why {
+    text-align: center; font-size: 16px; color: #546E7A; font-style: italic;
+    background: #F1F8F7; border: 2px dashed #B2DFDB; border-radius: 12px;
+    padding: 10px 14px; margin: 8px auto 0; max-width: 560px; line-height: 1.4;
+  }
+  .why.hidden { display: none; }
+  .next-btn, .big-btn {
+    font-family: inherit; display: block; margin: 14px auto 0;
+    font-size: 20px; font-weight: bold; color: #fff; background: #00897B;
+    border: none; border-radius: 16px; padding: 16px 40px; min-height: 58px; cursor: pointer; visibility: hidden;
+  }
+  .next-btn.show, .big-btn { visibility: visible; }
+  .next-btn:active, .big-btn:active { transform: scale(.97); }
+
+  /* ---------- Result ---------- */
+  .result-emoji { text-align: center; font-size: 70px; margin: 10px 0 4px; }
+  .result-title { text-align: center; font-size: clamp(22px, 5vw, 30px); font-weight: bold; color: #00695C; margin: 4px 0; }
+  .stars { text-align: center; font-size: 38px; letter-spacing: 4px; margin: 6px 0; }
+  .result-score { text-align: center; font-size: 20px; color: #555; margin: 6px 0 2px; }
+  .result-msg { text-align: center; font-size: 17px; color: #777; font-style: italic; margin: 2px 0 16px; }
+
+  /* ---------- Exit ---------- */
+  .exit-ov {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 50;
+  }
+  .exit-box { background: #fff; border: 5px solid #00897B; border-radius: 22px; padding: 22px; max-width: 340px; text-align: center; }
+  .exit-box p { font-size: 19px; color: #00695C; font-weight: bold; margin: 4px 0 16px; }
+  .exit-box button {
+    font-family: inherit; font-size: 18px; font-weight: bold; display: block; width: 100%;
+    margin: 8px 0 0; padding: 14px; min-height: 54px; border-radius: 14px;
+    border: 3px solid #00897B; background: #00897B; color: #fff; cursor: pointer;
+  }
+  .exit-box .exit-no { background: #fff; color: #546E7A; border-color: #CFD8DC; }
+  .exit-box button:active { transform: scale(.97); }
+
+  /* ---------- Breadcrumbs ---------- */
+  .crumbs { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; margin: 0 0 10px; font-size: 14px; }
+  .crumbs a { text-decoration: none; color: #546E7A; background: rgba(255,255,255,.92); border: 2px solid #CFD8DC; border-radius: 16px; padding: 6px 13px; white-space: nowrap; }
+  .crumbs a:active { transform: scale(.96); }
+  .crumbs .sep { color: #B0BEC5; }
+  .crumbs .here { color: #78909C; font-weight: bold; padding: 0 4px; white-space: nowrap; }
+  .crumbs .back-btn {
+    font-family: inherit; font-size: 14px; font-weight: bold; color: #fff;
+    background: #546E7A; border: 2px solid #546E7A; border-radius: 16px; padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .crumbs .back-btn:active { transform: scale(.96); background: #37474F; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="crumbs">
+    <button class="back-btn" onclick="if (history.length > 1) { history.back(); } else { location.href = '../../index.html#tercero/t3/Science'; }">← Atrás</button>
+    <a href="../../index.html">🏠 Inicio</a><span class="sep">›</span>
+    <a href="../../index.html#tercero">Tercer grado</a><span class="sep">›</span>
+    <a href="../../index.html#tercero/t3">III Trimestre</a><span class="sep">›</span>
+    <a href="../../index.html#tercero/t3/Science">Science</a><span class="sep">›</span>
+    <span class="here">Weather Practice</span>
+  </nav>
+  <div class="board">
+    <h1>🌦️ Science Practice</h1>
+    <p class="subtitle">Weather — third term review</p>
+
+    <!-- START -->
+    <div id="screen-start">
+      <div class="intro-emoji">🌈⛈️</div>
+      <p class="choose-label">What do you want to practice?</p>
+      <div class="topic-grid" id="topic-grid"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="screen-quiz" class="hidden">
+      <div class="topbar">
+        <button class="close-btn" id="close-btn" aria-label="Exit">✕</button>
+        <span id="q-counter">1/10</span>
+        <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+        <span class="score-chip" id="score-chip">⭐ 0</span>
+      </div>
+      <p class="q-category" id="q-category"></p>
+      <span class="q-kind" id="q-kind"></span>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <p class="feedback" id="feedback"></p>
+      <p class="why hidden" id="why"></p>
+      <button class="next-btn" id="next-btn">Next ➜</button>
+    </div>
+
+    <!-- RESULT -->
+    <div id="screen-result" class="hidden">
+      <div class="result-emoji" id="result-emoji">🏆</div>
+      <p class="result-title" id="result-title">Practice finished!</p>
+      <div class="stars" id="stars"></div>
+      <p class="result-score" id="result-score"></p>
+      <p class="result-msg" id="result-msg"></p>
+      <button class="big-btn" id="retry-btn">Play again 🔄</button>
+      <button class="big-btn" id="home-btn" style="background:#5C6BC0; margin-top:10px;">Choose another topic 🌦️</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ==========================================================
+   Question bank — same questions as the Science practice sheet
+   ========================================================== */
+const BANK = [
+  // ---------- Topic 1: Weather Vocabulary ----------
+  { sec: "vocab", type: "mc",
+    q: "What do we call water or ice that falls from clouds?",
+    opts: ["Wind", "Precipitation", "Humidity"], answer: "Precipitation",
+    why: "Rain, snow, sleet and hail are all forms of precipitation." },
+  { sec: "vocab", type: "tf",
+    q: "If the temperature is below 0 °C, the roads can be icy and dangerous.",
+    answer: "True",
+    why: "Temperatures below zero make roads icy and hazardous." },
+  { sec: "vocab", type: "fill",
+    q: "Emma looks outside and sees gray clouds blocking the sun. The weather is __________.",
+    answer: "Cloudy", accept: ["cloudy", "clouded", "overcast"],
+    why: "Gray clouds mean a cloudy sky." },
+  { sec: "vocab", type: "short",
+    q: "Write two words used to describe weather conditions.",
+    answer: "Sunny, rainy (or windy, snowy, cloudy, hot, cold…)",
+    keywords: ["sunny","sun","rainy","rain","windy","wind","snowy","snow","cloudy","cloud","hot","cold","warm","cool","foggy","fog","stormy","storm","humid","icy","ice","freezing","wet","dry","sleet","hail","partly cloudy"],
+    need: 2,
+    why: "Any two valid weather vocabulary words are correct." },
+
+  // ---------- Topic 2: Weather Forecasts ----------
+  { sec: "forecast", type: "mc",
+    q: "Why do meteorologists study and measure the weather?",
+    opts: ["To make predictions about future weather", "To change the seasons", "To make it rain"],
+    answer: "To make predictions about future weather",
+    why: "Forecasts help people plan and stay safe." },
+  { sec: "forecast", type: "tf",
+    q: "An 80% chance of rain means rain is very likely.",
+    answer: "True",
+    why: "High percentages like 80% or 90% mean rain is likely." },
+  { sec: "forecast", type: "fill",
+    q: "A weather __________ tells us what the temperature and conditions will be like in the coming days.",
+    answer: "Forecast", accept: ["forecast", "forecasts"],
+    why: "A forecast predicts upcoming weather conditions." },
+
+  // ---------- Topic 3: Weather Instruments ----------
+  { sec: "instruments", type: "mc",
+    q: "Which instrument measures wind speed?",
+    opts: ["Thermometer", "Anemometer", "Rain gauge"], answer: "Anemometer",
+    why: "An anemometer uses cups to measure how fast wind travels." },
+  { sec: "instruments", type: "tf",
+    q: "A weather vane measures the direction of the wind.",
+    answer: "True",
+    why: "The weather vane points north, south, east and west to show wind direction." },
+  { sec: "instruments", type: "fill",
+    q: "A __________ measures how hot or cold the air temperature is.",
+    answer: "Thermometer", accept: ["thermometer", "termometer", "thermomether"],
+    why: "Thermometers track air temperature in Celsius or Fahrenheit." },
+
+  // ---------- Topic 4: Severe Weather Safety ----------
+  { sec: "safety", type: "mc",
+    q: "What is the safest place during a tornado?",
+    opts: ["Outside near tall trees", "A small, windowless room on the lowest floor", "An upstairs room with large windows"],
+    answer: "A small, windowless room on the lowest floor",
+    why: "This protects you from flying debris and strong winds." },
+  { sec: "safety", type: "tf",
+    q: "You should swim or stand in water during a thunderstorm.",
+    answer: "False",
+    why: "Lightning can travel through water, making it extremely dangerous." },
+  { sec: "safety", type: "short",
+    q: "Name one way to stay safe during a heat wave.",
+    answer: "Drink lots of water (or wear light clothes / stay in the shade)",
+    keywords: ["water","drink","hydrat","shade","shadow","light clothes","light clothing","indoor","inside","air condition","fan","hat","sunscreen","rest","cool","avoid the sun","stay out of the sun","umbrella"],
+    need: 1,
+    why: "Drinking water, wearing light clothes and staying in the shade prevent heatstroke." },
+
+  // ---------- General Exam ----------
+  { sec: "exam", type: "mc",
+    q: "Which of the following is NOT a type of precipitation?",
+    opts: ["Snow", "Rain", "Thermometer"], answer: "Thermometer",
+    why: "A thermometer is a temperature tool, not precipitation." },
+  { sec: "exam", type: "fill",
+    q: "An instrument that collects rainwater and measures it in millimeters is a __________.",
+    answer: "Rain gauge", accept: ["rain gauge", "raingauge", "rain gage", "gauge", "pluviometer"],
+    why: "The rain gauge collects and measures rainfall." },
+  { sec: "exam", type: "tf",
+    q: "A weather vane measures wind speed.",
+    answer: "False",
+    why: "A weather vane measures wind direction; an anemometer measures wind speed." },
+  { sec: "exam", type: "mc",
+    q: "If you hear thunder and see lightning outside, what should you do?",
+    opts: ["Go indoors immediately", "Stand under a tall tree", "Go swimming"],
+    answer: "Go indoors immediately",
+    why: "Indoors is the safest place during a thunderstorm." },
+  { sec: "exam", type: "mc",
+    q: "What does an anemometer measure?",
+    opts: ["Temperature", "Wind speed", "Rain volume"], answer: "Wind speed",
+    why: "The anemometer measures how fast the wind travels." },
+  { sec: "exam", type: "tf",
+    q: "Spending too much time outside in extreme heat can cause a heatstroke.",
+    answer: "True",
+    why: "Too much heat and not enough water can cause a heatstroke." },
+  { sec: "exam", type: "mc",
+    q: "What weather condition is described when the temperature is below 0 °C and roads become slippery?",
+    opts: ["Sunny", "Icy", "Windy"], answer: "Icy",
+    why: "Below zero, water freezes and the roads turn icy." }
+];
+
+const SECTIONS = [
+  ["vocab",       "☁️", "Weather Vocabulary"],
+  ["forecast",    "📺", "Weather Forecasts"],
+  ["instruments", "🌡️", "Weather Instruments"],
+  ["safety",      "⛈️", "Severe Weather Safety"],
+  ["exam",        "📝", "General Exam"]
+];
+const KIND_LABEL = {
+  mc: "MULTIPLE CHOICE",
+  tf: "TRUE OR FALSE",
+  fill: "FILL IN THE BLANK",
+  short: "SHORT ANSWER"
+};
+
+/* ==========================================================
+   Engine
+   ========================================================== */
+let questions = [], idx = 0, score = 0, currentMode = "";
+const PRAISE = ["Excellent! 🎉", "Very good! 🌟", "That's right! ✅", "Great job! 🥳", "You rock! 💪"];
+const OOPS = ["Almost! The answer was: ", "Oops 👀 The correct answer was: ", "Not this time. It was: "];
+
+function buildRound(mode){
+  const list = mode === "all" ? BANK.slice() : BANK.filter(q => q.sec === mode);
+  return shuffle(list).map(q => {
+    const copy = Object.assign({}, q);
+    if (q.type === "mc") copy.opts = shuffle(q.opts);
+    if (q.type === "tf") copy.opts = ["True", "False"];
+    return copy;
+  });
+}
+
+function startQuiz(mode){
+  currentMode = mode;
+  questions = buildRound(mode);
+  idx = 0; score = 0;
+  show("screen-quiz");
+  renderQuestion();
+}
+
+function show(id){
+  for (const s of ["screen-start","screen-quiz","screen-result"])
+    document.getElementById(s).classList.toggle("hidden", s !== id);
+}
+
+let answered = false;
+
+function sectionName(sec){
+  const s = SECTIONS.find(x => x[0] === sec);
+  return s ? s[1] + " " + s[2] : "";
+}
+
+function renderQuestion(){
+  const q = questions[idx];
+  answered = false;
+  document.getElementById("q-counter").textContent = (idx + 1) + "/" + questions.length;
+  document.getElementById("progress-bar").style.width = (idx / questions.length * 100) + "%";
+  document.getElementById("score-chip").textContent = "⭐ " + score;
+  document.getElementById("q-category").textContent = sectionName(q.sec);
+  document.getElementById("q-kind").textContent = KIND_LABEL[q.type];
+  document.getElementById("q-text").textContent = q.q;
+  const fb = document.getElementById("feedback");
+  fb.textContent = ""; fb.className = "feedback";
+  const why = document.getElementById("why");
+  why.textContent = ""; why.classList.add("hidden");
+  document.getElementById("next-btn").classList.remove("show");
+  const viejo = document.querySelector(".self-btn");
+  if (viejo) viejo.remove();
+
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+  box.className = "options" + (q.type === "tf" ? " two" : "");
+
+  if (q.type === "fill" || q.type === "short") { box.className = ""; renderTyped(q, box); return; }
+
+  q.opts.forEach(opt => {
+    const b = document.createElement("button");
+    b.className = "opt-btn";
+    b.textContent = opt;
+    b.addEventListener("click", () => answerChoice(opt, b), {passive:true});
+    box.appendChild(b);
+  });
+}
+
+/* ----- typed answers ----- */
+function normalize(s){
+  return s.toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[.,;:!?"'()]/g, " ")
+    .replace(/\bthe\b|\ba\b|\ban\b|\bis\b|\bit\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function renderTyped(q, box){
+  const wrap = document.createElement("div");
+  wrap.className = "typed";
+  const input = document.createElement("input");
+  input.className = "typed-input";
+  input.type = "text";
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("autocorrect", "off");
+  input.setAttribute("autocapitalize", "off");
+  input.setAttribute("spellcheck", "false");
+  input.setAttribute("enterkeyhint", "done");
+  input.placeholder = q.type === "short" ? "Write your answer…" : "Type the word…";
+  const btn = document.createElement("button");
+  btn.className = "check-btn";
+  btn.textContent = "Check ✓";
+  const go = () => { if (!answered && input.value.trim()) checkTyped(q, input, btn); };
+  btn.addEventListener("click", go, {passive:true});
+  input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); go(); } });
+  wrap.appendChild(input); wrap.appendChild(btn);
+  box.appendChild(wrap);
+}
+
+function checkTyped(q, input, btn){
+  answered = true;
+  const val = normalize(input.value);
+  let ok;
+  if (q.type === "fill") {
+    ok = q.accept.some(a => {
+      const n = normalize(a);
+      return val === n || val.split(" ").includes(n) || val.indexOf(n) !== -1;
+    });
+  } else {
+    const hits = q.keywords.filter(k => val.indexOf(normalize(k)) !== -1);
+    ok = hits.length >= q.need;
+  }
+  input.disabled = true;
+  btn.disabled = true;
+  input.classList.add(ok ? "ok" : "bad");
+  finishAnswer(ok, q.answer, q.why);
+  if (!ok && q.type === "short") {
+    const self = document.createElement("button");
+    self.className = "self-btn";
+    self.textContent = "My answer is correct too ✅";
+    self.addEventListener("click", () => {
+      self.remove();
+      score++;
+      document.getElementById("score-chip").textContent = "⭐ " + score;
+      input.classList.remove("bad"); input.classList.add("ok");
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback good";
+      fb.textContent = "Nice one! 🌟";
+    }, {passive:true});
+    const nb = document.getElementById("next-btn");
+    nb.parentNode.insertBefore(self, nb);
+  }
+}
+
+function answerChoice(opt, btn){
+  if (answered) return;
+  answered = true;
+  const q = questions[idx];
+  const buttons = document.querySelectorAll(".opt-btn");
+  buttons.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === q.answer) b.classList.add("correct");
+  });
+  const ok = opt === q.answer;
+  if (!ok) btn.classList.add("wrong");
+  finishAnswer(ok, q.answer, q.why);
+}
+
+function finishAnswer(ok, correctText, why){
+  const fb = document.getElementById("feedback");
+  if (ok) {
+    score++;
+    fb.textContent = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+    fb.classList.add("good");
+  } else {
+    fb.textContent = OOPS[Math.floor(Math.random() * OOPS.length)] + correctText;
+    fb.classList.add("bad");
+  }
+  if (why) {
+    const w = document.getElementById("why");
+    w.textContent = why;
+    w.classList.remove("hidden");
+  }
+  document.getElementById("score-chip").textContent = "⭐ " + score;
+  const nb = document.getElementById("next-btn");
+  nb.classList.add("show");
+  nb.textContent = (idx === questions.length - 1) ? "See my score 🏁" : "Next ➜";
+}
+
+function finish(){
+  document.getElementById("progress-bar").style.width = "100%";
+  const pct = score / questions.length;
+  const stars = pct === 1 ? 5 : pct >= .9 ? 4 : pct >= .7 ? 3 : pct >= .5 ? 2 : 1;
+  document.getElementById("stars").textContent = "⭐".repeat(stars) + "☆".repeat(5 - stars);
+  document.getElementById("result-score").textContent = "You got " + score + " of " + questions.length + " questions right";
+  const emoji = pct === 1 ? "🏆" : pct >= .7 ? "🎉" : pct >= .5 ? "😊" : "💪";
+  document.getElementById("result-emoji").textContent = emoji;
+  document.getElementById("result-title").textContent =
+    pct === 1 ? "PERFECT, Luciana!" : pct >= .7 ? "Great work!" : pct >= .5 ? "Good try!" : "Keep practicing!";
+  document.getElementById("result-msg").textContent =
+    pct === 1 ? "You are a weather expert! 🌦️✨" :
+    pct >= .7 ? "You almost know it all!" :
+    pct >= .5 ? "A little more practice and you've got it." :
+    "Every try makes you stronger. One more time!";
+  show("screen-result");
+}
+
+document.getElementById("next-btn").addEventListener("click", () => {
+  if (idx === questions.length - 1) { finish(); return; }
+  idx++;
+  renderQuestion();
+});
+document.getElementById("retry-btn").addEventListener("click", () => startQuiz(currentMode));
+document.getElementById("home-btn").addEventListener("click", () => show("screen-start"));
+
+/* ---------- exit overlay ---------- */
+(function(){
+  const ov = document.createElement("div");
+  ov.className = "exit-ov hidden";
+  ov.innerHTML = '<div class="exit-box"><p>Do you want to exit the practice?</p>' +
+    '<button class="exit-yes">Yes, exit 🚪</button>' +
+    '<button class="exit-no">Keep practicing 💪</button></div>';
+  document.body.appendChild(ov);
+  const hide = () => ov.classList.add("hidden");
+  ov.querySelector(".exit-no").addEventListener("click", hide, {passive:true});
+  ov.querySelector(".exit-yes").addEventListener("click", () => { hide(); show("screen-start"); }, {passive:true});
+  document.getElementById("close-btn").addEventListener("click", () => ov.classList.remove("hidden"), {passive:true});
+})();
+
+/* ---------- topic buttons ---------- */
+const grid = document.getElementById("topic-grid");
+for (const [key, icon, label] of SECTIONS) {
+  const n = BANK.filter(q => q.sec === key).length;
+  const b = document.createElement("button");
+  b.className = "topic-btn";
+  b.innerHTML = '<span class="icon">' + icon + '</span>' + label +
+    '<span class="count">' + n + " questions</span>";
+  b.addEventListener("click", () => startQuiz(key), {passive:true});
+  grid.appendChild(b);
+}
+const all = document.createElement("button");
+all.className = "topic-btn all";
+all.innerHTML = '<span class="icon">🚀</span>Full practice (everything)' +
+  '<span class="count">' + BANK.length + " questions</span>";
+all.addEventListener("click", () => startQuiz("all"), {passive:true});
+grid.appendChild(all);
+</script>
+</body>
+</html>
